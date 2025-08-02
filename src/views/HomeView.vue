@@ -1,13 +1,10 @@
 <template>
-  <div class="relative flex flex-col items-center justify-center min-h-screen bg-gray-100">
-    <h1 ref="textRef" class="text-9xl font-bold mb-6">PONG.</h1>
-
-    <div class="pong-button">
-      <router-link to="/pong" class="back-link">
-        Go to PongGame
+    <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 ref="textRef" class="text-9xl font-bold mb-6 text-gray-700 dark:text-red-500">PONG.</h1>
+      <router-link to="/pong" class="text-blue-500 underline hover:text-blue-700">
+        Aller jouer au Pong
       </router-link>
     </div>
-  </div>
 </template>
 
 <script lang="ts" setup>

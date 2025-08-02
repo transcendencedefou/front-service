@@ -11,8 +11,12 @@
             <router-link to="/pong" class="hover:text-green-400 transition">Pong</router-link>
             <router-link to="/dashboard" class="hover:text-green-400 transition">Dashboard</router-link>
             <router-link to="/login" class="bg-green-500 px-3 py-1 rounded hover:bg-green-600 text-black font-semibold">Connexion</router-link>
-          </div>
-  
+            <!-- Toggle Light/Dark Mode -->
+            <button @click="toggleTheme" class="ml-4 text-xl hover:scale-110 transition">
+              <span v-if="theme === 'dark'">light</span>
+              <span v-else>dark</span>
+            </button>
+            </div>
           <!-- Burger (mobile) -->
           <div class="md:hidden">
             <button @click="menuOpen = !menuOpen" class="focus:outline-none">
@@ -39,6 +43,8 @@
   
   <script lang="ts" setup>
   import { ref } from 'vue'
-  
+  import { useTheme } from '@/composables/useTheme'
+
   const menuOpen = ref(false)
+  const { theme, toggleTheme } = useTheme()
   </script>
