@@ -12,7 +12,7 @@ const i18n = createI18n({
     legacy: false, // obliogatoire en compo API
     locale: 'fr-FR',
     fallbackLocale: 'en-US',
-    messages: { 
+    messages: {
       'fr-FR': fr,
       'en-US': en,
     },
