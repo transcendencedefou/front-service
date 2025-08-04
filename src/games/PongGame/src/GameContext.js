@@ -1,6 +1,5 @@
-import { useGameStore } from "@/stores/gameStore"; // chiant le chemin relatif trouver une solution
+import {useGameStore} from "@/stores/gameStore"; // chiant le chemin relatif trouver une solution
 import {Engine, Scene} from "@babylonjs/core";
-import {ref} from "vue";
 
 export const GameContext = {
     game: null,
@@ -30,6 +29,19 @@ export const GameContext = {
     _initGameTextures() {
         this.game._initSceneSettings()
         this.game._initPlayGround()
+    },
+
+    startGame() {
+        this.running = true;
+    },
+
+    stopGame() {
+        this.running = false;
+    },
+
+    resetGame() {
+        //all reset methodes
+        this.running = false;
     },
 
     _render() {
