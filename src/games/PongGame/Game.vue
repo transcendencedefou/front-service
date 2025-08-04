@@ -96,6 +96,7 @@ onMounted(() => {
   PlayerManager.addPlayer('1', "Albert")
   resetGame()
 
+  //handleAddEventListener
   window.addEventListener('keydown', handleKeyDown)
   window.addEventListener('keyup', handleKeyUp)
   window.addEventListener('resize', handleResize)
@@ -106,6 +107,7 @@ onBeforeUnmount(() => {
   pongInstance.value?.dispose()
   cancelAnimationFrame(animationFrameId)
 
+  //handleRemoveEventListener
   window.removeEventListener('keydown', handleKeyDown)
   window.removeEventListener('keyup', handleKeyUp)
   window.removeEventListener('resize', handleResize)

@@ -1,5 +1,4 @@
-import { PlayerManager } from "PlayerManager.js";
-import { useGameStore } from "../../../stores/gameStore"; // chiant le chemin relatif trouver une solution
+import { useGameStore } from "@/stores/gameStore"; // chiant le chemin relatif trouver une solution
 import {Engine, Scene} from "@babylonjs/core";
 
 export const GameContext = {
