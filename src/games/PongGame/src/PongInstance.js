@@ -14,7 +14,9 @@ import {
 // It initializes the scene, camera, lights, and playground
 // It also creates the win surfaces and borders for the game
 // The engine runs the render loop to continuously update the scene
-export default class PongEngine {
+export default class PongInstance {
+
+    // aviser sur le constructeur pour ce dont on a besoin
     constructor(canvas) {
         this.canvas = canvas;
         this.engine = new Engine(canvas, true);
