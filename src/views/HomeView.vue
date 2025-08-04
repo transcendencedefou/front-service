@@ -1,31 +1,41 @@
 <template>
-    <div class="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 ref="textRef" class="text-9xl font-bold mb-6 text-gray-700 dark:text-red-500">PONG.</h1>
-      <router-link to="/pong" class="text-blue-500 underline hover:text-blue-700">
+  <div class="relative w-full h-screen overflow-hidden bg-neutral-50 dark:bg-black flex items-center justify-center">
+    <!-- Sphere simulee -->
+    <div
+      ref="sphereRef"
+      class="absolute w-64 h-64 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-white/20 to-dkpurple/20 shadow-2xl blur-md -translate-y-24 md:-translate-y-32"
+    ></div>
+
+    <!-- Gradient de sol fondu -->
+    <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-dkpurple/40 to-transparent dark:from-dkpurple/90 pointer-events-none"></div>
+
+    <!-- Texte au-dessus -->
+    <div class="relative z-10 text-center">
+      <h1 ref="textRef" class="text-6xl md:text-8xl font-black text-gray-900 dark:text-white tracking-tight">PONG.</h1>
+      <router-link
+        to="/pong"
+        class="mt-6 inline-block text-lg font-semibold text-purple-600 dark:text-purple-400 hover:underline"
+      >
         Aller jouer au Pong
       </router-link>
     </div>
+  </div>
 </template>
 
-<script lang="ts" setup>
-  import { onMounted, ref } from 'vue';
-  import { gsap } from 'gsap'
-  import { TextPlugin } from 'gsap/TextPlugin'
-  gsap.registerPlugin(TextPlugin)
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+import { gsap } from 'gsap'
+import { TextPlugin } from 'gsap/TextPlugin'
+gsap.registerPlugin(TextPlugin)
 
-  const textRef = ref(null)
+const textRef = ref(null)
+const sphereRef = ref<HTMLElement | null>(null)
 
-  onMounted(() =>{
-    const messages = [
-      "PING.",
-      "PONG.",
-      "WIN.",
-      "LOSE.",
-    ]
+onMounted(() => {
+  const messages = ['PING.', 'PONG.', 'WIN.', 'LOSE.']
+  let i = 0
 
-    let i = 0
-
-    const animateText = () => {
+  const animateText = () => {
     const tl = gsap.timeline({
       repeat: 0,
       onComplete: () => {
@@ -36,48 +46,21 @@
       }
     })
 
-    // erase text
-    tl.to(textRef.value, {
-      duration: 0.5,
-      text: "",
-      ease: "none",
-    })
-
-    // writer again
-    tl.to(textRef.value, {
-      duration: 1.5,
-      text: messages[i],
-      ease: "none",
-    })
+    tl.to(textRef.value, { duration: 0.5, text: '', ease: 'none' })
+    tl.to(textRef.value, { duration: 1.5, text: messages[i], ease: 'none' })
   }
 
   animateText()
+
+  gsap.to(sphereRef.value, {
+    y: +0.1, 
+    scale: 1.05,
+    filter: "blur(24px)",
+    opacity: 0.9,
+    duration: 2.5,
+    repeat: -1,
+    yoyo: true, 
+    ease: "sine.inOut",
+  })
 })
 </script>
-
-<style scoped>
-.pong-button {
-  position: absolute;
-  top: 20px;
-  left: 20px;
-  z-index: 50;
-}
-
-.back-link {
-  display: inline-block;
-  padding: 10px 16px;
-  background-color: #111;
-  color: #f1f1f1;
-  border-radius: 6px;
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 14px;
-  text-decoration: none;
-  transition: background-color 0.3s, transform 0.2s;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
-}
-
-.back-link:hover {
-  background-color: #333;
-  transform: scale(1.05);
-}
-</style>

@@ -4,8 +4,6 @@
 
 @layer base {
   body {
-    background-color: #1a1a1a;
-    color: white;
     font-family: system-ui, -apple-system, sans-serif;
   }
 }

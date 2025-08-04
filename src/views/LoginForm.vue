@@ -10,7 +10,7 @@
     <!-- sous titre + lien  -->
     <p class="text-center text-sm text-gray-600">
       Tjrs pas membre?
-      <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">t'attends quoi?</a>
+      <a href="#" class="font-medium text-clpurple hover:text-clpurple">t'attends quoi?</a>
     </p>
     <!-- formulaire de connexion -->
     <form class="mt-8 space-y-6" @submit.prevent="onSubmit">
@@ -62,14 +62,14 @@
           Se souvenir de moi ?
         </label>
         <div class="text-sm">
-          <a href="#" class="font-medium text-indigo-600 hover:text-indigo-500">Mot de passe oublie?</a>
+          <a href="#" class="font-medium text-clpurple hover:text-clpurple">Mot de passe oublie?</a>
         </div>
       </div>
       <!-- submit bouton -->
       <div>
         <button
           type="submit"
-          class="w-full flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700"
+          class="w-full flex justify-center rounded-md border border-transparent bg-clpurple py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 transition"
         >
           Se connecter
         </button>
