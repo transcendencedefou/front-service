@@ -9,7 +9,8 @@ import {
     Color4,
     StandardMaterial,
 } from '@babylonjs/core';
-
+import {GameContext} from "@/games/PongGame/src/GameContext.js";
+import {PlayerManager} from "@/games/PongGame/src/PlayerManager.js";
 // Class representing the Pong game engine
 // It initializes the scene, camera, lights, and playground
 // It also creates the win surfaces and borders for the game
@@ -17,95 +18,110 @@ import {
 export default class PongInstance {
 
     // aviser sur le constructeur pour ce dont on a besoin
-    constructor(canvas) {
-        this.canvas = canvas;
-        this.engine = new Engine(canvas, true);
-        this.scene = new Scene(this.engine);
-        this._init();
-        this._render();
+    constructor() {
+        this.ball = null
+        this.border = new Map
     }
 
-    _init() {
-        const scene = this.scene;
-        scene.clearColor = new Color4(0.5, 0.8, 0.5, 1.0);
+    gameLoop() {
+
+        for (const player in PlayerManager.listPlayers())
+            if (player.store.score === 3)
+                GameContext.running = false
+
+        GameContext.running = PlayerManager.listPlayers().length === 2;
+
+        if (GameContext.running) {
+            if (keysPressed.value.z) Player1.value.moveUp()
+            if (keysPressed.value.s) Player1.value.moveDown()
+            if (keysPressed.value.arrowup) Player2.value.moveUp()
+            if (keysPressed.value.arrowdown) Player2.value.moveDown()
+            // ball.value?.move()
+        }
+
+        GameContext.animationFrameId = requestAnimationFrame(() => gameLoop());
+    }
+
+    _initSceneSettings() {
+        GameContext.scene.clearColor = new Color4(0.5, 0.8, 0.5, 1.0);
 
         const camera = new ArcRotateCamera("camera",
             -Math.PI / 2,
             Math.PI / 5,
             10,
             new Vector3(0, -1, 0),
-            scene);
+            GameContext.scene);
         camera.inputs.clear();
 
         const light = new HemisphericLight("light",
             new Vector3(0, 1, -2),
-            scene);
+            GameContext.scene);
         light.intensity = 0.9;
-
-        this._initPlayGround();
     }
 
     _initPlayGround() {
-        const groundMaterial = new StandardMaterial("groundMaterial", this.scene);
+        const groundMaterial = new StandardMaterial("groundMaterial", GameContext.scene);
         groundMaterial.diffuseColor = new Color3(0.4, 0, 1);
 
         const playground = MeshBuilder.CreateGround("ground",
             { width: 9, height: 6 },
-            this.scene);
+            GameContext.scene);
         playground.material = groundMaterial;
 
-        const winsurfaceMaterial = new StandardMaterial("winsurfaceMaterial", this.scene);
+        const winsurfaceMaterial = new StandardMaterial("winsurfaceMaterial", GameContext.scene);
         winsurfaceMaterial.diffuseColor = new Color3(0.8, 0.2, 0.2);
         winsurfaceMaterial.alpha = 0.5;
         winsurfaceMaterial.hasAlpha = true;
 
-        this.winSurfaceLeft = MeshBuilder.CreateBox("winSurfaceLeft",
+
+        const horizontalBorderMaterial = new StandardMaterial("horizontalBorderMaterial", GameContext.scene);
+        horizontalBorderMaterial.diffuseColor = new Color3(0.2, 0.6, 1);
+        horizontalBorderMaterial.alpha = 0;
+        horizontalBorderMaterial.hasAlpha = true;
+        
+        
+        const leftBorder = MeshBuilder.CreateBox("leftBorder",
             { width: 0.1, height: 0.1, depth: 6, updatable: true },
-            this.scene);
-        this.winSurfaceLeft.position.y = 0.05;
-        this.winSurfaceLeft.position.z = 0;
-        this.winSurfaceLeft.position.x = -playground._width / 2 - 0.05;
-        this.winSurfaceLeft.material = winsurfaceMaterial;
+            GameContext.scene);
+        leftBorder.position.y = 0.05;
+        leftBorder.position.z = 0;
+        leftBorder.position.x = -playground._width / 2 - 0.05;
+        leftBorder.material = winsurfaceMaterial;
+        this.border.set("leftborder", leftBorder)
 
-        this.winSurfaceRight = MeshBuilder.CreateBox("winSurfaceRight",
+
+        const rightBorder = MeshBuilder.CreateBox("rightBorder",
             { width: 0.1, height: 0.1, depth: 6, updatable: true },
-            this.scene);
-        this.winSurfaceRight.position.y = 0.05;
-        this.winSurfaceRight.position.z = 0;
-        this.winSurfaceRight.position.x = playground._width / 2 + 0.05;
-        this.winSurfaceRight.material = winsurfaceMaterial;
+            GameContext.scene);
+        rightBorder.position.y = 0.05;
+        rightBorder.position.z = 0;
+        rightBorder.position.x = playground._width / 2 + 0.05;
+        rightBorder.material = winsurfaceMaterial;
+        this.border.set("rightborder", rightBorder)
 
-        const borderMaterial = new StandardMaterial("borderMaterial", this.scene);
-        borderMaterial.diffuseColor = new Color3(0.2, 0.6, 1);
-        borderMaterial.alpha = 0;
-        borderMaterial.hasAlpha = true;
-
-        this.upBorder = MeshBuilder.CreateBox("border",
+        const upBorder = MeshBuilder.CreateBox("upBorder",
             { width: 9, height: 0.1, depth: 0.1, updatable: true },
-            this.scene);
-        this.upBorder.position.y = 0.05;
-        this.upBorder.position.z = playground._height / 2 + 0.05;
-        this.upBorder.position.x = 0;
-        this.upBorder.material = borderMaterial;
-
-        this.downBorder = MeshBuilder.CreateBox("border",
+            GameContext.scene);
+        upBorder.position.y = 0.05;
+        upBorder.position.z = playground._height / 2 + 0.05;
+        upBorder.position.x = 0;
+        upBorder.material = horizontalBorderMaterial;
+        this.border.set("upborder", upBorder)
+        
+        const downBorder = MeshBuilder.CreateBox("downBorder",
             { width: 9, height: 0.1, depth: 0.1, updatable: true },
-            this.scene);
-        this.downBorder.position.y = 0.05;
-        this.downBorder.position.z = -playground._height / 2 - 0.05;
-        this.downBorder.position.x = 0;
-        this.downBorder.material = borderMaterial;
+            GameContext.scene);
+        downBorder.position.y = 0.05;
+        downBorder.position.z = -playground._height / 2 - 0.05;
+        downBorder.position.x = 0;
+        downBorder.material = horizontalBorderMaterial;
+        this.border.set("downborder", downBorder)
     }
 
-    _render() {
-        this.engine.runRenderLoop(() => {
-            this.scene.render();
-        });
-    }
 
     dispose() {
-        this.engine.stopRenderLoop();
-        this.scene.dispose();
-        this.engine.dispose();
+        GameContext.engine.stopRenderLoop();
+        GameContext.engine.dispose();
+        GameContext.scene.dispose();
     }
 }

@@ -4,7 +4,6 @@ export const useGameStore = defineStore("game", {
     state: () => ({
         ID: '',
         game_type: '',
-        running: false,
         player_name: [],
         player_num: 0,
         winner: "",
