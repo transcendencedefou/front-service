@@ -1,11 +1,11 @@
 <template>
-  <div class="relative w-full h-screen overflow-hidden bg-neutral-50 dark:bg-black flex items-center justify-center">
+  <div class="relative overflow-hidden w-full h-screen bg-neutral-50 dark:bg-black flex items-center justify-center">
     <!-- Sphere simulee -->
+    <section class="h-screen flex items-center justify-center">
     <div
       ref="sphereRef"
       class="absolute w-64 h-64 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-white/20 to-dkpurple/20 shadow-2xl blur-md -translate-y-24 md:-translate-y-32"
     ></div>
-
     <!-- Gradient de sol fondu -->
     <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-dkpurple/40 to-transparent dark:from-dkpurple/90 pointer-events-none"></div>
 
@@ -19,6 +19,7 @@
         {{ t('home.cta') }}
       </router-link>
     </div>
+  </section>
   </div>
 </template>
 
@@ -40,6 +41,7 @@ onMounted(() => {
   let i = 0
 
   const animateText = () => {
+    if (!textRef.value) return
     const tl = gsap.timeline({
       repeat: 0,
       onComplete: () => {
@@ -55,16 +57,5 @@ onMounted(() => {
   }
 
   animateText()
-
-  gsap.to(sphereRef.value, {
-    y: +0.1, 
-    scale: 1.05,
-    filter: "blur(24px)",
-    opacity: 0.9,
-    duration: 2.5,
-    repeat: -1,
-    yoyo: true, 
-    ease: "sine.inOut",
-  })
 })
 </script>

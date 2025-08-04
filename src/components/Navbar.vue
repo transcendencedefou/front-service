@@ -50,10 +50,10 @@
         >
           &times;
         </button>
-        <router-link to="/" class="nav-mobile-text" @click="menuOpen = false"> Accueil </router-link>
-        <router-link to="/app/pong" class="nav-mobile-text" @click="menuOpen = false"> Pong </router-link>
-        <router-link to="/dashboard" class="nav-mobile-text" @click="menuOpen = false"> Dashboard </router-link>
-        <router-link to="/auth/login" class="nav-mobile-text" @click="menuOpen = false"> Connexion </router-link>
+        <router-link to="/" class="nav-mobile-text" @click="menuOpen = false">{{ t('nav.home') }}</router-link>
+        <router-link to="/app/pong" class="nav-mobile-text" @click="menuOpen = false">{{ t('nav.games') }}</router-link>
+        <router-link to="/dashboard" class="nav-mobile-text" @click="menuOpen = false">{{ t('nav.user') }}</router-link>
+        <router-link to="/auth/login" class="nav-mobile-text" @click="menuOpen = false">{{ t('nav.login') }}</router-link>
         <!-- Light/Dark toggle -->
         <button
           @click="toggleTheme"

@@ -1,31 +1,31 @@
 <template>
-  <div class="w-full max-w-md space-y-8 bg-white p-8 rounded shadow">
+  <div class="login-card">
     <div class="flex justify-center"></div>
 
-    <h2 class="text-center text-2xl font-bold text-gray-900">{{ t('auth.register.title') }}</h2>
-    <p class="text-center text-sm text-gray-600">
+    <h2 class="login-title">{{ t('auth.register.title') }}</h2>
+    <p class="login-text">
       {{ t('auth.register.subtitle') }}
-      <router-link to="/auth/login" class="font-medium text-clpurple hover:text-clpurple">{{ t('auth.register.cta') }}</router-link>
+      <router-link to="/auth/login" class="login-cta-text">{{ t('auth.register.cta') }}</router-link>
     </p>
 
     <form class="mt-8 space-y-6" @submit.prevent="onSubmit">
       <div class="space-y-4">
         <!-- Username -->
         <div>
-          <label for="email" class="block text-sm font-medium text-gray-700">{{ t('auth.register.email') }}</label>
+          <label for="email" class="login-label-text">{{ t('auth.register.email') }}</label>
           <input
             id="email"
             name="email"
             type="text"
             v-model="email"
             required
-            class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-700"
+            class="login-label-box"
           />
         </div>
 
         <!-- Password -->
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">{{ t('auth.register.password') }}</label>
+          <label for="password" class="login-label-text">{{ t('auth.register.password') }}</label>
           <input
             id="password"
             name="password"
@@ -33,25 +33,25 @@
             v-model="password"
             @input="validate"
             required
-            class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-700"
+            class="login-label-box"
           />
         </div>
 
         <!-- Confirmation -->
         <div>
-          <label for="confirmPassword" class="block text-sm font-medium text-gray-700">{{ t('auth.register.confirm') }}</label>
+          <label for="confirmPassword" class="login-label-text">{{ t('auth.register.confirm') }}</label>
           <input
             id="confirmPassword"
             name="confirmPassword"
             type="password"
             v-model="confirmPassword"
             required
-            class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-700"
+            class="login-label-box"
           />
         </div>
 
         <!-- Erreurs -->
-        <ul v-if="errors.length" class="text-xs text-red-500 mt-1 list-disc ml-4">
+        <ul v-if="errors.length" class="login-errors-text">
           <li v-for="err in errors" :key="err">{{ err }}</li>
         </ul>
 
@@ -71,7 +71,7 @@
       <div>
         <button
           type="submit"
-          class="w-full flex justify-center rounded-md border border-transparent bg-clpurple py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 transition"
+          class="login-main-button"
         >
           {{ t('auth.register.submit') }}
         </button>
