@@ -5,11 +5,11 @@ import LoginForm from '../views/LoginView.vue'
 import RegisterForm from '../views/RegisterView.vue'
 
 const routes = [
-    { path: '/', 
-      name: 'Home', 
+    { path: '/',
+      name: 'Home',
       component: HomeView },
-    { path: '/pong', 
-      name: 'Pong Game', 
+    { path: '/pong',
+      name: 'Pong Game',
       component: PongView },
     { path: '/login',
       name: 'Login',
@@ -21,7 +21,7 @@ const routes = [
 ]
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory('/app'),
     routes,
 })
 
