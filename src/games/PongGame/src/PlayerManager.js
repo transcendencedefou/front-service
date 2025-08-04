@@ -3,8 +3,8 @@ import { Player } from './Player.js'
 const playerMap = new Map()
 
 export const PlayerManager = {
-    addPlayer(id, name) {
-        id = playerMap.size
+    addPlayer(name) {
+        const id = playerMap.size
         const player = new Player(id, name)
         playerMap.set(id, player)
     },
@@ -20,6 +20,10 @@ export const PlayerManager = {
 
     removePlayer(id) {
         playerMap.delete(id)
+    },
+
+    clearMap() {
+        playerMap.clear()
     },
 
     listPlayers() {
