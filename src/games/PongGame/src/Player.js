@@ -4,14 +4,10 @@ import {
     StandardMaterial,
 } from '@babylonjs/core';
 import { createPlayerStore } from '@/stores/playerFactory'
+import { GameContext } from './GameContext'
 
-// Revoir pour que la taille de la barre du player soit totalement scaled sur la taille du terrain
-// Rework tout ce qui est lié a left ou right ca va bosser avec le player num de pinia
-// J'aimerai voir si je peux ramener store ici avec import, pcque flemme des parametres
 export class Player {
     constructor(id, name) {
-        // this.type = type;
-        // this.scene = scene; Donc ca on essaye d'importer sans params
         this.bar = null;
 
         this.store = createPlayerStore(id)
@@ -23,31 +19,30 @@ export class Player {
     }
 
     _init() {
-
+        this.store.setSpawn((this.store.id === 1 ? 1 : -1) * (0.8 * (GameContext.size["width"] / 2)), 0);
+        this.store.setPos(this.store.spawn.x, this.store.spawn.z)
+        this.store.setBarHeight(0.2)
     }
 
     _initTexture() {
-        const barMaterial = new StandardMaterial("barMaterial", this.scene);
+        const barMaterial = new StandardMaterial("barMaterial", GameContext.scene);
         barMaterial.diffuseColor = new Color3(1, 0, 0);
-
         this.bar = MeshBuilder.CreateBox("leftBar",
-            {width: 0.1, height: 0.2, depth: 1, updatable: true},
-            this.scene);
+            {width: 0.1, height: this.store.bar_height, depth: 1, updatable: true},
+            GameContext.scene);
         this.bar.material = barMaterial;
-        // Bar pos ca part sur pinia
-        this.bar.position.y = 0.1;
-        this.type === 'left' ? this.bar.position.x = -3.5 : this.bar.position.x = 3.5;
+        this.bar.position.set(this.store.pos.x, 0.1, this.store.pos.z);
     }
 
     moveUp() {
-        if (this.bar && this.bar.position.z < 2.5) {
-            this.bar.position.z += this.barspeed;
+        if (this.bar && this.bar.position.z < GameContext.size["height"] / 2) {
+            this.bar.position.z += this.store.bar_speed;
         }
     }
 
     moveDown() {
-        if (this.bar && this.bar.position.z > -2.5) {
-            this.bar.position.z -= this.barspeed;
+        if (this.bar && this.bar.position.z > -GameContext.size["height"] / 2) {
+            this.bar.position.z -= this.store.bar_speed;
         }
     }
 

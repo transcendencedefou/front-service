@@ -10,28 +10,37 @@ function handleResize() {
   GameContext.engine.resize()
 }
 
-//faire un init et un destructeur d'evenements pour la lisibilité
-//pas oublier les cleans
-onMounted(() => {
-  GameContext._initGameContext(new PongInstance(), canvas.value)
-  GameContext._render()
-  PlayerManager.addPlayer('1', "Albert")
-
-  //fonction handleAddEventListener
-  window.addEventListener('keydown', GameContext.handleKeyDown)
-  window.addEventListener('keyup', GameContext.handleKeyUp)
+function handleAddEventListener() {
+  window.addEventListener('keydown', GameContext.handleKeyDown.bind(GameContext))
+  window.addEventListener('keyup', GameContext.handleKeyUp.bind(GameContext))
   window.addEventListener('resize', handleResize)
+}
 
-  if (GameContext.running) {}
-    GameContext.game.gameLoop() //mettre la game loop dans l instance du jeu
-})
-onBeforeUnmount(() => {
-
-  //fonction handleRemoveEventListener
+function handleRemoveEventListener() {
   window.removeEventListener('keydown', GameContext.handleKeyDown)
   window.removeEventListener('keyup', GameContext.handleKeyUp)
   window.removeEventListener('resize', handleResize)
+}
 
+
+//pas oublier les cleans
+onMounted(() => {
+  GameContext._initGameContext(new PongInstance(), canvas.value)
+
+  // Ca c est temporaire, juste au moins on a les methodes
+  GameContext.setSize(9, 6)
+  PlayerManager.addPlayer("Albert")
+  PlayerManager.addPlayer("Albert0")
+
+  handleAddEventListener()
+  GameContext._render()
+  GameContext.startGame()
+  GameContext.game.gameLoop()
+})
+onBeforeUnmount(() => {
+  handleRemoveEventListener()
+
+  PlayerManager.clearMap()
   GameContext.dispose()
 })
 </script>

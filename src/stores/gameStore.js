@@ -5,7 +5,7 @@ export const useGameStore = defineStore("game", {
         ID: '',
         game_type: '',
         player_name: [],
-        player_num: 0,
+        player_count: 0,
         winner: "",
     }),
 
@@ -20,8 +20,8 @@ export const useGameStore = defineStore("game", {
             this.running = value
         },
         addPlayer(player) {
-            if (this.player_num >= 2) return
-            this.player_num += 1
+            if (this.player_count >= 2) return
+            this.player_count += 1
             this.player_name.push(player)
         },
         setWinner(value) {

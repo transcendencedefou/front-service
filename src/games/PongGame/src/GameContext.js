@@ -1,4 +1,5 @@
-import {useGameStore} from "@/stores/gameStore"; // chiant le chemin relatif trouver une solution
+import { useGameStore } from "@/stores/gameStore";
+import { PlayerManager } from "./PlayerManager.js";
 import {Engine, Scene} from "@babylonjs/core";
 
 export const GameContext = {
@@ -9,12 +10,13 @@ export const GameContext = {
     store: null,
     running: false,
     animationFrameId: null,
+    size: {height: 0, width: 0},
     keysPressed: {
         z: false,
         s: false,
         arrowup: false,
         arrowdown: false,
-        ' ': false, //space
+        ' ': false,
         r: false
     },
     _initGameContext(game, canvas) {
@@ -31,8 +33,14 @@ export const GameContext = {
         this.game._initPlayGround()
     },
 
+    setSize(width, height) {
+        this.size.width = width;
+        this.size.height = height;
+    },
+
     startGame() {
-        this.running = true;
+        if (PlayerManager.listPlayers().length === 2)
+            this.running = true;
     },
 
     stopGame() {
@@ -53,15 +61,15 @@ export const GameContext = {
     handleKeyDown(event) {
         const key = event.key.toLowerCase()
 
-        if (key in this.keysPressed.value) {
-            this.keysPressed.value[key] = true
+        if (key in this.keysPressed) {
+            this.keysPressed[key] = true
         }
     },
 
     handleKeyUp(event) {
         const key = event.key.toLowerCase()
-        if (key in this.keysPressed.value) {
-            this.keysPressed.value[key] = false
+        if (key in this.keysPressed) {
+            this.keysPressed[key] = false
         }
     },
 

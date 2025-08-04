@@ -1,6 +1,4 @@
 import {
-    Engine,
-    Scene,
     ArcRotateCamera,
     HemisphericLight,
     MeshBuilder,
@@ -9,37 +7,34 @@ import {
     Color4,
     StandardMaterial,
 } from '@babylonjs/core';
-import {GameContext} from "@/games/PongGame/src/GameContext.js";
-import {PlayerManager} from "@/games/PongGame/src/PlayerManager.js";
-// Class representing the Pong game engine
-// It initializes the scene, camera, lights, and playground
-// It also creates the win surfaces and borders for the game
-// The engine runs the render loop to continuously update the scene
+import {GameContext} from "./GameContext.js";
+import {PlayerManager} from "./PlayerManager.js";
+import {usePongStore} from "@/stores/pongStore.js";
+
+function handlePlayerInputs()
+{
+    if (GameContext.running) {
+        if (GameContext.keysPressed[" "]) GameContext.stopGame()
+        if (GameContext.keysPressed["z"]) PlayerManager.getPlayer(0).moveUp()
+        if (GameContext.keysPressed["s"]) PlayerManager.getPlayer(0).moveDown()
+    } else {
+        if (GameContext.keysPressed[" "]) GameContext.startGame()
+    }
+}
+
 export default class PongInstance {
 
-    // aviser sur le constructeur pour ce dont on a besoin
     constructor() {
         this.ball = null
         this.border = new Map
     }
 
     gameLoop() {
-
-        for (const player in PlayerManager.listPlayers())
+        for (const player of PlayerManager.listPlayers())
             if (player.store.score === 3)
                 GameContext.running = false
-
-        GameContext.running = PlayerManager.listPlayers().length === 2;
-
-        if (GameContext.running) {
-            if (keysPressed.value.z) Player1.value.moveUp()
-            if (keysPressed.value.s) Player1.value.moveDown()
-            if (keysPressed.value.arrowup) Player2.value.moveUp()
-            if (keysPressed.value.arrowdown) Player2.value.moveDown()
-            // ball.value?.move()
-        }
-
-        GameContext.animationFrameId = requestAnimationFrame(() => gameLoop());
+        handlePlayerInputs();
+        GameContext.animationFrameId = requestAnimationFrame(() => this.gameLoop());
     }
 
     _initSceneSettings() {
@@ -68,15 +63,15 @@ export default class PongInstance {
             GameContext.scene);
         playground.material = groundMaterial;
 
-        const winsurfaceMaterial = new StandardMaterial("winsurfaceMaterial", GameContext.scene);
-        winsurfaceMaterial.diffuseColor = new Color3(0.8, 0.2, 0.2);
-        winsurfaceMaterial.alpha = 0.5;
-        winsurfaceMaterial.hasAlpha = true;
+        const verticalBorderMaterial = new StandardMaterial("verticalBorderMaterial", GameContext.scene);
+        verticalBorderMaterial.diffuseColor = new Color3(0.8, 0.2, 0.2);
+        verticalBorderMaterial.alpha = 0.5;
+        verticalBorderMaterial.hasAlpha = true;
 
 
         const horizontalBorderMaterial = new StandardMaterial("horizontalBorderMaterial", GameContext.scene);
         horizontalBorderMaterial.diffuseColor = new Color3(0.2, 0.6, 1);
-        horizontalBorderMaterial.alpha = 0;
+        horizontalBorderMaterial.alpha = 0.5;
         horizontalBorderMaterial.hasAlpha = true;
         
         
@@ -86,9 +81,8 @@ export default class PongInstance {
         leftBorder.position.y = 0.05;
         leftBorder.position.z = 0;
         leftBorder.position.x = -playground._width / 2 - 0.05;
-        leftBorder.material = winsurfaceMaterial;
+        leftBorder.material = verticalBorderMaterial;
         this.border.set("leftborder", leftBorder)
-
 
         const rightBorder = MeshBuilder.CreateBox("rightBorder",
             { width: 0.1, height: 0.1, depth: 6, updatable: true },
@@ -96,7 +90,7 @@ export default class PongInstance {
         rightBorder.position.y = 0.05;
         rightBorder.position.z = 0;
         rightBorder.position.x = playground._width / 2 + 0.05;
-        rightBorder.material = winsurfaceMaterial;
+        rightBorder.material = verticalBorderMaterial;
         this.border.set("rightborder", rightBorder)
 
         const upBorder = MeshBuilder.CreateBox("upBorder",

@@ -3,7 +3,7 @@ import {defineStore} from "pinia";
 export const usePongStore = defineStore("game", {
     state: () => ({
         height: 0,
-        width: 0
+        width: 0,
     }),
     actions: ({
         setHeight(value) {
