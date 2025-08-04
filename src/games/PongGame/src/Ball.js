@@ -3,6 +3,8 @@ import {Color3, MeshBuilder, StandardMaterial,} from '@babylonjs/core';
 // Class representing the ball in the Pong game
 // It handles the ball's movement, collision detection, and scoring
 // It also resets the ball's position and speed when a player scores
+
+// revoir toute la class
 export default class Ball {
     constructor(pongEngine, player1, player2) {
         this.player1 = player1;
@@ -25,7 +27,6 @@ export default class Ball {
         this.ball.position.y = 0.1;
     }
 
-    // Method to move the ball and check for collisions
     move() {
         const pos = this.ball.position;
 

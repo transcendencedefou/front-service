@@ -1,16 +1,22 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import PongEngine from './src/PongEngine.js'
-import Player from './src/Player.js'
+import { PlayerManager } from "@/games/PongGame/src/PlayerManager.js";
+import PongInstance from './src/PongInstance.js'
 import Ball from "./src/Ball.js";
+import {GameContext} from "@/games/PongGame/src/GameContext.js";
 
+// Il faut que je vois si j'ai encore besoin des refs ici, je ne pense pas pour tout
 const gameCanvas = ref(null)
-const pongInstance = ref(null)
-const Player1 = ref(null)
-const Player2 = ref(null)
 const ball = ref(null)
-const running = ref(false)
 
+// Pour l'adaptabilité à l'ecran--------------
+function handleResize() {
+  pongInstance.value?.engine.resize()
+}
+//---------------------------------------------
+
+
+// Gestion des inputs -------------------------
 const keysPressed = ref({
   z: false,
   s: false,
@@ -19,10 +25,6 @@ const keysPressed = ref({
   ' ': false, // espace
   r: false
 })
-
-function handleResize() {
-  pongInstance.value?.engine.resize()
-}
 
 function handleKeyDown(event) {
   const key = event.key.toLowerCase()
@@ -44,9 +46,12 @@ function handleKeyUp(event) {
     keysPressed.value[key] = false
   }
 }
+// fin ---------------------------------------------------
 
+
+
+// main loop-----------------------------------------------
 let animationFrameId;
-
 
 function gameLoop() {
   if (Player1.value?.player_score >= 3 || Player2.value?.player_score >= 3) {
@@ -62,6 +67,11 @@ function gameLoop() {
 
   animationFrameId = requestAnimationFrame(() => gameLoop());
 }
+//--------------------------------------------------------------
+
+
+
+//--Start, Stop et Reset ----------------------------------------
 
 function startGame() {
   if (!running.value) {
@@ -70,24 +80,20 @@ function startGame() {
 }
 
 function stopGame() {
-  running.value = false;
 }
 
 function resetGame() {
-  stopGame();
-  Player1.value.resetPosition();
-  Player2.value.resetPosition();
-  Player1.value.player_score = 0;
-  Player2.value.player_score = 0;
-  ball.value.reset();
 }
+//-----------------------------------------------------------
 
+
+
+//Ca ca reste ici c'est pour le chargement et le dechargement de la page
+//faire un init et un destructeur d'evenements pour la lisibilité
+//Le systeme d'init au debut va bouger, pas oublier les cleans
 onMounted(() => {
-  pongInstance.value = new PongEngine(gameCanvas.value)
-  Player1.value = new Player('left', pongInstance.value.scene)
-  Player2.value = new Player('right', pongInstance.value.scene)
-  ball.value = new Ball(pongInstance.value, Player1.value, Player2.value)
-
+  GameContext._initGameContext(new PongInstance(), gameCanvas)
+  PlayerManager.addPlayer('1', "Albert")
   resetGame()
 
   window.addEventListener('keydown', handleKeyDown)
@@ -148,3 +154,24 @@ onBeforeUnmount(() => {
   margin: 4px 0;
 }
 </style>
+
+<!--Pour tester les dicos pinia-->
+
+<!--<template>-->
+<!--  <div>-->
+<!--    <div v-for="(name, index) in gameStore.player_name" :key="index">-->
+<!--      {{ name }}-->
+<!--    </div>-->
+<!--    <button @click="add">Add player</button>-->
+<!--  </div>-->
+<!--</template>-->
+
+<!--<script setup>-->
+<!--import { useGameStore } from '@/stores/gameStore';-->
+
+<!--const gameStore = useGameStore();-->
+
+<!--function add() {-->
+<!--  gameStore.addPlayer('Jonas');-->
+<!--}-->
+<!--</script>-->
