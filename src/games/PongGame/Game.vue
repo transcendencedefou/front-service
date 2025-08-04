@@ -4,40 +4,16 @@ import { GameContext } from "@/games/PongGame/src/GameContext.js";
 import { PlayerManager } from "@/games/PongGame/src/PlayerManager.js";
 import PongInstance from './src/PongInstance.js'
 
-const gameCanvas = ref(null)
+const canvas = ref(null)
 
 function handleResize() {
   GameContext.engine.resize()
 }
 
-
-// Gestion des inputs -------------------------
-
-
-
-// fin ---------------------------------------------------
-
-function startGame() {
-  GameContext.running = true;
-}
-
-function stopGame() {
-  GameContext.running = false;
-}
-
-function resetGame() {
-  //Methodes de reset des elements, surement chaque instance de jeu la sienne
-  GameContext.running = false;
-}
-//-----------------------------------------------------------
-
-
-
-//Ca ca reste ici c'est pour le chargement et le dechargement de la page
 //faire un init et un destructeur d'evenements pour la lisibilité
 //pas oublier les cleans
 onMounted(() => {
-  GameContext._initGameContext(new PongInstance(), gameCanvas)
+  GameContext._initGameContext(new PongInstance(), canvas.value)
   GameContext._render()
   PlayerManager.addPlayer('1', "Albert")
 
@@ -61,7 +37,7 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <canvas ref="gameCanvas" class="game-canvas"></canvas>
+    <canvas ref="canvas" class="game-canvas"></canvas>
     <div class="infos">
       <p>Space to start/pause</p>
       <p>R to reset the game</p>
