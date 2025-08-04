@@ -2,22 +2,22 @@
   <div class="w-full max-w-md space-y-8 bg-white p-8 rounded shadow">
     <div class="flex justify-center"></div>
 
-    <h2 class="text-center text-2xl font-bold text-gray-900">Inscris-toi le reuf</h2>
+    <h2 class="text-center text-2xl font-bold text-gray-900">{{ t('auth.register.title') }}</h2>
     <p class="text-center text-sm text-gray-600">
-      Déjà un compte ?
-      <router-link to="/login" class="font-medium text-clpurple hover:text-clpurple">connecte-toi !</router-link>
+      {{ t('auth.register.subtitle') }}
+      <router-link to="/auth/login" class="font-medium text-clpurple hover:text-clpurple">{{ t('auth.register.cta') }}</router-link>
     </p>
 
     <form class="mt-8 space-y-6" @submit.prevent="onSubmit">
       <div class="space-y-4">
         <!-- Username -->
         <div>
-          <label for="username" class="block text-sm font-medium text-gray-700">Nom d'utilisateur</label>
+          <label for="email" class="block text-sm font-medium text-gray-700">{{ t('auth.register.email') }}</label>
           <input
-            id="username"
-            name="username"
+            id="email"
+            name="email"
             type="text"
-            v-model="username"
+            v-model="email"
             required
             class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-700"
           />
@@ -25,7 +25,7 @@
 
         <!-- Password -->
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+          <label for="password" class="block text-sm font-medium text-gray-700">{{ t('auth.register.password') }}</label>
           <input
             id="password"
             name="password"
@@ -39,7 +39,7 @@
 
         <!-- Confirmation -->
         <div>
-          <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Répéter le mot de passe</label>
+          <label for="confirmPassword" class="block text-sm font-medium text-gray-700">{{ t('auth.register.confirm') }}</label>
           <input
             id="confirmPassword"
             name="confirmPassword"
@@ -64,7 +64,7 @@
               :style="{ width: ((strength + 1) * 20) + '%' }"
             ></div>
           </div>
-          <p class="text-xs text-gray-600 mt-1">{{ strengthLabels[strength] }}</p>
+          <p class="text-xs text-gray-600 mt-1">{{ t(`auth.password.strength.${strength}`) }}</p>
         </div>
       </div>
 
@@ -73,7 +73,7 @@
           type="submit"
           class="w-full flex justify-center rounded-md border border-transparent bg-clpurple py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 transition"
         >
-          Créer un compte
+          {{ t('auth.register.submit') }}
         </button>
       </div>
     </form>
@@ -85,8 +85,11 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Ref } from 'vue'
 import { PasswordStrength, usePasswordPolicy } from '@/composables/usePasswordPolicy'
+import { buildApiUrl, API_CONFIG } from '@/config/api'
+import { useI18n } from 'vue-i18n'
 
-const username = ref('')
+const { t } = useI18n()
+const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const errors = ref<string[]>([])
@@ -120,7 +123,7 @@ const onSubmit = async () => {
   if (errors.value.length > 0) return
 
   try {
-    const res = await fetch('http://localhost/auth/register', {
+    const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.REGISTER), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: username.value, password: password.value })

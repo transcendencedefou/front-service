@@ -11,12 +11,12 @@
 
     <!-- Texte au-dessus -->
     <div class="relative z-10 text-center">
-      <h1 ref="textRef" class="text-6xl md:text-8xl font-black text-gray-900 dark:text-white tracking-tight">PONG.</h1>
+      <h1 ref="textRef" class="text-6xl md:text-8xl font-black text-gray-900 dark:text-white tracking-tight">{{ t('home.title') }}</h1>
       <router-link
-        to="/pong"
+        to="/app/pong"
         class="mt-6 inline-block text-lg font-semibold text-purple-600 dark:text-purple-400 hover:underline"
       >
-        Aller jouer au Pong
+        {{ t('home.cta') }}
       </router-link>
     </div>
   </div>
@@ -26,6 +26,10 @@
 import { ref, onMounted } from 'vue'
 import { gsap } from 'gsap'
 import { TextPlugin } from 'gsap/TextPlugin'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
+
 gsap.registerPlugin(TextPlugin)
 
 const textRef = ref(null)

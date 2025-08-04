@@ -7,10 +7,10 @@
   
           <!-- Desktop links -->
           <div class="hidden md:flex space-x-6 items-center">
-            <router-link to="/" class="text-gray-100 hover:text-clpurple transition">Accueil</router-link>
-            <router-link to="/pong" class="text-gray-100 hover:text-clpurple transition">Pong</router-link>
-            <router-link to="/dashboard" class="text-gray-100 hover:text-clpurple transition">Dashboard</router-link>
-            <router-link to="/login" class="text-dkpurple bg-clpurple px-3 py-1 rounded hover:text-white font-semibold">Connexion</router-link>
+            <router-link to="/" class="nav-text">{{ t('nav.home') }}</router-link>
+            <router-link to="/app/pong" class="nav-text">{{ t('nav.games') }}</router-link>
+            <router-link to="/dashboard" class="nav-text">{{ t('nav.user') }}</router-link>
+            <router-link to="/auth/login" class="nav-cta">{{ t('nav.login') }}</router-link>
             <!-- Toggle Light/Dark Mode -->
             <button 
               @click="toggleTheme"
@@ -19,7 +19,12 @@
               <span v-if="theme === 'dark'">☀️</span>
               <span v-else>🌙</span>
             </button>
-            </div>
+            <!-- Language switch -->
+            <select v-model="locale" class="bg-transparent border rounded px-2 py-1 text-sm outline-none">
+              <option value="fr-FR">FR</option>
+              <option value="en-US">EN</option>
+            </select>
+          </div>
           <!-- Burger (mobile) -->
           <div class="md:hidden z-50 relative">
             <button @click="menuOpen = !menuOpen" class="focus:outline-none">
@@ -45,10 +50,10 @@
         >
           &times;
         </button>
-        <router-link to="/" class="text-2xl font-semibold hover:text-green-500" @click="menuOpen = false"> Accueil </router-link>
-        <router-link to="/pong" class="text-2xl font-semibold hover:text-green-500" @click="menuOpen = false"> Pong </router-link>
-        <router-link to="/dashboard" class="text-2xl font-semibold hover:text-green-500" @click="menuOpen = false"> Dashboard </router-link>
-        <router-link to="/login" class="text-2xl font-semibold hover:text-green-500" @click="menuOpen = false"> Connexion </router-link>
+        <router-link to="/" class="nav-mobile-text" @click="menuOpen = false"> Accueil </router-link>
+        <router-link to="/app/pong" class="nav-mobile-text" @click="menuOpen = false"> Pong </router-link>
+        <router-link to="/dashboard" class="nav-mobile-text" @click="menuOpen = false"> Dashboard </router-link>
+        <router-link to="/auth/login" class="nav-mobile-text" @click="menuOpen = false"> Connexion </router-link>
         <!-- Light/Dark toggle -->
         <button
           @click="toggleTheme"
@@ -58,13 +63,22 @@
           <span v-if="theme === 'dark'">☀️</span>
           <span v-else>🌙</span>
         </button>
+        <select v-model="locale" class="bg-transparent border rounded px-2 py-1 text-sm outline-none">
+          <option value="fr-FR">FR</option>
+          <option value="en-US">EN</option>
+        </select>
       </div>
   </template>
   
   <script lang="ts" setup>
   import { ref } from 'vue'
   import { useTheme } from '@/composables/useTheme'
+  import { useI18n } from 'vue-i18n'
+
+  const { t } = useI18n()
 
   const menuOpen = ref(false)
   const { theme, toggleTheme } = useTheme()
+
+  const { locale } = useI18n()
   </script>
