@@ -10,7 +10,7 @@
     <!-- sous titre + lien  -->
     <p class="text-center text-sm text-gray-600">
       Tjrs pas membre?
-      <a href="#" class="font-medium text-clpurple hover:text-clpurple">t'attends quoi?</a>
+      <router-link to="/register" class="font-medium text-clpurple hover:text-clpurple">T'attends quoi? </router-link>
     </p>
     <!-- formulaire de connexion -->
     <form class="mt-8 space-y-6" @submit.prevent="onSubmit">
