@@ -4,6 +4,7 @@ const playerMap = new Map()
 
 export const PlayerManager = {
     addPlayer(id, name) {
+        id = playerMap.size
         const player = new Player(id, name)
         playerMap.set(id, player)
     },
