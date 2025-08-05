@@ -1,16 +1,17 @@
 import {defineStore} from "pinia";
 
-export const usePongStore = defineStore("game", {
+export const usePongStore = defineStore("ponggame", {
     state: () => ({
-        height: 0,
-        width: 0,
+        ball_speed: 0,
+        ball_direction: {x: 0, y: 0, z: 0},
+        ball_position: {x: 0, y: 0, z: 0},
     }),
     actions: ({
-        setHeight(value) {
-            this.height = value;
+        setBallSpeed(value) {
+            this.ball_speed = value
         },
-        setWidth(value) {
-            this.width = value;
+        setBallDirection(value) {
+            this.ball_direction = value
         }
     })
 })

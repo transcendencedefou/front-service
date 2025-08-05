@@ -1,4 +1,5 @@
 import {defineStore} from "pinia";
+import {GameContext} from "../games/PongGame/src/GameContext.js";
 
 export function createPlayerStore(id) {
     return defineStore(`player-${id}`, {
@@ -9,7 +10,7 @@ export function createPlayerStore(id) {
             spawn: { x: 0, z: 0 },
             pos: { x: 0 , z: 0},
             bar_speed: 0,
-            bar_height: 1,
+            bar_depth: 0,
         }),
         actions: {
             setName(value) {
@@ -30,8 +31,8 @@ export function createPlayerStore(id) {
             setBarSpeed(value) {
                 this.bar_speed = value
             },
-            setBarHeight(value) {
-                this.bar_height = value
+            setBarDepth(value) {
+                this.bar_depth = value * (1 / 6) * GameContext.size["depth"]
             },
         }
     }) ()

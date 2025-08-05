@@ -13,6 +13,7 @@ function handleResize() {
 function handleAddEventListener() {
   window.addEventListener('keydown', GameContext.handleKeyDown.bind(GameContext))
   window.addEventListener('keyup', GameContext.handleKeyUp.bind(GameContext))
+  // window.addEventListener('keyup', GameContext.switchRunningState().bind(GameContext))
   window.addEventListener('resize', handleResize)
 }
 
@@ -23,17 +24,19 @@ function handleRemoveEventListener() {
 }
 
 
-//pas oublier les cleans
 onMounted(() => {
+  // temp
+  GameContext.setSize(9, 6)
+
   GameContext._initGameContext(new PongInstance(), canvas.value)
 
   // Ca c est temporaire, juste au moins on a les methodes
-  GameContext.setSize(9, 6)
   PlayerManager.addPlayer("Albert")
   PlayerManager.addPlayer("Albert0")
 
-  handleAddEventListener()
   GameContext._render()
+
+  handleAddEventListener()
   GameContext.startGame()
   GameContext.game.gameLoop()
 })
