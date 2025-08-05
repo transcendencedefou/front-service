@@ -10,6 +10,7 @@
     button,
     input,
     textarea,
+    label,
     select {
       cursor: none !important;
     }
