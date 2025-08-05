@@ -12,12 +12,12 @@
       <div class="space-y-4">
         <!-- Username -->
         <div>
-          <label for="email" class="login-label-text">{{ t('auth.register.email') }}</label>
+          <label for="username" class="login-label-text">{{ t('auth.register.username') }}</label>
           <input
-            id="email"
-            name="email"
+            id="username"
+            name="username"
             type="text"
-            v-model="email"
+            v-model="username"
             required
             class="login-label-box"
           />
@@ -89,7 +89,7 @@ import { buildApiUrl, API_CONFIG } from '@/config/api'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const email = ref('')
+const username = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const errors = ref<string[]>([])
@@ -99,7 +99,6 @@ const { validatePassword } = usePasswordPolicy()
 
 const strength: Ref<PasswordStrength> = ref(0)
 
-const strengthLabels = ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort']
 const strengthColors = [
   'bg-red-500',
   'bg-orange-500',
@@ -109,6 +108,7 @@ const strengthColors = [
 ]
 
 const validate = () => {
+  errors.value = []
   const result = validatePassword(password.value)
   errors.value = result.errors
   strength.value = result.strength
@@ -133,8 +133,8 @@ const onSubmit = async () => {
 
     if (!res.ok || !data.success) throw new Error('Erreur lors de l’inscription.')
 
-    console.log('Inscription réussie:', data.user)
-    router.push('/login')
+    console.log('Inscription réussie:', username.value)
+    router.push('/auth/login')
   } catch (err) {
     console.error(err)
     errors.value = ['Une erreur est survenue.']

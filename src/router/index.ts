@@ -9,7 +9,7 @@ const routes = [
     { path: '/',
       name: 'Home',
       component: HomeView },
-    { path: '/app/pong',
+    { path: '/pong',
       name: 'Pong Game',
       component: PongView },
     { path: '/auth/login',

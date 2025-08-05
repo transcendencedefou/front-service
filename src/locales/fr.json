@@ -3,7 +3,8 @@
     "home": "Accueil",
     "games": "Jeux",
     "user": "Profil",
-    "login": "Connexion"
+    "login": "Connexion",
+    "logout": "Deconnexion"
   },
   "home": {
     "title": "PONG.",
@@ -14,7 +15,7 @@
       "title": "Connectez-vous !",
       "subtitle": "Toujours pas membre ?",
       "cta": "T'attends quoi ?",
-      "email": "Email",
+      "username": "Nom d'utilisateur",
       "password": "Mot de passe",
       "remember": "Se souvenir de moi ?",
       "forgot": "Mot de passe oublié ?",
@@ -29,7 +30,7 @@
         "title": "Inscris-toi le reuf",
         "subtitle": "Deja un compte ?",
         "cta": "Connecte-toi !",
-        "email": "Email",
+        "username": "Nom d'utilisateur",
         "password": "Mot de passe",
         "confirm": "Repeter le mot de passe",
         "submit": "Creer un compte",

@@ -8,9 +8,11 @@
           <!-- Desktop links -->
           <div class="hidden md:flex space-x-6 items-center">
             <router-link to="/" class="nav-text">{{ t('nav.home') }}</router-link>
-            <router-link to="/app/pong" class="nav-text">{{ t('nav.games') }}</router-link>
+            <router-link to="/pong" class="nav-text">{{ t('nav.games') }}</router-link>
             <router-link to="/dashboard" class="nav-text">{{ t('nav.user') }}</router-link>
-            <router-link to="/auth/login" class="nav-cta">{{ t('nav.login') }}</router-link>
+            <!-- Connexion / deconnxion -->
+            <router-link v-if="!auth.isAuthenticated" to="/auth/login" class="nav-cta">{{ t('nav.login') }}</router-link>
+            <button v-else @click="logout" class="nav-cta text-red-500 hover:underline">{{ t('nav.logout') }}</button>
             <!-- Toggle Light/Dark Mode -->
             <button 
               @click="toggleTheme"
@@ -51,7 +53,7 @@
           &times;
         </button>
         <router-link to="/" class="nav-mobile-text" @click="menuOpen = false">{{ t('nav.home') }}</router-link>
-        <router-link to="/app/pong" class="nav-mobile-text" @click="menuOpen = false">{{ t('nav.games') }}</router-link>
+        <router-link to="/pong" class="nav-mobile-text" @click="menuOpen = false">{{ t('nav.games') }}</router-link>
         <router-link to="/dashboard" class="nav-mobile-text" @click="menuOpen = false">{{ t('nav.user') }}</router-link>
         <router-link to="/auth/login" class="nav-mobile-text" @click="menuOpen = false">{{ t('nav.login') }}</router-link>
         <!-- Light/Dark toggle -->
@@ -68,12 +70,14 @@
           <option value="en-US">EN</option>
         </select>
       </div>
-  </template>
+</template>
   
-  <script lang="ts" setup>
+<script lang="ts" setup>
   import { ref } from 'vue'
   import { useTheme } from '@/composables/useTheme'
   import { useI18n } from 'vue-i18n'
+  import { useAuthStore } from '@/stores/auth';
+  import { useRouter } from 'vue-router'
 
   const { t } = useI18n()
 
@@ -81,4 +85,13 @@
   const { theme, toggleTheme } = useTheme()
 
   const { locale } = useI18n()
-  </script>
+
+  const auth = useAuthStore()
+
+  const router = useRouter()
+
+  function logout() {
+    auth.logout()
+    router.push('/auth/login')
+  }
+</script>

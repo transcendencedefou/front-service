@@ -13,7 +13,7 @@
     <div class="relative z-10 text-center">
       <h1 ref="textRef" class="text-6xl md:text-8xl font-black text-gray-900 dark:text-white tracking-tight">{{ t('home.title') }}</h1>
       <router-link
-        to="/app/pong"
+        to="/pong"
         class="mt-6 inline-block text-lg font-semibold text-purple-600 dark:text-purple-400 hover:underline"
       >
         {{ t('home.cta') }}

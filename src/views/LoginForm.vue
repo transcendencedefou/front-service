@@ -16,12 +16,12 @@
     <form class="mt-8 space-y-6" @submit.prevent="onSubmit">
       <div class="space-y-4">
         <div>
-          <label for="email" class="login-label-text">{{ t('auth.login.email') }}</label>
+          <label for="username" class="login-label-text">{{ t('auth.login.username') }}</label>
           <input
-            id="email"
-            name="email"
-            type="email"
-            v-model="email"
+            id="username"
+            name="username"
+            type="username"
+            v-model="username"
             required
             class="login-label-box"
           />
@@ -111,22 +111,25 @@
 </template>
 
 <script setup lang="ts">
+import { useRouter } from 'vue-router'
+import API_CONFIG, { buildApiUrl } from '@/config/api'
 import { ref } from 'vue'
 import type { Ref } from 'vue'
 import { PasswordStrength, usePasswordPolicy } from '@/composables/usePasswordPolicy'
 import { useI18n } from 'vue-i18n'
+import { useAuthStore } from '@/stores/auth'
 
 const { t } = useI18n()
 
-const email = ref('')
+const username = ref('')
 const password = ref('')
 const errors = ref<string[]>([])
+const auth = useAuthStore()
 
 const { validatePassword } = usePasswordPolicy()
 
 const strength: Ref<PasswordStrength> = ref(0)
 
-const strengthLabels = ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort']
 const strengthColors = [
   'bg-red-500',
   'bg-orange-500',
@@ -141,11 +144,17 @@ const validate = () => {
   strength.value = result.strength
 }
 
-const onSubmit = () => {
+const router = useRouter()
+
+const onSubmit = async () => {
   validate()
-  if (errors.value.length === 0) {
-    console.log('Connexion en cours avec', { email: email.value, password: password.value })
-    // Appel API ici
+  if (errors.value.length > 0) return
+
+  try {
+    await auth.login(username.value, password.value)
+    router.push('/dashboard')
+  } catch (err: any) {
+    errors.value = [err.message || 'Erreur lors de la connexion.']
   }
 }
 </script>
