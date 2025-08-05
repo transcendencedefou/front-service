@@ -13,7 +13,8 @@ function handleResize() {
 function handleAddEventListener() {
   window.addEventListener('keydown', GameContext.handleKeyDown.bind(GameContext))
   window.addEventListener('keyup', GameContext.handleKeyUp.bind(GameContext))
-  // window.addEventListener('keyup', GameContext.switchRunningState().bind(GameContext))
+  window.addEventListener('keyup', GameContext.switchRunningState)
+  window.addEventListener('keyup', GameContext.resetGame)
   window.addEventListener('resize', handleResize)
 }
 
@@ -37,7 +38,6 @@ onMounted(() => {
   GameContext._render()
 
   handleAddEventListener()
-  GameContext.startGame()
   GameContext.game.gameLoop()
 })
 onBeforeUnmount(() => {

@@ -14,7 +14,7 @@ export class Player {
         this.store.setID(id)
         this.store.setName(name)
 
-        this.store.setBarSpeed(0.1)
+        this.store.setBarSpeed(0.06)
 
         this._init()
         this._initTexture()

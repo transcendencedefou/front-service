@@ -48,9 +48,11 @@ export const GameContext = {
         this.running = false;
     },
 
-    resetGame() {
-        //all reset methodes
-        this.running = false;
+    resetGame(event) {
+        const key = event.key.toLowerCase()
+        if (key === "r") {
+            this.game.reset();
+        }
     },
 
     _render() {
@@ -61,7 +63,6 @@ export const GameContext = {
 
     handleKeyDown(event) {
         const key = event.key.toLowerCase()
-
         if (key in this.keysPressed) {
             this.keysPressed[key] = true
         }
@@ -70,7 +71,7 @@ export const GameContext = {
     switchRunningState(event) {
         const key = event.key.toLowerCase()
         if (key === " ") {
-            this.running = !this.running;
+            GameContext.running = !GameContext.running;
         }
     },
 
