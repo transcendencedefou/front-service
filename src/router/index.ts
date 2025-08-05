@@ -3,21 +3,26 @@ import HomeView from '../views/HomeView.vue'
 import PongView from '../views/PongView.vue'
 import LoginForm from '../views/LoginView.vue'
 import RegisterForm from '../views/RegisterView.vue'
+import PlayerStatsChart from '../views/DashboardView.vue'
 
 const routes = [
     { path: '/',
       name: 'Home',
       component: HomeView },
-    { path: '/pong',
+    { path: '/app/pong',
       name: 'Pong Game',
       component: PongView },
-    { path: '/login',
+    { path: '/auth/login',
       name: 'Login',
       component: LoginForm},
     {
-      path: '/register',
+      path: '/auth/register',
       name: 'Register',
-      component: RegisterForm}
+      component: RegisterForm},
+    {
+      path: '/dashboard',
+      name: 'Dashboard',
+      component: PlayerStatsChart}
 ]
 
 const router = createRouter({

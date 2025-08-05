@@ -1,0 +1,51 @@
+{
+  "nav": {
+    "home": "Accueil",
+    "games": "Jeux",
+    "user": "Profil",
+    "login": "Connexion"
+  },
+  "home": {
+    "title": "PONG.",
+    "cta": "Aller jouer au Pong"
+  },
+  "auth": {
+    "login": {
+      "title": "Connectez-vous !",
+      "subtitle": "Toujours pas membre ?",
+      "cta": "T'attends quoi ?",
+      "email": "Email",
+      "password": "Mot de passe",
+      "remember": "Se souvenir de moi ?",
+      "forgot": "Mot de passe oublié ?",
+      "submit": "Se connecter",
+      "separator": "Se connecter via",
+      "providers": {
+        "google": "Google",
+        "github": "GitHub"
+        }
+      },
+      "register": {
+        "title": "Inscris-toi le reuf",
+        "subtitle": "Deja un compte ?",
+        "cta": "Connecte-toi !",
+        "email": "Email",
+        "password": "Mot de passe",
+        "confirm": "Repeter le mot de passe",
+        "submit": "Creer un compte",
+        "error": {
+          "mismatch": "Les mots de passe ne correspondent pas.",
+          "server": "Une erreur est survenue."
+        }
+      },
+    "password": {
+      "strength": {
+        "0": "Très faible",
+        "1": "Faible",
+        "2": "Moyen",
+        "3": "Fort",
+        "4": "Très fort"
+      }
+    }
+  }
+}

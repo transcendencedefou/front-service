@@ -1,0 +1,46 @@
+/**
+ * Configuration des URLs de l'API
+ */
+
+// Détecte automatiquement le protocole et l'host
+const getBaseUrl = (): string => {
+    if (typeof window !== 'undefined') {
+      // Côté client : utilise le même protocole que la page courante
+      return `${window.location.protocol}//${window.location.host}`;
+    }
+    
+    // Fallback pour le SSR ou les tests
+    return 'https://localhost';
+  };
+  
+  export const API_CONFIG = {
+    BASE_URL: getBaseUrl(),
+    ENDPOINTS: {
+      AUTH: {
+        REGISTER: '/auth/register',
+        LOGIN: '/auth/login',
+        LOGOUT: '/auth/logout',
+        VERIFY_2FA: '/auth/2fa/verify',
+        SETUP_2FA: '/auth/2fa/setup',
+        GITHUB_LOGIN: '/auth/github',
+      },
+      USER: {
+        PROFILE: '/users/profile',
+        UPDATE: '/users/update',
+      },
+      GAME: {
+        CREATE: '/games/create',
+        JOIN: '/games/join',
+        STATS: '/games/stats',
+      }
+    }
+  };
+  
+  /**
+   * Construit une URL complète pour un endpoint
+   */
+  export const buildApiUrl = (endpoint: string): string => {
+    return `${API_CONFIG.BASE_URL}${endpoint}`;
+  };
+  
+  export default API_CONFIG;

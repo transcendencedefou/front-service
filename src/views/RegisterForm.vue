@@ -1,31 +1,31 @@
 <template>
-  <div class="w-full max-w-md space-y-8 bg-white p-8 rounded shadow">
+  <div class="login-card">
     <div class="flex justify-center"></div>
 
-    <h2 class="text-center text-2xl font-bold text-gray-900">Inscris-toi le reuf</h2>
-    <p class="text-center text-sm text-gray-600">
-      Déjà un compte ?
-      <router-link to="/login" class="font-medium text-clpurple hover:text-clpurple">connecte-toi !</router-link>
+    <h2 class="login-title">{{ t('auth.register.title') }}</h2>
+    <p class="login-text">
+      {{ t('auth.register.subtitle') }}
+      <router-link to="/auth/login" class="login-cta-text">{{ t('auth.register.cta') }}</router-link>
     </p>
 
     <form class="mt-8 space-y-6" @submit.prevent="onSubmit">
       <div class="space-y-4">
         <!-- Username -->
         <div>
-          <label for="username" class="block text-sm font-medium text-gray-700">Nom d'utilisateur</label>
+          <label for="email" class="login-label-text">{{ t('auth.register.email') }}</label>
           <input
-            id="username"
-            name="username"
+            id="email"
+            name="email"
             type="text"
-            v-model="username"
+            v-model="email"
             required
-            class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-700"
+            class="login-label-box"
           />
         </div>
 
         <!-- Password -->
         <div>
-          <label for="password" class="block text-sm font-medium text-gray-700">Mot de passe</label>
+          <label for="password" class="login-label-text">{{ t('auth.register.password') }}</label>
           <input
             id="password"
             name="password"
@@ -33,25 +33,25 @@
             v-model="password"
             @input="validate"
             required
-            class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-700"
+            class="login-label-box"
           />
         </div>
 
         <!-- Confirmation -->
         <div>
-          <label for="confirmPassword" class="block text-sm font-medium text-gray-700">Répéter le mot de passe</label>
+          <label for="confirmPassword" class="login-label-text">{{ t('auth.register.confirm') }}</label>
           <input
             id="confirmPassword"
             name="confirmPassword"
             type="password"
             v-model="confirmPassword"
             required
-            class="mt-1 block w-full rounded border border-gray-300 px-3 py-2 shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm text-gray-700"
+            class="login-label-box"
           />
         </div>
 
         <!-- Erreurs -->
-        <ul v-if="errors.length" class="text-xs text-red-500 mt-1 list-disc ml-4">
+        <ul v-if="errors.length" class="login-errors-text">
           <li v-for="err in errors" :key="err">{{ err }}</li>
         </ul>
 
@@ -64,16 +64,16 @@
               :style="{ width: ((strength + 1) * 20) + '%' }"
             ></div>
           </div>
-          <p class="text-xs text-gray-600 mt-1">{{ strengthLabels[strength] }}</p>
+          <p class="text-xs text-gray-600 mt-1">{{ t(`auth.password.strength.${strength}`) }}</p>
         </div>
       </div>
 
       <div>
         <button
           type="submit"
-          class="w-full flex justify-center rounded-md border border-transparent bg-clpurple py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 transition"
+          class="login-main-button"
         >
-          Créer un compte
+          {{ t('auth.register.submit') }}
         </button>
       </div>
     </form>
@@ -85,8 +85,11 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Ref } from 'vue'
 import { PasswordStrength, usePasswordPolicy } from '@/composables/usePasswordPolicy'
+import { buildApiUrl, API_CONFIG } from '@/config/api'
+import { useI18n } from 'vue-i18n'
 
-const username = ref('')
+const { t } = useI18n()
+const email = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const errors = ref<string[]>([])
@@ -120,7 +123,7 @@ const onSubmit = async () => {
   if (errors.value.length > 0) return
 
   try {
-    const res = await fetch('http://localhost/auth/register', {
+    const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.REGISTER), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ username: username.value, password: password.value })

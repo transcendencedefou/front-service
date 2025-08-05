@@ -8,7 +8,9 @@ import Game from '../games/PongGame/Game.vue'
 </script>
 
 <template>
-  <Game />
+  <section class="max-h-50">
+    <Game />
+  </section>
   <div class="home-button">
     <router-link to="/" class="back-link">
       Back to Home

@@ -10,7 +10,10 @@ export default {
         colors: {
           clpurple: '#b5a5eb',
           dkpurple: '#22007c',
-        }
+        },
+        fontFamily: { 
+          sans: ['"Inclusive Sans"', 'sans-serif'],
+        },
       },
     },
     plugins: [],
