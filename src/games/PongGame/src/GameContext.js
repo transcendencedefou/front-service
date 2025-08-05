@@ -1,22 +1,23 @@
 import { useGameStore } from "@/stores/gameStore";
 import { PlayerManager } from "./PlayerManager.js";
 import {Engine, Scene} from "@babylonjs/core";
+import Ball from "@/games/PongGame/src/Ball.js";
 
 export const GameContext = {
     game: null,
     canvas: null,
     engine: null,
     scene: null,
+    borders: null,
     store: null,
     running: false,
     animationFrameId: null,
-    size: {height: 0, width: 0},
+    size: {depth: 0, width: 0},
     keysPressed: {
         z: false,
         s: false,
         arrowup: false,
         arrowdown: false,
-        ' ': false,
         r: false
     },
     _initGameContext(game, canvas) {
@@ -33,9 +34,9 @@ export const GameContext = {
         this.game._initPlayGround()
     },
 
-    setSize(width, height) {
+    setSize(width, depth) {
         this.size.width = width;
-        this.size.height = height;
+        this.size.depth = depth;
     },
 
     startGame() {
@@ -63,6 +64,13 @@ export const GameContext = {
 
         if (key in this.keysPressed) {
             this.keysPressed[key] = true
+        }
+    },
+
+    switchRunningState(event) {
+        const key = event.key.toLowerCase()
+        if (key === " ") {
+            this.running = !this.running;
         }
     },
 
