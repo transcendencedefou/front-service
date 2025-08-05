@@ -41,7 +41,9 @@ export default class PongInstance {
             if (player.store.score === 3)
                 GameContext.running = false
         handlePlayerInputs();
-        this.ball?.move()
+        if (GameContext.running) {
+            this.ball?.move();
+        }
 
         GameContext.animationFrameId = requestAnimationFrame(() => this.gameLoop());
     }
@@ -124,6 +126,14 @@ export default class PongInstance {
         GameContext.borders.set("down", downBorder)
     }
 
+    reset() {
+        this.ball.reset()
+        for (const player of PlayerManager.listPlayers()) { player.resetPosition() }
+    }
+
+    hardReset() {
+        //avec le reset des scores aussi
+    }
 
     dispose() {
         GameContext.engine.stopRenderLoop();
