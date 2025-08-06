@@ -1,10 +1,15 @@
-<script  setup>
-import Game from '../games/PongGame/Game.vue'
-    window.addEventListener('keydown', function (e) {
-      if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
-        e.preventDefault();
-      }
-    }, { passive: false });
+<script setup lang="ts">
+import Game from '../games/PongGame/Game.vue';
+
+window.addEventListener(
+  'keydown',
+  (e: KeyboardEvent) => {
+    if (['ArrowUp', 'ArrowDown'].includes(e.key)) {
+      e.preventDefault();
+    }
+  },
+  { passive: false }
+);
 </script>
 
 <template>
