@@ -4,7 +4,7 @@
     <aside class="hidden md:flex w-64 bg-gray-900 text-white p-4 flex-col  gap-6">
       <h1 class="text-2xl font-bold">DASHBOARD</h1>
       <nav class="flex flex-col gap-4 mt-4">
-        <!-- liens ici -->
+        <ChartSelector :selected="chartType" @select="chartType = $event" />
       </nav>
     </aside>
 
@@ -45,7 +45,11 @@
         <h4 class="text-lg font-bold mb-6 text-center md:text-left">STATS</h4>
         <div v-if="isLoading">Chargement des stats...</div>
         <div v-else-if="error" class="text-red-500 text-sm">{{ error }}</div>
-        <div v-else class="grid grid-cols-2 gap-6 max-w-md mx-auto text-center">
+        <!-- vision numeraire-->
+        <div
+          v-if="!chartType"
+          class="grid grid-cols-2 gap-6 max-w-md mx-auto text-center"
+        >
           <div>
             <p class="text-3xl font-bold">{{ totalMatches }}</p>
             <p class="text-sm text-gray-500">Matchs joués</p>
@@ -67,6 +71,14 @@
             <p class="text-sm text-gray-500">Winrate</p>
           </div>
         </div>
+        <!-- vision charts -->
+        <div v-else class="max-w-xl mx-auto">
+          <component
+            :is="getChartComponent(chartType)"
+            :matches="matches"
+            :user-id="auth.user?.id"
+          />
+        </div>
       </section>
     </div>
   </div>
@@ -75,14 +87,21 @@
 <script lang="ts" setup>
   import { ref, onMounted, computed } from 'vue'
   import { useAuthStore } from '@/stores/auth'
+  import ChartSelector from '@components/ChartSelector.vue'
+  import { type ChartType } from '@/types/chart'
+  import BarChart from '@/components/charts/BarChart.vue'
+  import DoughnutChart from '@/components/charts/DoughnutChart.vue'
+  import LineChart from '@/components/charts/LineChart.vue'
 
   const auth = useAuthStore()
   const matches = ref<any[]>([])
   const isLoading = ref(true)
   const error = ref('')
-
+  const chartType = ref<ChartType | null>(null)
+  // console.log(auth.user?.id) pour fake data
   onMounted(async () => {
     try {
+      /*
       const res = await fetch(`https://localhost/users/profiles/${auth.user?.id}`, {
         method: 'GET',
         headers: {
@@ -92,6 +111,27 @@
       if (!res.ok) throw new Error('Erreur lors du chargement des matchs.')
       
       matches.value = await res.json()
+      */
+     matches.value = [
+      {
+        id:'match1',
+        winnerId: '61e2a0ff-2d10-480d-ba0f-98fb1971f332',
+        ballHit: 25,
+        powerUp: 6,
+      },
+      {
+        id:'match2',
+        winnerId: '61e2a0ff-2d10-480d-ba0f-98fb1971f332',
+        ballHit: 42,
+        powerUp:1,
+      },
+      {
+        id:'match3',
+        winnerId: '2',
+        ballHit: 34,
+        powerUp: 2,
+      }
+     ]
     } catch (err: any) {
       error.value = err.message || 'Erreur inconnue'
     } finally {
@@ -114,4 +154,15 @@
   const winRate = computed(() =>
     totalMatches.value > 0 ? Math.round((totalWins.value / totalMatches.value) * 100) : 0
   )
+
+  const getChartComponent = (type: ChartType) => {
+  switch (type) {
+    case 'doughnut':
+      return DoughnutChart
+    case 'line':
+      return LineChart
+    default:
+      return BarChart
+  }
+}
 </script>
