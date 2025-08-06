@@ -4,21 +4,21 @@
 
 // Détecte automatiquement le protocole et l'host
 const getBaseUrl = (): string => {
-    if (typeof window !== 'undefined') {
-      // Côté client : utilise le même protocole que la page courante
-      return `${window.location.protocol}//${window.location.host}`;
-    }
+    // if (typeof window !== 'undefined') {
+    //   // Côté client : utilise le même protocole que la page courante
+    //   return `${window.location.protocol}//${window.location.host}`;
+    // }
     
     // Fallback pour le SSR ou les tests
-    return 'https://localhost';
+    return 'https://localhost/auth';
   };
   
   export const API_CONFIG = {
     BASE_URL: getBaseUrl(),
     ENDPOINTS: {
       AUTH: {
-        REGISTER: '/auth/register',
-        LOGIN: '/auth/login',
+        REGISTER: '/register',
+        LOGIN: '/login',
         LOGOUT: '/auth/logout',
         VERIFY_2FA: '/auth/2fa/verify',
         SETUP_2FA: '/auth/2fa/setup',

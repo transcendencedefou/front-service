@@ -16,12 +16,12 @@
     <form class="mt-8 space-y-6" @submit.prevent="onSubmit">
       <div class="space-y-4">
         <div>
-          <label for="email" class="login-label-text">{{ t('auth.login.email') }}</label>
+          <label for="username" class="login-label-text">{{ t('auth.login.username') }}</label>
           <input
-            id="email"
-            name="email"
-            type="email"
-            v-model="email"
+            id="username"
+            name="username"
+            type="username"
+            v-model="username"
             required
             class="login-label-box"
           />
@@ -34,25 +34,9 @@
             name="password"
             type="password"
             v-model="password"
-            @input="validate"
             required
             class="login-label-box"
           />
-          <!-- affichage des msgs d'erreur -->
-          <ul v-if="errors.length" class="login-errors-text">
-            <li v-for="err in errors" :key="err">{{ err }}</li>
-          </ul>
-          <!-- jauge de securite -->
-          <div class="mt-2">
-            <div class="w-full h-2 bg-gray-200 rounded">
-              <div
-                class="h-2 rounded transition-all duration-300"
-                :class="strengthColors[strength]"
-                :style="{ width: ((strength + 1) * 20) + '%' }"
-              ></div>
-            </div>
-            <p class="text-xs text-gray-600 mt-1">{{ t(`auth.password.strength.${strength}`) }}</p>
-          </div>
         </div>
       </div>
       <!-- se souvenir de moi + mdp oublie -->
@@ -112,40 +96,26 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import type { Ref } from 'vue'
-import { PasswordStrength, usePasswordPolicy } from '@/composables/usePasswordPolicy'
+import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+const router = useRouter()
+const auth = useAuthStore()
 
-const email = ref('')
+const username = ref('')
 const password = ref('')
 const errors = ref<string[]>([])
 
-const { validatePassword } = usePasswordPolicy()
-
-const strength: Ref<PasswordStrength> = ref(0)
-
-const strengthLabels = ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort']
-const strengthColors = [
-  'bg-red-500',
-  'bg-orange-500',
-  'bg-yellow-400',
-  'bg-green-400',
-  'bg-green-600'
-]
-
-const validate = () => {
-  const result = validatePassword(password.value)
-  errors.value = result.errors
-  strength.value = result.strength
-}
-
-const onSubmit = () => {
-  validate()
-  if (errors.value.length === 0) {
-    console.log('Connexion en cours avec', { email: email.value, password: password.value })
-    // Appel API ici
+const onSubmit = async () => {
+  errors.value = []
+  try {
+    await auth.login(username.value, password.value)
+    router.push('/dashboard')
+  } catch (err: any) {
+    errors.value = [err.message || 'Erreur lors de la connexion.']
   }
 }
 </script>
+

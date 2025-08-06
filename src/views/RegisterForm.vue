@@ -12,15 +12,17 @@
       <div class="space-y-4">
         <!-- Username -->
         <div>
-          <label for="email" class="login-label-text">{{ t('auth.register.email') }}</label>
+          <label for="username" class="login-label-text">{{ t('auth.register.username') }}</label>
           <input
-            id="email"
-            name="email"
+            id="username"
+            name="username"
             type="text"
-            v-model="email"
+            v-model="username"
+            @input="validate"
             required
-            class="login-label-box"
+            :class="['login-label-box', usernameError ? 'border-red-500' : '']"
           />
+          <p v-if="usernameError" class="login-errors-text">{{ usernameError }}</p>
         </div>
 
         <!-- Password -->
@@ -45,9 +47,11 @@
             name="confirmPassword"
             type="password"
             v-model="confirmPassword"
+            @blur="validateConfirmPassword"
             required
-            class="login-label-box"
+            :class="['login-label-box', confirmPasswordError ? 'border-red-500' : '']"
           />
+          <p v-if="confirmPasswordError" class="login-errors-text">{{ confirmPasswordError }}</p>
         </div>
 
         <!-- Erreurs -->
@@ -84,22 +88,24 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import type { Ref } from 'vue'
-import { PasswordStrength, usePasswordPolicy } from '@/composables/usePasswordPolicy'
+import { PasswordStrength, useAuthPolicy } from '@/composables/useAuthPolicy'
 import { buildApiUrl, API_CONFIG } from '@/config/api'
 import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
-const email = ref('')
+const router = useRouter()
+
+const username = ref('')
 const password = ref('')
 const confirmPassword = ref('')
 const errors = ref<string[]>([])
+const usernameError = ref<string | null>(null)
+const confirmPasswordError = ref<string | null>(null)
 
-const router = useRouter()
-const { validatePassword } = usePasswordPolicy()
+const { validatePassword, validateUsername } = useAuthPolicy()
 
 const strength: Ref<PasswordStrength> = ref(0)
 
-const strengthLabels = ['Très faible', 'Faible', 'Moyen', 'Fort', 'Très fort']
 const strengthColors = [
   'bg-red-500',
   'bg-orange-500',
@@ -108,33 +114,43 @@ const strengthColors = [
   'bg-green-600'
 ]
 
-const validate = () => {
-  const result = validatePassword(password.value)
-  errors.value = result.errors
-  strength.value = result.strength
-
-  if (password.value !== confirmPassword.value) {
-    errors.value.push("Les mots de passe ne correspondent pas.")
+const validateConfirmPassword = () => {
+  confirmPasswordError.value = null
+  if (confirmPassword.value && password.value !== confirmPassword.value) {
+    confirmPasswordError.value = 'Les mots de passe ne correspondent pas.'
   }
+}
+
+const validate = () => {
+  errors.value = []
+  usernameError.value = null
+  confirmPasswordError.value = null
+
+  const usernameResult = validateUsername(username.value)
+  if (!usernameResult.valid && usernameResult.error)
+    usernameError.value = usernameResult.error
+  
+  const passwordResult = validatePassword(password.value)
+  errors.value.push(...passwordResult.errors)
+  strength.value = passwordResult.strength
 }
 
 const onSubmit = async () => {
   validate()
-  if (errors.value.length > 0) return
+  if (errors.value.length > 0 || usernameError.value) return
 
   try {
     const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.REGISTER), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ username: username.value, password: password.value })
+      body: JSON.stringify({ username: username.value, password: password.value }),
     })
 
     const data = await res.json()
-
     if (!res.ok || !data.success) throw new Error('Erreur lors de l’inscription.')
 
-    console.log('Inscription réussie:', data.user)
-    router.push('/login')
+    console.log('Inscription réussie:', username.value)
+    router.push('/auth/login')
   } catch (err) {
     console.error(err)
     errors.value = ['Une erreur est survenue.']

@@ -3,7 +3,8 @@
       "home": "Home",
       "games": "Games",
       "user": "Profile",
-      "login": "Log In" 
+      "login": "Log In",
+      "logout": "Log Out" 
     },
     "home": {
       "title": "PONG.",
@@ -14,7 +15,7 @@
         "title": "Log In !",
         "subtitle": "Still not member?",
         "cta": "What are you waiting for?",
-        "email": "Email",
+        "username": "Username",
         "password": "Password",
         "remember": "Remember me?",
         "forgot": "Forgot password?",
@@ -29,7 +30,7 @@
             "title": "Sign up bro !",
             "subtitle": "Already registered?",
             "cta": "Log in!",
-            "email": "Email",
+            "username": "Username",
             "password": "Password",
             "confirm": "Repeat password",
             "submit": "Create an account",
@@ -47,5 +48,8 @@
            "4": "Very strong"
           }
         }
+    },
+    "dashboard": {
+      "profile": "Profile's"
     }
 }

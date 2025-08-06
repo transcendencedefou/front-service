@@ -42,7 +42,7 @@ const updateMouse = (e: MouseEvent) => {
 const handleMouseOver = (e: MouseEvent) => {
   const target = e.target as HTMLElement
   if (target.closest('a, button')) {
-    // pulse infini
+    // pulse sur hover
     if (cursor.value) {
       gsap.to(cursor.value, {
         scale: 1.3,
