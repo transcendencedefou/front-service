@@ -34,25 +34,9 @@
             name="password"
             type="password"
             v-model="password"
-            @input="validate"
             required
             class="login-label-box"
           />
-          <!-- affichage des msgs d'erreur -->
-          <ul v-if="errors.length" class="login-errors-text">
-            <li v-for="err in errors" :key="err">{{ err }}</li>
-          </ul>
-          <!-- jauge de securite -->
-          <div class="mt-2">
-            <div class="w-full h-2 bg-gray-200 rounded">
-              <div
-                class="h-2 rounded transition-all duration-300"
-                :class="strengthColors[strength]"
-                :style="{ width: ((strength + 1) * 20) + '%' }"
-              ></div>
-            </div>
-            <p class="text-xs text-gray-600 mt-1">{{ t(`auth.password.strength.${strength}`) }}</p>
-          </div>
         </div>
       </div>
       <!-- se souvenir de moi + mdp oublie -->
@@ -111,45 +95,21 @@
 </template>
 
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-import API_CONFIG, { buildApiUrl } from '@/config/api'
 import { ref } from 'vue'
-import type { Ref } from 'vue'
-import { PasswordStrength, usePasswordPolicy } from '@/composables/usePasswordPolicy'
-import { useI18n } from 'vue-i18n'
+import { useRouter } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useI18n } from 'vue-i18n'
 
 const { t } = useI18n()
+const router = useRouter()
+const auth = useAuthStore()
 
 const username = ref('')
 const password = ref('')
 const errors = ref<string[]>([])
-const auth = useAuthStore()
-
-const { validatePassword } = usePasswordPolicy()
-
-const strength: Ref<PasswordStrength> = ref(0)
-
-const strengthColors = [
-  'bg-red-500',
-  'bg-orange-500',
-  'bg-yellow-400',
-  'bg-green-400',
-  'bg-green-600'
-]
-
-const validate = () => {
-  const result = validatePassword(password.value)
-  errors.value = result.errors
-  strength.value = result.strength
-}
-
-const router = useRouter()
 
 const onSubmit = async () => {
-  validate()
-  if (errors.value.length > 0) return
-
+  errors.value = []
   try {
     await auth.login(username.value, password.value)
     router.push('/dashboard')
@@ -158,3 +118,4 @@ const onSubmit = async () => {
   }
 }
 </script>
+
