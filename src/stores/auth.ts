@@ -24,10 +24,11 @@ export const useAuthStore = defineStore('auth', {
           throw new Error(data.message || 'Erreur de connexion')
         }
 
-        const user = new User(data.user.username, data.token)
+        const user = new User(data.user.id, data.user.username, data.token)
         this.user = user
         localStorage.setItem('token', user.token)
         localStorage.setItem('username', user.username)
+        localStorage.setItem('id', user.id)
 
         return true
       } catch (err: any) {
@@ -45,8 +46,9 @@ export const useAuthStore = defineStore('auth', {
     loadUserFromLocalStorage() {
       const token = localStorage.getItem('token')
       const username = localStorage.getItem('username')
-      if (token && username) {
-        this.user = new User(username, token)
+      const id = localStorage.getItem('id')
+      if (token && username && id) {
+        this.user = new User(id, username, token)
       }
     },
   },

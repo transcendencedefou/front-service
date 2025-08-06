@@ -48,5 +48,8 @@
         "4": "Très fort"
       }
     }
+  },
+  "dashboard": {
+    "profile": "Profil de " 
   }
 }

@@ -18,6 +18,7 @@
             name="username"
             type="text"
             v-model="username"
+            @input="validate"
             required
             :class="['login-label-box', usernameError ? 'border-red-500' : '']"
           />
@@ -128,7 +129,7 @@ const validate = () => {
   const usernameResult = validateUsername(username.value)
   if (!usernameResult.valid && usernameResult.error)
     usernameError.value = usernameResult.error
-
+  
   const passwordResult = validatePassword(password.value)
   errors.value.push(...passwordResult.errors)
   strength.value = passwordResult.strength
@@ -136,7 +137,7 @@ const validate = () => {
 
 const onSubmit = async () => {
   validate()
-  if (errors.value.length > 0) return
+  if (errors.value.length > 0 || usernameError.value) return
 
   try {
     const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.REGISTER), {
