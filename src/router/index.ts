@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, createWebHistory } from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue'
 import PongView from '../views/PongView.vue'
 
@@ -14,6 +14,6 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
-})
+});
 
-export default router
+export default router;

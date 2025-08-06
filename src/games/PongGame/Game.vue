@@ -1,51 +1,50 @@
-<script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue'
-import { GameContext } from "@/games/PongGame/src/GameContext.js";
-import { PlayerManager } from "@/games/PongGame/src/PlayerManager.js";
-import PongInstance from './src/PongInstance.js'
+<script setup lang="ts">
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { GameContext } from '@/games/PongGame/src/GameContext';
+import { PlayerManager } from '@/games/PongGame/src/PlayerManager';
+import PongInstance from './src/PongInstance';
 
-const canvas = ref(null)
+const canvas = ref<HTMLCanvasElement | null>(null);
 
-function handleResize() {
-  GameContext.engine.resize()
+function handleResize(): void {
+  GameContext.engine?.resize();
 }
 
-function handleAddEventListener() {
-  window.addEventListener('keydown', GameContext.handleKeyDown.bind(GameContext))
-  window.addEventListener('keyup', GameContext.handleKeyUp.bind(GameContext))
-  window.addEventListener('keydown', GameContext.switchRunningState)
-  window.addEventListener('keydown', GameContext.resetGame)
-  window.addEventListener('resize', handleResize)
+function handleAddEventListener(): void {
+  window.addEventListener('keydown', GameContext.handleKeyDown.bind(GameContext));
+  window.addEventListener('keyup', GameContext.handleKeyUp.bind(GameContext));
+  window.addEventListener('keyup', GameContext.switchRunningState);
+  window.addEventListener('keyup', GameContext.resetGame);
+  window.addEventListener('resize', handleResize);
 }
 
-function handleRemoveEventListener() {
-  window.removeEventListener('keydown', GameContext.handleKeyDown)
-  window.removeEventListener('keyup', GameContext.handleKeyUp)
-  window.removeEventListener('resize', handleResize)
+function handleRemoveEventListener(): void {
+  window.removeEventListener('keydown', GameContext.handleKeyDown);
+  window.removeEventListener('keyup', GameContext.handleKeyUp);
+  window.removeEventListener('resize', handleResize);
 }
-
 
 onMounted(() => {
   // temp
-  GameContext.setSize(9, 6)
+  GameContext.setSize(9, 6);
 
-  GameContext._initGameContext(new PongInstance(), canvas.value)
+  GameContext._initGameContext(new PongInstance(), canvas.value!);
 
   // Ca c est temporaire, juste au moins on a les methodes
-  PlayerManager.addPlayer("Albert")
-  PlayerManager.addPlayer("Albert0")
+  PlayerManager.addPlayer('Albert');
+  PlayerManager.addPlayer('Albert0');
 
-  GameContext._render()
+  GameContext._render();
 
-  handleAddEventListener()
-  GameContext.game.gameLoop()
-})
+  handleAddEventListener();
+  GameContext.game!.gameLoop();
+});
 onBeforeUnmount(() => {
-  handleRemoveEventListener()
+  handleRemoveEventListener();
 
-  PlayerManager.clearMap()
-  GameContext.dispose()
-})
+  PlayerManager.clearMap();
+  GameContext.dispose();
+});
 </script>
 
 <template>

@@ -24,8 +24,8 @@ front-service/
 ├── package.json              # Dépendances
 ├── tsconfig.json             # Configuration TypeScript
 ├── vite.config.ts            # Configuration Vite
-├── postcss.config.js         # Configuration PostCSS
-├── tailwind.config.js        # Configuration Tailwind
+├── postcss.config.cjs         # Configuration PostCSS
+├── tailwind.config.ts        # Configuration Tailwind
 ├── Dockerfile                # Image Docker
 ├── nginx.conf                # Configuration Nginx
 └── docker-entrypoint.sh      # Script de démarrage
