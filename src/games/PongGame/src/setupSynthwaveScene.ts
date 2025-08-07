@@ -6,7 +6,7 @@ import {
     Scene,
     ColorCurves,
     MeshBuilder,
-    StandardMaterial,
+    StandardMaterial, Mesh,
 } from '@babylonjs/core';
 
 export function setupSynthwaveScene(scene: Scene): void {
@@ -24,19 +24,32 @@ export function setupSynthwaveScene(scene: Scene): void {
 
     const curves = new ColorCurves();
     curves.globalHue = 310;
-    curves.globalSaturation = 30;
+    curves.globalSaturation = 50;
     pipeline.imageProcessing.colorCurves = curves;
 
-    const grid = MeshBuilder.CreateGround("grid", {
-        width: 100,
-        height: 100,
-        subdivisions: 50
-    }, scene);
-    grid.position.set(0, 0, 0);
+    // const grid = MeshBuilder.CreateGround("grid", {
+    //     width: 100,
+    //     height: 100,
+    //     subdivisions: 50
+    // }, scene);
+    // grid.position.set(0, 0, 0);
+    //
+    // const gridMat = new StandardMaterial("gridMat", scene);
+    // gridMat.emissiveColor = new Color3(0, 1, 1); // Cyan néon
+    // gridMat.wireframe = true;
+    // grid.material = gridMat;
+    // grid.position.y = -4;
 
-    const gridMat = new StandardMaterial("gridMat", scene);
-    gridMat.emissiveColor = new Color3(0, 1, 1); // Cyan néon
-    gridMat.wireframe = true;
-    grid.material = gridMat;
-    grid.position.y = -4;
+    const sphere = MeshBuilder.CreateSphere("gridSphere", {
+        diameter: 100,
+        segments: 16,
+        sideOrientation: Mesh.BACKSIDE
+    }, scene);
+    sphere.rotation.x = Math.PI / 2;
+    sphere.rotation.z = Math.PI / 2;
+
+    const sphereMat = new StandardMaterial("gridSphereMat", scene);
+    sphereMat.emissiveColor = new Color3(0, 1, 1); // Cyan néon
+    sphereMat.wireframe = true;
+    sphere.material = sphereMat;
 }
