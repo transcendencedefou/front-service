@@ -2,8 +2,7 @@ import {
     MeshBuilder,
     Color3,
     StandardMaterial,
-    Mesh, PointLight, Vector3,
-    // GlowLayer,
+    Mesh
 } from '@babylonjs/core';
 import { createPlayerStore } from '@/stores/playerFactory';
 import { GameContext } from './GameContext';
@@ -34,7 +33,10 @@ export class Player {
     private _initTexture(): void {
         const neonMaterial = new StandardMaterial('neonMaterial', GameContext.scene!);
 
-        neonMaterial.emissiveColor = new Color3(0.5, 0, 1);
+        if (this.store.id === 0)
+            neonMaterial.emissiveColor = new Color3(0.8, 0, 0);
+        else if (this.store.id === 1)
+            neonMaterial.emissiveColor = new Color3(0, 0, 0.8);
         neonMaterial.alpha = 1;
         neonMaterial.wireframe = true;
 

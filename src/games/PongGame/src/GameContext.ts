@@ -105,7 +105,7 @@ export const GameContext: GameContextType = {
             GameContext.running = !GameContext.running;
         }
         if (key === "r") {
-            GameContext.game?.reset()
+            GameContext.game?.hardReset()
             GameContext.running = false;
         }
     },

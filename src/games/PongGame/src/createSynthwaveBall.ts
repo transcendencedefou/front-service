@@ -46,7 +46,7 @@ export function createBallTrailParticles(ball: Mesh): void  {
     particleSystem.minLifeTime = 0.15;
     particleSystem.maxLifeTime = 0.15;
 
-    particleSystem.emitRate = 10000;
+    particleSystem.emitRate = 2500;
 
     particleSystem.minEmitPower = 1;
     particleSystem.maxEmitPower = 2;
@@ -71,10 +71,14 @@ export function createBallTrailParticles(ball: Mesh): void  {
             );
         } else if (PlayerManager.getPlayer(1)?.store.last_hit) {
             useColorsStore().setTrailColors(
-                new Color4(0/255, 255/255, 255/255),
-                new Color4(150/255, 0/255, 255/255),
-                new Color4(255/255, 0/255, 100/255)
-            );
+                new Color4(255/255, 50/255, 0/255),
+                new Color4(175/255, 0/255, 0/255),
+                new Color4(255/255, 255/255, 255/255));
+        } else {
+            useColorsStore().setTrailColors(
+                new Color4(255/255, 255/255, 255/255),
+                new Color4(255/255, 255/255, 255/255),
+                new Color4(255/255, 255/255, 255/255));
         }
         updateTrailColors(particleSystem);
         const currentPosition = ball.position;

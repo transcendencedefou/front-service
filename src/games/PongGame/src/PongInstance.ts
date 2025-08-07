@@ -13,7 +13,6 @@ import { setupSynthwaveScene } from './setupSynthwaveScene';
 import Ball from './Ball';
 
 function handlePlayerInputs(): void {
-    // Keyboard Inputs
     if (GameContext.running) {
         if (GameContext.keysPressed[' ']) {
             GameContext.stopGame();
@@ -96,12 +95,12 @@ export default class PongInstance {
         const verticalBorderMaterial = new StandardMaterial('verticalBorderMaterial', GameContext.scene!);
         verticalBorderMaterial.diffuseColor = new Color3(0.8, 0.01, 0.2);
         verticalBorderMaterial.alpha = 0;
-        verticalBorderMaterial.hasAlpha = true;
+        // verticalBorderMaterial.hasAlpha = true;
 
         const horizontalBorderMaterial = new StandardMaterial('horizontalBorderMaterial', GameContext.scene!);
         horizontalBorderMaterial.emissiveColor = Color3.White();
         horizontalBorderMaterial.alpha = 0.95;
-        horizontalBorderMaterial.hasAlpha = true;
+        // horizontalBorderMaterial.hasAlpha = true;
 
         const leftBorder = MeshBuilder.CreateBox('leftBorder',
             { width: 0.1, height: 0.01, depth: playground._height + 0.1, updatable: true },
@@ -144,12 +143,16 @@ export default class PongInstance {
         this.ball?.reset();
         for (const player of PlayerManager.listPlayers()) {
             player.resetPosition();
-            player.store.score = 0;
         }
     }
 
     hardReset(): void {
-        // avec le reset des scores aussi
+        PlayerManager.clearLastHit()
+        for (const player of PlayerManager.listPlayers()) {
+            player.store.setScore(0);
+            player.resetPosition();
+        }
+        this.reset()
     }
 
     dispose(): void {

@@ -1,20 +1,16 @@
-import {Color4, Mesh} from '@babylonjs/core';
+import { Mesh } from '@babylonjs/core';
 import { GameContext } from './GameContext';
 import { PlayerManager } from './PlayerManager';
 import { createSynthwaveBall, createBallTrailParticles  } from './createSynthwaveBall';
 import { useBallStore } from '@/stores/ballStore.ts'
-import { useColorsStore} from "@/stores/colorsStore.ts";
-import {Player} from "@/games/PongGame/src/Player.ts";
 
 export default class Ball {
     private store: ReturnType<typeof useBallStore>;
     private ball!: Mesh;
-    private updateSpeed: number;
 
     constructor() {
         this.store = useBallStore()
         this.store.speed = 0.05
-        this.updateSpeed = 0.0075
         this.store.direction = { x: Math.random() < 0.5 ? -1 : 1, y: 0, z: 0 };
         this._normalizeDirection();
 
@@ -88,16 +84,22 @@ export default class Ball {
 
     reset(): void {
         if (!this.ball) return;
-        useColorsStore().setTrailColors(
-            new Color4(112 /255, 157 /255, 255 /255),
-            new Color4(112 /255, 157 /255, 255 /255),
-            new Color4(112 /255, 157 /255, 255 /255)
-        )
         this.ball.position.x = 0;
         this.ball.position.z = 0;
         this.store.speed = 0.05;
-        this.store.direction.x = Math.random() < 0.5 ? -1 : 1;
-        // this.store.direction.z = (Math.random() * 2 - 1) * 0.2;
+        if (PlayerManager.getPlayer(0)?.store.last_hit) {
+            this.store.direction.x = 1
+            this.store.direction.z = (Math.random() * 2 - 1) * 0.2;
+            console.log("red");
+        } else if (PlayerManager.getPlayer(1)?.store.last_hit) {
+            this.store.direction.x = -1
+            this.store.direction.z = (Math.random() * 2 - 1) * 0.2;
+            console.log("blue");
+        } else {
+            this.store.direction.x = Math.random() < 0.5 ? -1 : 1;
+            this.store.direction.z = 0;
+            console.log(this.store.direction.x);
+        }
         this._normalizeDirection();
     }
 }
