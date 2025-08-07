@@ -46,6 +46,9 @@ export function createPlayerStore(id: number) {
             setScore(value: number) {
                 this.score = value;
             },
+            incrementScore(value: number) {
+                this.score += value;
+            },
             setSpawn(x: number, z: number) {
                 this.spawn = { x, z };
             },

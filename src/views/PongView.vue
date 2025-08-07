@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import Game from '../games/PongGame/Game.vue';
+import GameHud  from '../games/PongGame/GameHUD.vue';
 
 window.addEventListener(
   'keydown',
@@ -14,10 +15,11 @@ window.addEventListener(
 
 <template>
   <Game />
+  <GameHud />
   <div class="home-button">
-    <router-link to="/" class="back-link">
-      Back to Home
-    </router-link>
+<!--    <router-link to="/" class="back-link">-->
+<!--      Back to Home-->
+<!--    </router-link>-->
   </div>
 </template>
 

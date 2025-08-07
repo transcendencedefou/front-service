@@ -15,10 +15,12 @@ interface GameContextType {
     scene: Scene | null;
     borders: Map<string, Mesh>;
     store: ReturnType<typeof useGameStore> | null;
+    hud_created: boolean;
     running: boolean;
     animationFrameId: number | null;
     size: Size;
     keysPressed: Record<string, boolean>;
+    setHudTrue(): void;
     _initGameContext(game: PongInstance, canvas: HTMLCanvasElement): void;
     _initGameTextures(): void;
     setSize(width: number, depth: number): void;
@@ -39,6 +41,7 @@ export const GameContext: GameContextType = {
     scene: null,
     borders: new Map<string, Mesh>(),
     store: null,
+    hud_created: false,
     running: false,
     animationFrameId: null,
     size: { depth: 0, width: 0 },
@@ -48,6 +51,10 @@ export const GameContext: GameContextType = {
         arrowup: false,
         arrowdown: false,
         r: false,
+    },
+
+    setHudTrue() {
+        this.hud_created = true
     },
 
     _initGameContext(game: PongInstance, canvas: HTMLCanvasElement) {
