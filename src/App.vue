@@ -4,10 +4,13 @@
 </script>
 
 <template>
-  <CustomCursor />
-  <Navbar />
-  <router-view />
+  <div class="relative w-full min-h-screen overflow-hidden">
+    <CustomCursor />
+    <Navbar />
+    <router-view />
+  </div>
 </template>
 
 <style scoped>
 </style>
+
