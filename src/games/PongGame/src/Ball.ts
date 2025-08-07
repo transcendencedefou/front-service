@@ -1,7 +1,7 @@
 import { Mesh } from '@babylonjs/core';
 import { GameContext } from './GameContext';
 import { PlayerManager } from './PlayerManager';
-import { createSynthwaveBall, createBallTrailParticles  } from './createSynthwaveBall';
+import { createSynthwaveBall, createBallTrailParticles  } from './meshes/createSynthwaveBall.ts';
 import { useBallStore } from '@/stores/ballStore.ts'
 
 export default class Ball {
@@ -37,10 +37,10 @@ export default class Ball {
         const downBorder = GameContext.borders.get('down');
 
         if (leftBorder && this.ball.intersectsMesh(leftBorder, false) && PlayerManager.getPlayer(1)) {
-            PlayerManager.getPlayer(1)!.store.setScore(+1);
+            PlayerManager.getPlayer(1)!.store.incrementScore(+1);
             GameContext.game?.reset();
         } else if (rightBorder && this.ball.intersectsMesh(rightBorder, false) && PlayerManager.getPlayer(0)) {
-            PlayerManager.getPlayer(0)!.store.setScore(+1);
+            PlayerManager.getPlayer(0)!.store.incrementScore(1);
             GameContext.game?.reset();
         }
 
@@ -90,15 +90,12 @@ export default class Ball {
         if (PlayerManager.getPlayer(0)?.store.last_hit) {
             this.store.direction.x = 1
             this.store.direction.z = (Math.random() * 2 - 1) * 0.2;
-            console.log("red");
         } else if (PlayerManager.getPlayer(1)?.store.last_hit) {
             this.store.direction.x = -1
             this.store.direction.z = (Math.random() * 2 - 1) * 0.2;
-            console.log("blue");
         } else {
             this.store.direction.x = Math.random() < 0.5 ? -1 : 1;
             this.store.direction.z = 0;
-            console.log(this.store.direction.x);
         }
         this._normalizeDirection();
     }

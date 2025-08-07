@@ -31,6 +31,10 @@ export const PlayerManager = {
         return Array.from(playerMap.values());
     },
 
+    playerMap(): typeof playerMap {
+        return playerMap;
+    },
+
     clearLastHit() {
         for (const player of playerMap.values())
             player.store.last_hit = false;

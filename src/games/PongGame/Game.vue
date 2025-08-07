@@ -32,7 +32,7 @@ onMounted(() => {
 
   // Ca c est temporaire, juste au moins on a les methodes
   PlayerManager.addPlayer('Albert');
-  PlayerManager.addPlayer('Albert0');
+  PlayerManager.addPlayer('Richard');
 
   GameContext._render();
 
@@ -49,12 +49,6 @@ onBeforeUnmount(() => {
 
 <template>
     <canvas ref="canvas" class="game-canvas"></canvas>
-    <div class="infos">
-      <p>Space to start/pause</p>
-      <p>R to reset the game</p>
-      <p>Player1: Z/S</p>
-      <p>Player2: ArrowUp/ArrowDown</p>
-    </div>
 </template>
 
 <style scoped>
@@ -66,24 +60,5 @@ onBeforeUnmount(() => {
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: #000;
-}
-
-.infos {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: #f1f1f1;
-  padding: 12px 16px;
-  border-radius: 8px;
-  font-family: 'Segoe UI', sans-serif;
-  font-size: 14px;
-  line-height: 1.6;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
-  max-width: 200px;
-}
-
-.infos p {
-  margin: 4px 0;
 }
 </style>

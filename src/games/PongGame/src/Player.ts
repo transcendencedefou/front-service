@@ -21,7 +21,7 @@ export class Player {
         this.store.setBarSpeed(0.13);
 
         this._init();
-        this._initTexture();
+        this._initBarTexture();
     }
 
     private _init(): void {
@@ -30,7 +30,7 @@ export class Player {
         this.store.setBarDepth(1);
     }
 
-    private _initTexture(): void {
+    private _initBarTexture(): void {
         const neonMaterial = new StandardMaterial('neonMaterial', GameContext.scene!);
 
         if (this.store.id === 0)
