@@ -72,7 +72,7 @@ onBeforeUnmount(() => {
   position: absolute;
   top: 20px;
   right: 20px;
-  background-color: rgba(0, 0, 0, 0.7); /* fond semi-transparent */
+  background-color: rgba(0, 0, 0, 0.7);
   color: #f1f1f1;
   padding: 12px 16px;
   border-radius: 8px;
