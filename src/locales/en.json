@@ -50,6 +50,29 @@
         }
     },
     "dashboard": {
-      "profile": "Profile's"
+      "profile": "Profile's",
+      "match-played": "Match played",
+      "ball-hit": "Ball hits",
+      "wins": "Wins",
+      "losses": "Losses",
+      "winrate": "Winrate",
+      "account-settings": "Account settings",
+      "username": "Username",
+      "new-username": "New Username",
+      "current-password": "Current password",
+      "new-password": "New password",
+      "save-changes": "Save changes",
+      "required-password": "Current password required",
+      "no-changes": "No changes detected",
+      "error-occured": "An error occured",
+      "changes-error": "An error occured while modifying",
+      "nav": {
+        "doughnut": "Wins | Losses",
+        "bar": "Power-Ups",
+        "line": "Ball hits",
+        "settings": "Settings",
+        "friends": "Friends",
+        "global": "Global stats"
+      }
     }
 }

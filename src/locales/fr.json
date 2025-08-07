@@ -4,7 +4,7 @@
     "games": "Jeux",
     "user": "Profil",
     "login": "Connexion",
-    "logout": "Deconnexion"
+    "logout": "Déconnexion"
   },
   "home": {
     "title": "PONG.",
@@ -24,21 +24,21 @@
       "providers": {
         "google": "Google",
         "github": "GitHub"
-        }
-      },
-      "register": {
-        "title": "Inscris-toi le reuf",
-        "subtitle": "Deja un compte ?",
-        "cta": "Connecte-toi !",
-        "username": "Nom d'utilisateur",
-        "password": "Mot de passe",
-        "confirm": "Repeter le mot de passe",
-        "submit": "Creer un compte",
-        "error": {
-          "mismatch": "Les mots de passe ne correspondent pas.",
-          "server": "Une erreur est survenue."
-        }
-      },
+      }
+    },
+    "register": {
+      "title": "Inscris-toi le reuf",
+      "subtitle": "Déjà un compte ?",
+      "cta": "Connecte-toi !",
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "confirm": "Répéter le mot de passe",
+      "submit": "Créer un compte",
+      "error": {
+        "mismatch": "Les mots de passe ne correspondent pas.",
+        "server": "Une erreur est survenue."
+      }
+    },
     "password": {
       "strength": {
         "0": "Très faible",
@@ -50,6 +50,29 @@
     }
   },
   "dashboard": {
-    "profile": "Profil de " 
+    "profile": "Profil de ",
+    "match-played": "Matchs joués",
+    "ball-hit": "Rebonds",
+    "wins": "Victoires",
+    "losses": "Défaites",
+    "winrate": "Winrate",
+    "account-settings": "Réglages du compte",
+    "username": "Nom d'utilisateur",
+    "new-username": "Nouveau pseudo",
+    "current-password": "Mot de passe actuel",
+    "new-password": "Nouveau mot de passe",
+    "save-changes": "Enregistrer les modifications",
+    "required-password": "Le mot de passe actuel est requis",
+    "no-changes": "Aucune modification détectée",
+    "error-occured": "Une erreur est survenue",
+    "changes-error": "Erreur lors de la modification",
+    "nav": {
+      "doughnut": "Victoires | Défaites",
+      "bar": "Power-Ups",
+      "line": "Balles touchées",
+      "settings": "Réglages",
+      "friends": "Amis",
+      "global": "Statistiques globales"
+    }
   }
 }
