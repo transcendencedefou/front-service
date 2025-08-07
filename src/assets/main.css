@@ -76,3 +76,36 @@
     @apply flex w-full items-center justify-center rounded-md border border-gray-300 bg-white py-2 px-4 text-sm font-medium text-gray-500 shadow-sm hover:bg-gray-50;
   }
 }
+
+:root {
+  /* fond et textes */
+  --bg: #fafafa;
+  --fg: #0a0a0a;
+
+  /* neon grid */
+  --horizon: rgba(120,40,255,.18);
+  --grid-line: rgba(20,20,20,.12);
+  --grid-color: rgba(0,0,0,0.12);
+
+  /* accents */
+  --accent-1: #7a00ff;
+  --accent-2: #00f6ff;
+  --accent-3: #ff6b6b;
+}
+
+.dark {
+  --bg: #060714;
+  --fg: #ffffff;
+
+  --horizon: rgba(120,40,255,.18);
+  --grid-line: rgba(20,20,20.12);
+  --grid-color: rgba(0.0,255,255);
+
+  --accent-1: #b388ff;
+  --accent-2: #6ff3ff;
+  --accent-3: #ff9fb0;
+}
+
+@media (prefers-reduced-motion: reduce){
+  .motion-ok{ animation: none !important; transition: none !important; }
+}

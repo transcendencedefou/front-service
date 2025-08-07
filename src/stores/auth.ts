@@ -2,6 +2,8 @@ import { defineStore } from 'pinia'
 import { User } from '@/models/User'
 import API_CONFIG, { buildApiUrl } from '@/config/api'
 
+console.log('[API]', buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.LOGIN))
+
 export const useAuthStore = defineStore('auth', {
   state: () => ({
     user: null as User | null,
