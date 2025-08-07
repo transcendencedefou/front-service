@@ -5,6 +5,6 @@
   </template>
   
   <script lang="ts" setup>
-  import PlayerStatsChart from '@/components/PlayerStatsChart.vue'
+  import PlayerStatsChart from '@/components/dashboard/PlayerStatsChart.vue'
   </script>
   
