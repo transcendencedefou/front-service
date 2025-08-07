@@ -1,41 +1,41 @@
 <template>
   <div class="max-w-md mx-auto space-y-8">
-    <h2 class="text-2xl font-bold text-center">Réglages du compte</h2>
+    <h2 class="text-2xl font-bold text-center">{{ t('dashboard.account-settings') }}</h2>
 
     <!-- 🔤 Nom d'utilisateur -->
     <div class="space-y-2">
-      <label class="block text-sm font-medium">Nom d'utilisateur</label>
+      <label class="block text-sm font-medium">{{ t('dashboard.new-username') }}</label>
       <input
         v-model="newUsername"
         type="text"
         class="w-full border px-3 py-2 rounded shadow-sm"
-        placeholder="Nouveau pseudo"
+        :placeholder="t('dashboard.new-username')"
       />
     </div>
 
     <!-- 🔒 Mot de passe -->
     <div class="space-y-2">
-      <label class="block text-sm font-medium">Mot de passe actuel</label>
+      <label class="block text-sm font-medium">{{ t('dashboard.current-password') }}</label>
       <input
         v-model="currentPassword"
         type="password"
         class="w-full border px-3 py-2 rounded shadow-sm"
-        placeholder="Mot de passe actuel"
+        :placeholder="t('dashboard.current-password')"
       />
 
-      <label class="block text-sm font-medium">Nouveau mot de passe</label>
+      <label class="block text-sm font-medium">{{ t('dashboard.new-password') }}</label>
       <input
         v-model="newPassword"
         type="password"
         class="w-full border px-3 py-2 rounded shadow-sm"
-        placeholder="Nouveau mot de passe"
+        :placeholder="t('dashboard.new-password')"
       />
     </div>
 
     <!-- ✅ Actions -->
     <div class="space-y-2">
       <button @click="submitModifications" class="btn-primary w-full">
-        Enregistrer les modifications
+        {{ t('dashboard.save-changes') }}
       </button>
 
       <!-- messages -->
@@ -48,6 +48,9 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 const auth = useAuthStore()
 
@@ -63,7 +66,7 @@ const submitModifications = async () => {
   errorMessage.value = ''
 
   if (!currentPassword.value) {
-    errorMessage.value = 'Le mot de passe actuel est requis.'
+    errorMessage.value = t('dashboard.required-password')
     return
   }
 
@@ -80,7 +83,7 @@ const submitModifications = async () => {
   }
 
   if (!payload.newUsername && !payload.newPassword) {
-    errorMessage.value = 'Aucune modification détectée.'
+    errorMessage.value = t('dashboard.no-changes')
     return
   }
 
@@ -97,7 +100,7 @@ const submitModifications = async () => {
     const data = await res.json()
 
     if (!res.ok || !data.success) {
-      throw new Error(data.message || 'Une erreur est survenue.')
+      throw new Error(data.message || t('dashboard.error-occured'))
     }
 
     message.value = data.message
@@ -107,7 +110,7 @@ const submitModifications = async () => {
     currentPassword.value = ''
     newPassword.value = ''
   } catch (err: any) {
-    errorMessage.value = err.message || 'Erreur lors de la modification.'
+    errorMessage.value = err.message || t('dashboard.changes-error')
   }
 }
 </script>

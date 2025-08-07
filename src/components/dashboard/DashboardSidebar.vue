@@ -7,7 +7,7 @@
       :class="{ 'bg-clpurple text-white': selected === null }"
     >
       <Notebook class="w-5 h-5" />
-      <span class="text-sm">{{ labels.global }}</span>
+      <span class="text-sm">{{ t('dashboard.nav.global') }}</span>
     </button>
 
     <!-- Boutons des types de graphiques -->
@@ -19,7 +19,7 @@
       :class="{ 'bg-clpurple text-white': selected === type }"
     >
       <component :is="icons[type]" class="w-5 h-5" />
-      <span class="text-sm">{{ labels[type] }}</span>
+      <span class="text-sm">{{ t('dashboard.nav.' + type) }}</span>
     </button>
 
     <!-- Boutons fixes (Réglages, Amis) -->
@@ -31,7 +31,7 @@
       :class="{ 'bg-clpurple text-white': selected === type }"
     >
       <component :is="icons[type]" class="w-5 h-5" />
-      <span class="text-sm">{{ labels[type] }}</span>
+      <span class="text-sm">{{ t('dashboard.nav.' + type) }}</span>
     </button>
   </div>
 </template>
@@ -48,6 +48,9 @@ import {
 } from 'lucide-vue-next'
 
 import { type ChartType, chartTypes } from '@/types/chart'
+import { useI18n } from 'vue-i18n'
+
+const { t } = useI18n()
 
 type SidebarTab = ChartType | 'settings' | 'friends' | null
 
@@ -69,14 +72,4 @@ const icons = {
   friends: Users,
   global: Notebook,
 }
-
-const labels = {
-  doughnut: 'Victoires | Défaites',
-  bar: 'PowerUps',
-  line: 'Balles Touchées',
-  settings: 'Réglages',
-  friends: 'Amis',
-  global: 'Statistiques Globales',
-} as const
 </script>
-
