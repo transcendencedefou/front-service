@@ -48,11 +48,15 @@
         <!-- vision numeraire-->
         <div
           v-if="!chartType"
-          class="grid grid-cols-2 gap-6 max-w-md mx-auto text-center"
+          class="grid grid-cols-2 gap-6 max-w-md mx-auto text-center bg-gray-100 p-10 rounded-md"
         >
           <div>
             <p class="text-3xl font-bold">{{ totalMatches }}</p>
             <p class="text-sm text-gray-500">Matchs joués</p>
+          </div>
+          <div>
+            <p class="text-3xl font-bold">{{ totalBallHits }}</p>
+            <p class="text-sm text-gray-500">Rebonds</p>
           </div>
           <div>
             <p class="text-3xl font-bold">{{ totalWins }}</p>
@@ -62,17 +66,13 @@
             <p class="text-3xl font-bold">{{ totalLosses }}</p>
             <p class="text-sm text-gray-500">Défaites</p>
           </div>
-          <div>
-            <p class="text-3xl font-bold">{{ totalBallHits }}</p>
-            <p class="text-sm text-gray-500">Rebonds</p>
-          </div>
           <div class="col-span-2">
             <p class="text-xl font-semibold text-clpurple">{{ winRate }}%</p>
             <p class="text-sm text-gray-500">Winrate</p>
           </div>
         </div>
         <!-- vision charts -->
-        <div v-else class="max-w-xl mx-auto">
+        <div v-else class="max-w-md mx-auto bg-gray-100 p-10 rounded-md">
           <component
             :is="getChartComponent(chartType)"
             :matches="matches"

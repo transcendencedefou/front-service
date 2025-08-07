@@ -1,5 +1,5 @@
 <template>
-  <div class="relative overflow-hidden w-full h-screen bg-neutral-50 dark:bg-black flex items-center justify-center">
+  <div class="relative overflow-hidden w-full h-screen bg-neutral-50 dark:bg-black flex items-center justify-center pt-16">
     <!-- Sphere simulee -->
     <section class="h-screen flex items-center justify-center">
     <div
