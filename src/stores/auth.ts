@@ -13,6 +13,7 @@ export const useAuthStore = defineStore('auth', () => {
   async function login(username: string, password: string, twoFactorCode?: string): Promise<boolean> {
     const body: any = { username, password }
     if (twoFactorCode) body.twoFactorCode = twoFactorCode
+
     const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.LOGIN), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -31,13 +32,14 @@ export const useAuthStore = defineStore('auth', () => {
       throw new Error(data.message || 'Erreur de connexion')
     }
 
-    const u = new User(data.user.id, data.user.username, data.token)
-    ;(u as any).twoFactorEnabled = data.user.twoFactorEnabled
+    const u = new User(data.user.id, data.user.username, data.token, !!data.user.twoFactorEnabled)
     user.value = u
+
     localStorage.setItem('token', u.token)
     localStorage.setItem('username', u.username)
     localStorage.setItem('id', u.id)
-    localStorage.setItem('twoFactorEnabled', String(!!(u as any).twoFactorEnabled))
+    localStorage.setItem('twoFactorEnabled', String(!!u.twoFactorEnabled))
+
     pending2FA.value = false
     tempCredentials.value = { username: '', password: '' }
     return true
@@ -62,12 +64,19 @@ export const useAuthStore = defineStore('auth', () => {
     const token = localStorage.getItem('token')
     const username = localStorage.getItem('username')
     const id = localStorage.getItem('id')
+    const twoFactorEnabled = localStorage.getItem('twoFactorEnabled') === 'true'
+
     if (token && username && id) {
-      const u = new User(id, username, token)
-      ;(u as any).twoFactorEnabled = localStorage.getItem('twoFactorEnabled') === 'true'
+      const u = new User(id, username, token, twoFactorEnabled)
       user.value = u
     }
   }
 
-  return { user, pending2FA, tempCredentials, isAuthenticated, login, verify2FA, logout, loadUserFromLocalStorage }
+  function setTwoFactorEnabled(v: boolean) {
+    if (!user.value) return
+    user.value.twoFactorEnabled = v
+    localStorage.setItem('twoFactorEnabled', String(v))
+  }
+
+  return { user, pending2FA, tempCredentials, isAuthenticated, login, verify2FA, logout, loadUserFromLocalStorage, setTwoFactorEnabled }
 })
