@@ -1,5 +1,5 @@
 import { Player } from "@/games/PongGame/src/Player.ts";
-import {Control, StackPanel, TextBlock, Rectangle} from "babylonjs-gui";
+import {Control, StackPanel, TextBlock, Rectangle} from '@babylonjs/gui';
 import { GameContext} from "../GameContext.ts"
 
 export function CreatePlayerBoard(player: Player): StackPanel {

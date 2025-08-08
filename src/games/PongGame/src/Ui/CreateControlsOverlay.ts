@@ -1,4 +1,4 @@
-import { Control, StackPanel, Rectangle, TextBlock } from "babylonjs-gui"
+import { Control, StackPanel, Rectangle, TextBlock } from '@babylonjs/gui';
 
 /**
  * Overlay fixe à gauche qui affiche les contrôles.

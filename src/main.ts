@@ -1,17 +1,30 @@
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
+import { createI18n } from 'vue-i18n'
 import App from './App.vue'
+import fr from './locales/fr.json'
+import en from './locales/en.json'
 import './assets/main.css'
 import router from './router/index.ts'
+import { useAuthStore } from './stores/auth.ts'
+
+const i18n = createI18n({
+    legacy: false, // obliogatoire en compo API
+    locale: 'fr-FR',
+    fallbackLocale: 'en-US',
+    messages: {
+      'fr-FR': fr,
+      'en-US': en,
+    },
+})
 
 const app = createApp(App)
-
-// Pinia c'est un gestionnaire d'état (donc de data) pour Vue, ça me permet de stocker des données globales,
-// dans mon cas celles du jeu. Graçe a ca on peut éditer et récuperer partout sur l'app ces données
-// Je peux les rendre perssistantes au refresh et au leave mais je m'en occuperai plus tard
 const pinia = createPinia()
 app.use(pinia)
+const auth = useAuthStore()
+auth.loadUserFromLocalStorage()
 
 app.use(router)
+app.use(i18n)
 app.mount('#app')
 

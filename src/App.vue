@@ -1,11 +1,16 @@
 <script lang="ts" setup>
-  import Navbar from './views/Navbar.vue'
+  import Navbar from './components/Navbar.vue'
+  import CustomCursor from './components/CustomCursor.vue'
 </script>
 
 <template>
-  <Navbar />
-  <router-view />
+  <div class="relative w-full min-h-screen overflow-hidden">
+    <Navbar />
+    <CustomCursor />
+    <router-view />
+  </div>
 </template>
 
 <style scoped>
 </style>
+

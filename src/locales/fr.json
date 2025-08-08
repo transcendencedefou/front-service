@@ -1,0 +1,104 @@
+{
+  "common": {
+    "loading": "Chargement..."
+  },
+  "nav": {
+    "home": "Accueil",
+    "games": "Jeux",
+    "user": "Profil",
+    "login": "Connexion",
+    "logout": "Déconnexion"
+  },
+  "home": {
+    "title": "PONG.",
+    "cta": "Aller jouer au Pong"
+  },
+  "auth": {
+    "login": {
+      "title": "Connectez-vous !",
+      "subtitle": "Toujours pas membre ?",
+      "cta": "T'attends quoi ?",
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "remember": "Se souvenir de moi ?",
+      "forgot": "Mot de passe oublié ?",
+      "submit": "Se connecter",
+      "separator": "Se connecter via",
+      "2faPrompt": "Saisissez votre code 2FA à 6 chiffres.",
+      "validate2fa": "Valider 2FA",
+      "back": "Retour",
+      "providers": {
+        "google": "Google",
+        "github": "GitHub"
+      }
+    },
+    "register": {
+      "title": "Inscris-toi le reuf",
+      "subtitle": "Déjà un compte ?",
+      "cta": "Connecte-toi !",
+      "username": "Nom d'utilisateur",
+      "password": "Mot de passe",
+      "confirm": "Répéter le mot de passe",
+      "submit": "Créer un compte",
+      "error": {
+        "mismatch": "Les mots de passe ne correspondent pas.",
+        "server": "Une erreur est survenue."
+      }
+    },
+    "password": {
+      "strength": {
+        "0": "Très faible",
+        "1": "Faible",
+        "2": "Moyen",
+        "3": "Fort",
+        "4": "Très fort"
+      }
+    }
+  },
+  "dashboard": {
+    "profile": "Profil de ",
+    "match-played": "Matchs joués",
+    "ball-hit": "Rebonds",
+    "wins": "Victoires",
+    "losses": "Défaites",
+    "winrate": "Winrate",
+    "account-settings": "Réglages du compte",
+    "username": "Nom d'utilisateur",
+    "new-username": "Nouveau pseudo",
+    "current-password": "Mot de passe actuel",
+    "new-password": "Nouveau mot de passe",
+    "save-changes": "Enregistrer les modifications",
+    "required-password": "Le mot de passe actuel est requis",
+    "no-changes": "Aucune modification détectée",
+    "error-occured": "Une erreur est survenue",
+    "changes-error": "Erreur lors de la modification",
+    "2fa":{
+      "title": "Authentification à deux facteurs (2FA)",
+      "enabled": "ACTIVÉE",
+      "disabled": "DÉSACTIVÉE", 
+      "desc": "Ajoute une couche de sécurité avec une application d'authentification.",
+      "loading": "Chargement...",
+      "enable": "Activer 2FA",
+      "disable": "Désactiver 2FA",
+      "disable-confirm": "Êtes-vous sûr de vouloir désactiver la 2FA ?",
+      "setup-title": "Configurer la 2FA",
+      "step1": "Installez une application d'authentification (Google Authenticator, Authy, etc.).",
+      "step2": "Scannez le QR code ou saisissez le secret manuellement.",
+      "step3": "Entrez le code à 6 chiffres pour valider.",
+      "enter-code": "Code à 6 chiffres",
+      "confirm": "Confirmer",
+      "cancel": "Annuler",
+      "prompt": "Saisissez votre code 2FA à 6 chiffres.",
+      "validate": "Valider 2FA",
+      "back": "Retour"
+    },
+    "nav": {
+      "doughnut": "Victoires | Défaites",
+      "bar": "Power-Ups",
+      "line": "Balles touchées",
+      "settings": "Réglages",
+      "friends": "Amis",
+      "global": "Statistiques globales"
+    }
+  }
+}

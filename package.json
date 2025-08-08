@@ -10,16 +10,18 @@
   },
   "dependencies": {
     "@babylonjs/core": "^7.0.0",
-    "@babylonjs/gui": "^7.0.0",
+    "@babylonjs/gui": "^7.54.3",
     "@babylonjs/loaders": "^7.0.0",
     "@babylonjs/materials": "^7.0.0",
     "axios": "^1.6.0",
-    "babylonjs": "^8.22.0",
-    "babylonjs-gui": "^8.22.0",
+    "chart.js": "^4.5.0",
     "gsap": "^3.13.0",
+    "lucide-vue-next": "^0.536.0",
     "pinia": "^3.0.3",
     "ts-node": "^10.9.2",
     "vue": "^3.5.18",
+    "vue-chartjs": "^5.3.2",
+    "vue-i18n": "^11.1.11",
     "vue-router": "^4.5.1"
   },
   "devDependencies": {

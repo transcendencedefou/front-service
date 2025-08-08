@@ -1,8 +1,10 @@
 import { defineConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
+import { fileURLToPath } from 'url'
 
 export default defineConfig({
   plugins: [vue()],
+  base: '/',
   server: {
     host: '0.0.0.0',
     port: 3004,
@@ -18,7 +20,8 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': '/src'
+      '@': fileURLToPath(new URL('./src', import.meta.url)),
+      '@components': fileURLToPath(new URL('./src/components', import.meta.url)),
     }
   }
 })
