@@ -1,6 +1,6 @@
 import {
     AdvancedDynamicTexture,
-} from 'babylonjs-gui';
+} from '@babylonjs/gui';
 import { PlayerManager } from "../PlayerManager";
 import { GameContext } from "@/games/PongGame/src/GameContext.ts";
 import { CreatePlayerBoard } from "./CreatePlayerBoard.ts"
