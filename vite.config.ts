@@ -11,7 +11,9 @@ export default defineConfig({
     strictPort: true,
     allowedHosts: ['front-service', 'localhost', '127.0.0.1'],
     hmr: {
-      host: 'localhost'
+      protocol: 'ws',
+      host: 'localhost',
+      port: 3004
     }
   },
   build: {

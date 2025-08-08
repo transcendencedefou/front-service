@@ -1,48 +1,26 @@
 <template>
-  <div class="max-w-md mx-auto space-y-8">
-    <h2 class="text-2xl font-bold text-center">{{ t('dashboard.account-settings') }}</h2>
+  <div class="max-w-md mx-auto space-y-8 panel">
+    <h2 class="set-title">{{ t('dashboard.account-settings') }}</h2>
 
-    <!-- 🔤 Nom d'utilisateur -->
     <div class="space-y-2">
-      <label class="block text-sm font-medium">{{ t('dashboard.new-username') }}</label>
-      <input
-        v-model="newUsername"
-        type="text"
-        class="w-full border px-3 py-2 rounded shadow-sm"
-        :placeholder="t('dashboard.new-username')"
-      />
+      <label class="set-label">{{ t('dashboard.new-username') }}</label>
+      <input v-model="newUsername" type="text" class="set-input" :placeholder="t('dashboard.new-username')" />
     </div>
 
-    <!-- 🔒 Mot de passe -->
     <div class="space-y-2">
-      <label class="block text-sm font-medium">{{ t('dashboard.current-password') }}</label>
-      <input
-        v-model="currentPassword"
-        type="password"
-        class="w-full border px-3 py-2 rounded shadow-sm"
-        :placeholder="t('dashboard.current-password')"
-      />
+      <label class="set-label">{{ t('dashboard.current-password') }}</label>
+      <input v-model="currentPassword" type="password" class="set-input" :placeholder="t('dashboard.current-password')" />
 
-      <label class="block text-sm font-medium">{{ t('dashboard.new-password') }}</label>
-      <input
-        v-model="newPassword"
-        type="password"
-        class="w-full border px-3 py-2 rounded shadow-sm"
-        :placeholder="t('dashboard.new-password')"
-      />
+      <label class="set-label">{{ t('dashboard.new-password') }}</label>
+      <input v-model="newPassword" type="password" class="set-input" :placeholder="t('dashboard.new-password')" />
     </div>
-
-
-
-    <!-- ✅ Actions -->
     <div class="space-y-2">
-      <button @click="submitModifications" class="btn-primary w-full">
+      <button @click="submitModifications" class="btn-primary">
         {{ t('dashboard.save-changes') }}
       </button>
 
-      <!-- messages -->
-      <p v-if="message" class="text-green-600 text-sm text-center">{{ message }}</p>
-      <p v-if="errorMessage" class="text-red-500 text-sm text-center">{{ errorMessage }}</p>
+      <p v-if="message" class="msg-ok">{{ message }}</p>
+      <p v-if="errorMessage" class="msg-err">{{ errorMessage }}</p>
     </div>
 
     <!-- 🔐 2FA -->
@@ -107,6 +85,7 @@
   </div>
 </template>
 
+
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
@@ -155,7 +134,7 @@ const submitModifications = async () => {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${auth.user.token}`,
+        Authorization: `Bearer ${auth.user?.token}`,
       },
       body: JSON.stringify(payload),
     })
@@ -292,7 +271,4 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.btn-primary {
-  @apply bg-clpurple text-white font-semibold py-2 px-4 rounded shadow hover:bg-clpurple/80 transition;
-}
 </style>

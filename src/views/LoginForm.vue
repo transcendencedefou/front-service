@@ -5,7 +5,9 @@
     <h2 class="login-title">{{ t('auth.login.title') }}</h2>
     <p class="login-text" v-if="!need2FA">
       {{ t('auth.login.subtitle') }}
-      <router-link to="/auth/register" class="login-cta-text">{{ t('auth.login.cta') }}</router-link>
+      <router-link to="/auth/register" class="auth-link">
+        {{ t('auth.login.cta') }}
+      </router-link>
     </p>
 
     <form class="mt-8 space-y-6" @submit.prevent="onSubmit">
@@ -52,9 +54,6 @@
           </button>
         </div>
       </template>
-    </form>
-  </div>
-</template>
 
 <script setup lang="ts">
 import { ref } from 'vue'
