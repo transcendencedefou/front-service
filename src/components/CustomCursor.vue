@@ -4,14 +4,15 @@
     ref="cursor"
     class="pointer-events-none fixed z-50 w-8 h-8 rounded-full blur-[1px] transition-colors duration-300"
     :class="themeClass"
+    :style="themeStyle"
   ></div>
 
   <!-- Onde autour -->
   <div
     ref="ripple"
-    class="pointer-events-none fixed z-40 w-8 h-8 rounded-full border"
+    class="pointer-events-none fixed z-50 w-8 h-8 rounded-full border"
     :class="themeClass"
-    style="opacity: 0"
+    :style="themeStyle"
   ></div>
 </template>
 
@@ -27,9 +28,16 @@ const { theme } = useTheme()
 
 const themeClass = computed(() =>
   theme.value === 'dark'
-    ? 'bg-clpurple/30 border border-white/40 shadow-[0_0_12px_rgba(255,255,255,0.6)]'
-    : 'bg-dkpurple/30 border border-black/40 shadow-[0_0_12px_rgba(0,0,0,0.4)]'
+    ? 'border border-white/40 shadow-[0_0_12px_rgba(255,255,255,0.6)]'
+    : 'border border-black/40 shadow-[0_0_12px_rgba(0,0,0,0.4)]'
 )
+
+const themeStyle = computed(() => ({
+  backgroundColor:
+    theme.value === 'dark'
+      ? 'rgba(var(--accent-1-rgb), 0.3)'
+      : 'rgba(var(--accent-3-rgb), 0.3)'
+}))
 
 const pos = { x: window.innerWidth / 2, y: window.innerHeight / 2 }
 const mouse = { x: pos.x, y: pos.y }
