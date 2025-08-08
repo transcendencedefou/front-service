@@ -1,14 +1,5 @@
 <template>
   <div class="p-4 space-y-6">
-    <!-- Messages -->
-    <transition name="fade">
-      <div v-if="feedback.message" :class="['rounded-md px-4 py-2 text-sm flex items-start gap-2', feedback.type==='success' ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300']">
-        <span class="font-medium" v-if="feedback.type==='success'">Succès:</span>
-        <span class="font-medium" v-else>Erreur:</span>
-        <span class="flex-1">{{ feedback.message }}</span>
-        <button class="text-xs opacity-60 hover:opacity-100" @click="clearFeedback">✕</button>
-      </div>
-    </transition>
     <!-- Header + stats -->
     <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
       <div>
@@ -131,9 +122,6 @@ const searchResults = ref<FriendSearchResult[]>([])
 const searching = ref(false)
 let searchTimeout: any = null
 
-const feedback = ref<{message: string|null; type: 'success'|'error'}>({ message: null, type: 'success' })
-let feedbackTimeout: any = null
-
 function authHeaders() {
   return { 'Authorization': `Bearer ${auth.user?.token}` }
 }
@@ -160,16 +148,8 @@ async function fetchStats() {
   } catch {}
 }
 
-function showFeedback(message: string, type: 'success'|'error'='success', autoHideMs=4000) {
-  feedback.value = { message, type }
-  if (feedbackTimeout) clearTimeout(feedbackTimeout)
-  if (autoHideMs) feedbackTimeout = setTimeout(() => { feedback.value.message = null }, autoHideMs)
-}
-
-function clearFeedback() { if (feedbackTimeout) clearTimeout(feedbackTimeout); feedback.value.message = null }
-
 async function handleAddFriend() {
-  if (!addUsername.value.trim()) { showFeedback('Pseudo requis', 'error'); return }
+  if (!addUsername.value.trim()) return
   adding.value = true
   try {
     const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.FRIENDS.ADD), {
@@ -178,33 +158,31 @@ async function handleAddFriend() {
       body: JSON.stringify({ username: addUsername.value.trim() })
     })
     const data = await res.json()
-    if (!res.ok || !data.success) {
-      showFeedback(data.error || data.message || 'Impossible d\'ajouter cet utilisateur', 'error')
-      return
+    if (data.success) {
+      addUsername.value = ''
+      await fetchFriends()
     }
-    addUsername.value = ''
-    await fetchFriends()
-    showFeedback(data.message || 'Ami ajouté', 'success')
-  } catch (e:any) {
-    showFeedback(e.message || 'Erreur réseau', 'error')
-  } finally { adding.value = false }
+  } finally {
+    adding.value = false
+  }
 }
 
 async function removeFriend(f: Friend) {
   if (!confirm(`Supprimer ${f.username} ?`)) return
   removingFriendIds.value.add(f.id)
   try {
-    const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.FRIENDS.REMOVE(f.id)), { method: 'DELETE', headers: authHeaders() })
+    const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.FRIENDS.REMOVE(f.id)), {
+      method: 'DELETE',
+      headers: authHeaders()
+    })
     const data = await res.json()
-    if (!res.ok || !data.success) {
-      showFeedback(data.error || data.message || 'Suppression impossible', 'error')
-      return
+    if (data.success) {
+      friends.value = friends.value.filter(fr => fr.id !== f.id)
+      await fetchStats()
     }
-    friends.value = friends.value.filter(fr => fr.id !== f.id)
-    await fetchStats()
-    showFeedback(data.message || 'Ami supprimé', 'success')
-  } catch (e:any) { showFeedback(e.message || 'Erreur réseau', 'error') }
-  finally { removingFriendIds.value.delete(f.id) }
+  } finally {
+    removingFriendIds.value.delete(f.id)
+  }
 }
 
 function debounce(fn: Function, delay = 400) {
@@ -218,23 +196,19 @@ const debouncedSearch = debounce(() => performSearch())
 
 async function performSearch() {
   if (!searchQuery.value.trim()) { searchResults.value = []; return }
-  if (searchQuery.value.trim().length < 2) { showFeedback('Min 2 caractères pour rechercher', 'error', 2500); return }
+  if (searchQuery.value.trim().length < 2) return
   searching.value = true
   try {
     const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.FRIENDS.SEARCH(searchQuery.value.trim())), { headers: authHeaders() })
     const data = await res.json()
-    if (!res.ok || !data.success) {
-      showFeedback(data.error || data.message || 'Recherche impossible', 'error')
-      return
-    }
-    searchResults.value = data.users
-    if (!data.users.length) showFeedback('Aucun utilisateur trouvé', 'error', 2500)
-  } catch (e:any) { showFeedback(e.message || 'Erreur réseau', 'error') }
-  finally { searching.value = false }
+    if (data.success) searchResults.value = data.users
+  } finally {
+    searching.value = false
+  }
 }
 
 async function addFriendFromSearch(u: FriendSearchResult) {
-  if (u.isFriend) { showFeedback('Déjà dans vos amis', 'error', 2500); return }
+  if (u.isFriend) return
   addingFriendIds.value.add(u.id)
   try {
     const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.FRIENDS.ADD), {
@@ -243,15 +217,13 @@ async function addFriendFromSearch(u: FriendSearchResult) {
       body: JSON.stringify({ username: u.username })
     })
     const data = await res.json()
-    if (!res.ok || !data.success) {
-      showFeedback(data.error || data.message || 'Ajout impossible', 'error')
-      return
+    if (data.success) {
+      u.isFriend = true
+      await fetchFriends()
     }
-    u.isFriend = true
-    await fetchFriends()
-    showFeedback(data.message || `${u.username} ajouté`, 'success')
-  } catch (e:any) { showFeedback(e.message || 'Erreur réseau', 'error') }
-  finally { addingFriendIds.value.delete(u.id) }
+  } finally {
+    addingFriendIds.value.delete(u.id)
+  }
 }
 
 function formatDate(dateStr: string) {
@@ -275,6 +247,4 @@ onMounted(() => {
 </script>
 
 <style scoped>
-.fade-enter-active,.fade-leave-active{transition:opacity .25s}
-.fade-enter-from,.fade-leave-to{opacity:0}
 </style>

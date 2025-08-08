@@ -1,0 +1,26 @@
+.friends-btn {
+    @apply inline-flex items-center justify-center rounded-md py-2 px-4 text-sm font-semibold transition border;
+    border-color: transparent;
+  }
+  .friends-btn:disabled { @apply opacity-50 pointer-events-none; }
+  .friends-btn-accent {
+    background-color: var(--accent-3);
+    color: var(--bg);
+  }
+  .friends-btn-accent:hover { background-color: var(--accent-1); }
+  .friends-btn-accent-ghost {
+    background-color: color-mix(in oklab, var(--bg) 96%, var(--fg) 4%);
+    color: color-mix(in oklab, var(--fg) 80%, transparent);
+    border-color: color-mix(in oklab, var(--fg) 18%, transparent);
+  }
+  .friends-btn-accent-ghost:hover {
+    background-color: color-mix(in oklab, var(--accent-3) 12%, transparent);
+    color: var(--fg);
+    border-color: color-mix(in oklab, var(--fg) 35%, transparent);
+  }
+  .friends-btn-sm { @apply py-1.5 px-3 text-xs; }
+  .friends-btn-danger {
+    background-color: #ef4444; /* red-500 */
+    color: white;
+  }
+  .friends-btn-danger:hover { background-color: #dc2626; } /* red-600 */

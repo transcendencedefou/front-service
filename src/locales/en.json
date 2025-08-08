@@ -1,104 +1,104 @@
 {
-    "common": {
-        "loading": "Loading..."
-    },
-    "nav":{
-      "home": "Home",
-      "games": "Games",
-      "user": "Profile",
-      "login": "Log In",
-      "logout": "Log Out" 
-    },
-    "home": {
-      "title": "PONG.",
-      "cta": "Go play Pong !"
-    },
-    "auth": {
-      "login": {
-        "title": "Log In !",
-        "subtitle": "Still not member?",
-        "cta": "What are you waiting for?",
-        "username": "Username",
-        "password": "Password",
-        "remember": "Remember me?",
-        "forgot": "Forgot password?",
-        "submit": "Log In",
-        "separator": "Log In via",
-        "2faPrompt": "Enter your 6-digit 2FA code.",
-        "validate2fa": "Validate 2FA", 
-        "back": "Back",
-        "providers": {
-          "google": "Google",
-          "github": "GitHub"
-            }
-        },
-        "register": {
-            "title": "Sign up bro !",
-            "subtitle": "Already registered?",
-            "cta": "Log in!",
-            "username": "Username",
-            "password": "Password",
-            "confirm": "Repeat password",
-            "submit": "Create an account",
-            "error": {
-              "mismatch": "Passwords do not match",
-              "server": "An error occured."
-            }
-          },
-        "password": {
-          "strength": {
-            "0": "Very weak",
-            "1": "Weak",
-            "2": "Medium",
-            "3": "Strong",
-           "4": "Very strong"
-          }
-        }
-    },
-    "dashboard": {
-      "profile": "Profile's",
-      "match-played": "Match played",
-      "ball-hit": "Ball hits",
-      "wins": "Wins",
-      "losses": "Losses",
-      "winrate": "Winrate",
-      "account-settings": "Account settings",
+  "common": {
+      "loading": "Loading..."
+  },
+  "nav":{
+    "home": "Home",
+    "games": "Games",
+    "user": "Profile",
+    "login": "Log In",
+    "logout": "Log Out" 
+  },
+  "home": {
+    "title": "PONG.",
+    "cta": "Go play Pong !"
+  },
+  "auth": {
+    "login": {
+      "title": "Log In !",
+      "subtitle": "Still not member?",
+      "cta": "What are you waiting for?",
       "username": "Username",
-      "new-username": "New Username",
-      "current-password": "Current password",
-      "new-password": "New password",
-      "save-changes": "Save changes",
-      "required-password": "Current password required",
-      "no-changes": "No changes detected",
-      "error-occured": "An error occured",
-      "changes-error": "An error occured while modifying",
-      "2fa": {
-        "title": "Two-Factor Authentication (2FA)",
-        "enabled": "ENABLED",
-        "disabled": "DISABLED",
-        "desc": "Add an extra layer of security with an authenticator app.",
-        "loading": "Loading...",
-        "enable": "Enable 2FA",
-        "disable": "Disable 2FA", 
-        "disable-confirm": "Are you sure you want to disable 2FA?",
-        "setup-title": "Setup 2FA",
-        "step1": "Install an authenticator app (Google Authenticator, Authy, etc.).",
-        "step2": "Scan the QR code or enter the secret manually.",
-        "step3": "Enter the 6-digit code to validate.",
-        "enter-code": "6-digit code",
-        "confirm": "Confirm",
-        "cancel": "Cancel",
-        "prompt": "Enter your 6-digit 2FA code.",
-        "validate": "Validate 2FA",
-        "back": "Back"
+      "password": "Password",
+      "remember": "Remember me?",
+      "forgot": "Forgot password?",
+      "submit": "Log In",
+      "separator": "Log In via",
+      "2faPrompt": "Enter your 6-digit 2FA code.",
+      "validate2fa": "Validate 2FA", 
+      "back": "Back",
+      "providers": {
+        "google": "Google",
+        "github": "GitHub"
+          }
       },
-      "nav": {
-        "doughnut": "Wins | Losses",
-        "bar": "Power-Ups",
-        "line": "Ball hits",
-        "settings": "Settings",
-        "friends": "Friends",
-        "global": "Global stats"
+      "register": {
+          "title": "Sign up bro !",
+          "subtitle": "Already registered?",
+          "cta": "Log in!",
+          "username": "Username",
+          "password": "Password",
+          "confirm": "Repeat password",
+          "submit": "Create an account",
+          "error": {
+            "mismatch": "Passwords do not match",
+            "server": "An error occured."
+          }
+        },
+      "password": {
+        "strength": {
+          "0": "Very weak",
+          "1": "Weak",
+          "2": "Medium",
+          "3": "Strong",
+         "4": "Very strong"
+        }
       }
+  },
+  "dashboard": {
+    "profile": "Profile's",
+    "match-played": "Match played",
+    "ball-hit": "Ball hits",
+    "wins": "Wins",
+    "losses": "Losses",
+    "winrate": "Winrate",
+    "account-settings": "Account settings",
+    "username": "Username",
+    "new-username": "New Username",
+    "current-password": "Current password",
+    "new-password": "New password",
+    "save-changes": "Save changes",
+    "required-password": "Current password required",
+    "no-changes": "No changes detected",
+    "error-occured": "An error occured",
+    "changes-error": "An error occured while modifying",
+    "2fa": {
+      "title": "Two-Factor Authentication (2FA)",
+      "enabled": "ENABLED",
+      "disabled": "DISABLED",
+      "desc": "Add an extra layer of security with an authenticator app.",
+      "loading": "Loading...",
+      "enable": "Enable 2FA",
+      "disable": "Disable 2FA", 
+      "disable-confirm": "Are you sure you want to disable 2FA?",
+      "setup-title": "Setup 2FA",
+      "step1": "Install an authenticator app (Google Authenticator, Authy, etc.).",
+      "step2": "Scan the QR code or enter the secret manually.",
+      "step3": "Enter the 6-digit code to validate.",
+      "enter-code": "6-digit code",
+      "confirm": "Confirm",
+      "cancel": "Cancel",
+      "prompt": "Enter your 6-digit 2FA code.",
+      "validate": "Validate 2FA",
+      "back": "Back"
+    },
+    "nav": {
+      "doughnut": "Wins | Losses",
+      "bar": "Power-Ups",
+      "line": "Ball hits",
+      "settings": "Settings",
+      "friends": "Friends",
+      "global": "Global stats"
     }
+  }
 }
