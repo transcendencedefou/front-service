@@ -1,3 +1,6 @@
+// import { watch } from 'vue';
+// import { useGameStore } from "@/stores/gameStore";
+// import { PlayerManager } from "../PlayerManager";
 import PongHUD from "./PongHUD.ts";
 
 interface HUDManagerType {
