@@ -70,7 +70,7 @@
     </div>
 
     <!-- Popup / Modal Setup 2FA -->
-    <div v-if="show2FAModal" class="fixed inset-0 z-50 flex items-center justify-center">
+    <div v-if="show2FAModal" class="fixed inset-0 z-39 flex items-center justify-center">
       <div class="absolute inset-0 bg-black/50" @click="close2FAModal" />
       <div class="relative bg-white dark:bg-neutral-900 rounded-lg shadow-lg w-full max-w-sm p-6 space-y-4">
         <h4 class="text-xl font-semibold text-center">{{ t('dashboard.2fa-setup-title') || 'Configurer la 2FA' }}</h4>
