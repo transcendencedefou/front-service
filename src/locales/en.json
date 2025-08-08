@@ -1,4 +1,7 @@
 {
+    "common": {
+        "loading": "Loading..."
+    },
     "nav":{
       "home": "Home",
       "games": "Games",
@@ -21,6 +24,9 @@
         "forgot": "Forgot password?",
         "submit": "Log In",
         "separator": "Log In via",
+        "2faPrompt": "Enter your 6-digit 2FA code.",
+        "validate2fa": "Validate 2FA", 
+        "back": "Back",
         "providers": {
           "google": "Google",
           "github": "GitHub"
@@ -66,6 +72,26 @@
       "no-changes": "No changes detected",
       "error-occured": "An error occured",
       "changes-error": "An error occured while modifying",
+      "2fa": {
+        "title": "Two-Factor Authentication (2FA)",
+        "enabled": "ENABLED",
+        "disabled": "DISABLED",
+        "desc": "Add an extra layer of security with an authenticator app.",
+        "loading": "Loading...",
+        "enable": "Enable 2FA",
+        "disable": "Disable 2FA", 
+        "disable-confirm": "Are you sure you want to disable 2FA?",
+        "setup-title": "Setup 2FA",
+        "step1": "Install an authenticator app (Google Authenticator, Authy, etc.).",
+        "step2": "Scan the QR code or enter the secret manually.",
+        "step3": "Enter the 6-digit code to validate.",
+        "enter-code": "6-digit code",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "prompt": "Enter your 6-digit 2FA code.",
+        "validate": "Validate 2FA",
+        "back": "Back"
+      },
       "nav": {
         "doughnut": "Wins | Losses",
         "bar": "Power-Ups",
