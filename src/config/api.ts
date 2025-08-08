@@ -16,7 +16,7 @@ const getBaseUrl = (): string => {
   const isLocalHost = window.location.hostname === 'localhost'
 
   export const API_CONFIG = {
-    BASE_URL: isLocalHost ? 'http://localhost:3000/auth' : '/auth',
+    BASE_URL: isLocalHost ? 'https://localhost:3000/auth' : '/auth',
     ENDPOINTS: {
       AUTH: {
         REGISTER: '/register',

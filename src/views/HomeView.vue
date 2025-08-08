@@ -5,14 +5,13 @@
                class="relative h-[calc(100vh-4rem)] w-full flex items-center justify-center">
         <!-- balle / soleil -->
         <div ref="ball"
-             aria-hidden="true"
-             class="motion-ok absolute top-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full"
-             :style="{
-               background:
-                 'radial-gradient(circle at 35% 35%, #fff 0%, rgba(255,255,255,.85) 20%, var(--accent-3) 45%, var(--accent-1) 85%)',
-               boxShadow: '0 0 30px rgba(255,107,107,.7), 0 0 60px rgba(122,0,255,.5)',
-               filter: 'saturate(1.1)'
-             }" />
+          aria-hidden="true"
+          class="motion-ok absolute top-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full shadow-neon"
+          :style="{
+            background:
+              'radial-gradient(circle at 35% 35%, #fff 0%, rgba(255,255,255,.85) 20%, var(--accent-3) 45%, var(--accent-1) 85%)',
+            filter: 'saturate(1.1)'
+          }" />
 
         <!-- texte -->
         <div class="relative z-10 text-center px-4">
@@ -22,7 +21,7 @@
           </h1>
           <router-link
             to="/pong"
-            class="mt-6 inline-block text-lg font-semibold text-accent-1 hover:underline focus:outline-none focus:ring-2 focus:ring-accent-2 rounded"
+            class="mt-6 inline-block text-lg font-semibold text-accent-1 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
           >
             {{ t('home.cta') }}
           </router-link>

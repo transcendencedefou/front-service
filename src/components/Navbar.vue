@@ -7,7 +7,7 @@
         <!-- logo -->
         <router-link
           to="/"
-          class="font-display text-xl tracking-widest text-accent-1 hover:text-accent-2 focus:outline-none focus:ring-2 focus:ring-accent-2 rounded"
+          class="font-display text-xl tracking-widest text-accent-1 hover:text-accent-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
         >
           la commuuuuu
         </router-link>
@@ -29,7 +29,7 @@
           <button
             v-else
             @click="logout"
-            class="nav-cta text-red-400 hover:text-red-300 focus:ring-red-400"
+            class="nav-cta text-red-400 hover:text-red-300 focus-visible:ring-red-400"
           >
             {{ t('nav.logout') }}
           </button>
@@ -37,7 +37,7 @@
           <!-- Light / Dark Mode -->
           <button
             @click="toggleTheme"
-            class="text-xl hover:scale-110 transition focus:outline-none focus:ring-2 focus:ring-accent-2 rounded"
+            class="text-xl hover:scale-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
             :aria-label="theme === 'dark' ? 'Activer le thème clair' : 'Activer le thème sombre'"
           >
             <span v-if="theme === 'dark'">☀️</span>
@@ -47,7 +47,7 @@
           <!-- Language switch -->
           <select
             v-model="locale"
-            class="bg-transparent border border-fg/30 rounded px-2 py-1 text-sm outline-none focus:border-accent-1 focus:ring-2 focus:ring-accent-1"
+            class="bg-transparent border border-fg/30 rounded px-2 py-1 text-sm outline-none"
           >
             <option value="fr-FR">FR</option>
             <option value="en-US">EN</option>
@@ -58,7 +58,7 @@
         <div class="md:hidden">
           <button
             @click="menuOpen = !menuOpen"
-            class="focus:outline-none focus:ring-2 focus:ring-accent-2 rounded"
+            class="focus:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
             aria-label="Menu"
           >
             <svg
@@ -95,7 +95,7 @@
     >
       <button
         @click="menuOpen = false"
-        class="absolute top-4 right-4 text-3xl hover:scale-110 transition focus:outline-none focus:ring-2 focus:ring-accent-2 rounded"
+        class="absolute top-4 right-4 text-3xl hover:scale-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
         aria-label="Fermer le menu"
       >
         &times;
@@ -123,7 +123,7 @@
 
       <button
         @click="toggleTheme"
-        class="mt-6 text-2xl hover:scale-110 transition focus:outline-none focus:ring-2 focus:ring-accent-2 rounded"
+        class="mt-6 text-2xl hover:scale-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
         :aria-label="theme === 'dark' ? 'Activer le thème clair' : 'Activer le thème sombre'"
       >
         <span v-if="theme === 'dark'">☀️</span>
@@ -132,7 +132,7 @@
 
       <select
         v-model="locale"
-        class="bg-transparent border border-fg/30 rounded px-2 py-1 text-sm outline-none focus:border-accent-1 focus:ring-2 focus:ring-accent-1"
+        class="bg-transparent border border-fg/30 rounded px-2 py-1 text-sm outline-none"
       >
         <option value="fr-FR">FR</option>
         <option value="en-US">EN</option>
