@@ -48,21 +48,21 @@
     <!-- 🔐 2FA -->
     <div class="space-y-2 border-t pt-6">
       <h3 class="text-lg font-semibold flex items-center justify-between">
-        <span>{{ t('dashboard.2fa-title') || 'Two-Factor Auth (2FA)' }}</span>
+        <span>{{ t('dashboard.2fa.title') }}</span>
         <span class="text-xs px-2 py-1 rounded"
               :class="twoFactorEnabled ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-600'">
-          {{ twoFactorEnabled ? (t('dashboard.enabled') || 'ON') : (t('dashboard.disabled') || 'OFF') }}
+          {{ twoFactorEnabled ? t('dashboard.2fa.enabled') : t('dashboard.2fa.disabled') }}
         </span>
       </h3>
       <p class="text-sm text-gray-500">
-        {{ t('dashboard.2fa-desc') || 'Ajoute une couche de sécurité avec une application d’authentification.' }}
+        {{ t('dashboard.2fa.desc') }}
       </p>
       <div class="flex gap-2">
         <button v-if="!twoFactorEnabled" @click="open2FAModal" class="btn-primary flex-1" :disabled="loading2FA">
-          {{ loading2FA ? (t('dashboard.loading') || '...') : (t('dashboard.2fa-enable') || 'Activer 2FA') }}
+          {{ loading2FA ? t('dashboard.2fa.loading') : t('dashboard.2fa.enable') }}
         </button>
         <button v-else @click="disable2FA" class="w-full bg-red-500 text-white font-semibold py-2 px-4 rounded shadow hover:bg-red-600 transition" :disabled="loading2FA">
-          {{ loading2FA ? (t('dashboard.loading') || '...') : (t('dashboard.2fa-disable') || 'Désactiver 2FA') }}
+          {{ loading2FA ? t('dashboard.2fa.loading') : t('dashboard.2fa.disable') }}
         </button>
       </div>
       <p v-if="message2FA" class="text-green-600 text-xs mt-1">{{ message2FA }}</p>
@@ -73,11 +73,11 @@
     <div v-if="show2FAModal" class="fixed inset-0 z-39 flex items-center justify-center">
       <div class="absolute inset-0 bg-black/50" @click="close2FAModal" />
       <div class="relative bg-white dark:bg-neutral-900 rounded-lg shadow-lg w-full max-w-sm p-6 space-y-4">
-        <h4 class="text-xl font-semibold text-center">{{ t('dashboard.2fa-setup-title') || 'Configurer la 2FA' }}</h4>
+        <h4 class="text-xl font-semibold text-center">{{ t('dashboard.2fa.setup-title') }}</h4>
         <ol class="space-y-2 text-sm list-decimal list-inside">
-          <li>{{ t('dashboard.2fa-step1') || 'Installe une application d’authentification (Google Authenticator, Authy, etc.).' }}</li>
-          <li>{{ t('dashboard.2fa-step2') || 'Scanne le QR ou saisis le secret manuellement.' }}</li>
-          <li>{{ t('dashboard.2fa-step3') || 'Entre le code à 6 chiffres pour valider.' }}</li>
+          <li>{{ t('dashboard.2fa.step1') }}</li>
+          <li>{{ t('dashboard.2fa.step2') }}</li>
+          <li>{{ t('dashboard.2fa.step3') }}</li>
         </ol>
 
         <div v-if="qrCodeDataUrl" class="flex flex-col items-center gap-2">
@@ -85,20 +85,20 @@
           <code class="text-xs break-all bg-gray-100 dark:bg-neutral-800 px-2 py-1 rounded">{{ secret }}</code>
         </div>
         <div v-else class="text-center py-8 text-sm text-gray-500">
-          {{ t('dashboard.loading') || 'Chargement...' }}
+          {{ t('dashboard.2fa.loading') }}
         </div>
 
         <div class="space-y-2">
-          <label class="block text-xs font-medium">{{ t('dashboard.2fa-enter-code') || 'Code à 6 chiffres' }}</label>
+          <label class="block text-xs font-medium">{{ t('dashboard.2fa.enter-code') }}</label>
           <input v-model="verificationCode" type="text" maxlength="6" class="w-full border px-3 py-2 rounded shadow-sm text-center tracking-widest" placeholder="123456" />
         </div>
 
         <div class="flex gap-2 pt-2">
           <button @click="confirm2FASetup" class="btn-primary flex-1" :disabled="loading2FA || verificationCode.length < 6">
-            {{ loading2FA ? (t('dashboard.validating') || 'Validation...') : (t('dashboard.confirm') || 'Valider') }}
+            {{ loading2FA ? t('dashboard.2fa.loading') : t('dashboard.2fa.confirm') }}
           </button>
           <button @click="close2FAModal" class="flex-1 border font-semibold py-2 px-4 rounded hover:bg-gray-50 dark:hover:bg-neutral-800 transition">
-            {{ t('dashboard.cancel') || 'Annuler' }}
+            {{ t('dashboard.2fa.cancel') }}
           </button>
         </div>
         <p v-if="error2FA" class="text-red-500 text-xs text-center">{{ error2FA }}</p>
@@ -244,10 +244,11 @@ const confirm2FASetup = async () => {
     twoFactorEnabled.value = true
     if (auth.user) auth.user.twoFactorEnabled = true as any
     message2FA.value = data.message || '2FA activée.'
+    // Fermer le modal après succès
+    loading2FA.value = false
     close2FAModal()
   } catch (e: any) {
     error2FA.value = e.message || 'Échec activation 2FA.'
-  } finally {
     loading2FA.value = false
   }
 }
@@ -255,7 +256,7 @@ const confirm2FASetup = async () => {
 // Désactivation => POST /2fa/disable
 const disable2FA = async () => {
   reset2FAFeedback()
-  if (!confirm(t('dashboard.2fa-disable-confirm') || 'Désactiver la 2FA ?')) return
+  if (!confirm(t('dashboard.2fa.disable-confirm'))) return
   try {
     loading2FA.value = true
     const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.DISABLE_2FA), {

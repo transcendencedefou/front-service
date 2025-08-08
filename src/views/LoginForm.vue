@@ -21,17 +21,17 @@
       </div>
 
       <div v-else class="space-y-4">
-        <p class="text-sm text-gray-600">{{ t('auth.login.2faPrompt') || 'Saisis ton code 2FA à 6 chiffres.' }}</p>
+        <p class="text-sm text-gray-600">{{ t('dashboard.2fa.prompt') }}</p>
         <div>
           <label for="twoFactor" class="login-label-text">Code 2FA</label>
           <input id="twoFactor" name="twoFactor" type="text" maxlength="6" v-model="twoFactorCode" required class="login-label-box tracking-widest text-center" />
         </div>
-        <button type="button" class="text-xs login-cta-text" @click="need2FA = false">{{ t('auth.login.back') || 'Retour' }}</button>
+        <button type="button" class="text-xs login-cta-text" @click="need2FA = false">{{ t('dashboard.2fa.back') }}</button>
       </div>
 
       <div>
         <button type="submit" class="login-main-button" :disabled="loading || (need2FA && twoFactorCode.length < 6)">
-          {{ loading ? (t('common.loading') || '...') : (need2FA ? (t('auth.login.validate2fa') || 'Valider 2FA') : t('auth.login.submit')) }}
+          {{ loading ? (t('dashboard.2fa.loading') || '...') : (need2FA ? t('dashboard.2fa.validate') : t('auth.login.submit')) }}
         </button>
       </div>
 
