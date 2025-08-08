@@ -1,24 +1,24 @@
 <template>
   <div class="flex flex-col md:flex-row min-h-screen">
-    <!-- Sidebar desktop only -->
+    <!-- sidebar desktop only -->
     <aside class="hidden md:flex w-64 bg-black text-white p-4 flex-col gap-6 justify-center">
       <nav class="flex flex-col gap-4 mt-4">
         <DashboardSidebar :selected="chartType" @select="chartType = $event" />
       </nav>
     </aside>
 
-    <!-- Contenu principal -->
+    <!-- contenu principal -->
     <div class="flex-1 flex flex-col">
-      <!-- Bannière avec avatar centré -->
+      <!-- bannière avec avatar centre -->
       <section class="relative h-40 md:h-52">
-        <!-- Bannière -->
+        <!-- Banniere -->
         <img
           src="/src/assets/img/test_banner.jpg"
           alt="Bannière"
           class="w-full h-full object-cover"
         />
 
-        <!-- Avatar + Username -->
+        <!-- avatar + Username -->
         <div
           class="absolute inset-0 flex flex-col items-center justify-center
               md:inset-auto md:left-6 md:bottom-[-4rem] md:items-start md:justify-end"
@@ -35,7 +35,7 @@
             />
           </div>
 
-          <!-- Username -->
+          <!-- username -->
           <p
             class="mt-2 text-white md:text-black text-base md:text-xl font-semibold drop-shadow text-center md:drop-shadow-none md:text-left"
           >
@@ -45,7 +45,7 @@
         </div>
       </section>
       
-      <!-- Navigation mobile simplifiée -->
+      <!-- Navigation mobile -->
       <nav class="flex justify-around py-3 md:hidden border-t border-b border-gray-200 bg-white">
         <button
           class="flex flex-col items-center text-xs"
@@ -88,13 +88,13 @@
         <div v-if="isLoading">Chargement des stats...</div>
         <div v-else-if="error" class="text-red-500 text-sm">{{ error }}</div>
 
-        <!-- 👥 Vue Amis -->
+        <!-- friends -->
         <FriendsView v-else-if="chartType === 'friends'" />
 
-        <!-- ⚙️ Vue Réglages -->
+        <!-- settings -->
         <PlayerSettings v-else-if="chartType === 'settings'" />
 
-        <!-- 📊 Charts -->
+        <!-- charts -->
         <div
           v-else-if="chartType"
           class="max-w-md mx-auto bg-gray-100 p-10 rounded-md"
@@ -106,7 +106,7 @@
           />
         </div>
 
-        <!-- 🔢 Stats globales -->
+        <!-- stats numeraires -->
         <div
           v-else
           class="grid grid-cols-2 gap-6 max-w-md mx-auto text-center bg-gray-100 p-10 rounded-md"

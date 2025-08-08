@@ -5,8 +5,8 @@
 
 <template>
   <div class="relative w-full min-h-screen overflow-hidden">
-    <CustomCursor />
     <Navbar />
+    <CustomCursor />
     <router-view />
   </div>
 </template>

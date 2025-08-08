@@ -10,11 +10,13 @@ const getBaseUrl = (): string => {
     // }
     
     // Fallback pour le SSR ou les tests
-    return 'https://localhost/auth';
+    return 'http://localhost/auth';
   };
   
+  const isLocalHost = window.location.hostname === 'localhost'
+
   export const API_CONFIG = {
-    BASE_URL: getBaseUrl(),
+    BASE_URL: isLocalHost ? 'https://localhost:3000/auth' : '/auth',
     ENDPOINTS: {
       AUTH: {
         REGISTER: '/register',

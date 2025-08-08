@@ -1,83 +1,100 @@
 <template>
-  <div class="relative overflow-hidden w-full h-screen bg-neutral-50 dark:bg-black flex items-center justify-center pt-16">
-    <!-- Sphere animée -->
-    <section class="h-screen flex items-center justify-center w-full">
-      <div
-        ref="sphereRef"
-        class="absolute top-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full bg-gradient-to-br from-white/20 to-dkpurple/20 shadow-2xl backdrop-blur-sm"
-      ></div>
+  <div class="relative overflow-hidden w-full h-screen">
+    <SynthGridBackground>
+      <section ref="stage"
+               class="relative h-[calc(100vh-4rem)] w-full flex items-center justify-center">
+        <!-- balle / soleil -->
+        <div ref="ball"
+          aria-hidden="true"
+          class="motion-ok absolute top-1/2 -translate-y-1/2 w-20 h-20 md:w-24 md:h-24 rounded-full shadow-neon"
+          :style="{
+            background:
+              'radial-gradient(circle at 35% 35%, #fff 0%, rgba(255,255,255,.85) 20%, var(--accent-3) 45%, var(--accent-1) 85%)',
+            filter: 'saturate(1.1)'
+          }" />
 
-      <!-- Gradient sol -->
-      <div class="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-dkpurple/40 to-transparent dark:from-dkpurple/90 pointer-events-none"></div>
-
-      <!-- Texte -->
-      <div class="relative z-10 text-center">
-        <h1 ref="textRef" class="text-6xl md:text-8xl font-black text-gray-900 dark:text-white tracking-tight">
-          {{ t('home.title') }}
-        </h1>
-        <router-link
-          to="/pong"
-          class="mt-6 inline-block text-lg font-semibold text-purple-600 dark:text-purple-400 hover:underline"
-        >
-          {{ t('home.cta') }}
-        </router-link>
-      </div>
-    </section>
+        <!-- texte -->
+        <div class="relative z-10 text-center px-4">
+          <h1 ref="title"
+              class="text-5xl md:text-7xl font-black tracking-tight text-fg">
+            {{ t('home.title') }}
+          </h1>
+          <router-link
+            to="/pong"
+            class="mt-6 inline-block text-lg font-semibold text-accent-1 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
+          >
+            {{ t('home.cta') }}
+          </router-link>
+        </div>
+      </section>
+    </SynthGridBackground>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onBeforeUnmount } from 'vue'
 import { gsap } from 'gsap'
 import { TextPlugin } from 'gsap/TextPlugin'
 import { useI18n } from 'vue-i18n'
+import SynthGridBackground from '@/components/SynthGridBackground.vue'
 
-const { t } = useI18n()
 gsap.registerPlugin(TextPlugin)
+const { t } = useI18n()
 
-const textRef = ref(null)
-const sphereRef = ref<HTMLElement | null>(null)
+const stage = ref<HTMLElement | null>(null)
+const title = ref<HTMLElement | null>(null)
+const ball = ref<HTMLElement | null>(null)
+let ctx: gsap.Context | null = null
+let ro: ResizeObserver | null = null
 
 onMounted(() => {
-  // Animation texte (cyclique)
-  const messages = ['PING.', 'PONG.', 'WIN.', 'LOSE.']
-  let i = 0
-
-  const animateText = () => {
-    if (!textRef.value) return
-    const tl = gsap.timeline({
-      repeat: 0,
-      onComplete: () => {
-        setTimeout(() => {
-          i = (i + 1) % messages.length
-          animateText()
-        }, 1000)
+  
+  const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  if (title.value) {
+    if (!reduced) {
+      const messages = ['PING.', 'PONG.', 'WIN.', 'LOSE.']
+      let i = 0
+      const loop = () => {
+        if (!title.value) return
+        const tl = gsap.timeline({
+          onComplete: () => setTimeout(() => (i = (i + 1) % messages.length, loop()), 900),
+        })
+        tl.to(title.value, { duration: .4, text: '', ease: 'none' })
+          .to(title.value, { duration: 1.2, text: messages[i], ease: 'none' })
       }
-    })
-
-    tl.to(textRef.value, { duration: 0.5, text: '', ease: 'none' })
-    tl.to(textRef.value, { duration: 1.5, text: messages[i], ease: 'none' })
+      loop()
+    }
   }
 
-  animateText()
+  if (ball.value && stage.value) {
+    const animate = () => {
+      const w = stage.value!.clientWidth
+      const margin = 24
+      const left = -w / 2 + margin
+      const right = w / 2 - margin
 
-  // animate ball as pong game
-  if (sphereRef.value) {
-    gsap.from(sphereRef.value, {
-      x:'-50vw',
-      y: '20vh',
-      duration: 3,
-      ease: 'power1.inOut',
-      yoyo: true,
-    })
-    gsap.to(sphereRef.value, {
-      x: '50vw',       
-      y: '-20vh',
-      duration: 3,     
-      ease: 'power1.inOut',
-      repeat: -1,      
-      yoyo: true,      
-    })
+      gsap.killTweensOf(ball.value)
+      gsap.set(ball.value, { xPercent: -50, yPercent: -50, x: left })
+
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        gsap.to(ball.value, {
+          x: right,
+          duration: 2.4,
+          ease: 'power1.inOut',
+          repeat: -1,
+          yoyo: true,
+        })
+      }
+    }
+    animate()
+    ro = new ResizeObserver(animate)
+    ro.observe(stage.value)
   }
+})
+
+onBeforeUnmount(() => {
+  ctx?.revert?.()
+  ro?.disconnect?.()
+  if (ball.value) gsap.killTweensOf(ball.value)
 })
 </script>
