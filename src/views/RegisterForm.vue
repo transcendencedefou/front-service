@@ -140,6 +140,7 @@ const onSubmit = async () => {
   if (errors.value.length > 0 || usernameError.value) return
 
   try {
+    console.log('[DEBUG] = buildApIUrl() => ', buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.REGISTER))
     const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.REGISTER), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
