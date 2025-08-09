@@ -1,7 +1,8 @@
 import { useGameStore } from "@/stores/gameStore";
 import { PlayerManager } from "./PlayerManager";
 import { Engine, Scene } from "@babylonjs/core";
-import type PongInstance from "./PongInstance";
+import type PongInstance from "./PongGame/PongInstance.ts";
+import {setupSynthwaveScene} from "@/games/PongGame/src/meshes/setupSynthwaveScene.ts";
 
 interface Size {
     depth: number;
@@ -62,6 +63,7 @@ export const GameContext: GameContextType = {
         this.scene = new Scene(this.engine);
         this.store = useGameStore();
         this._initGameTextures();
+        setupSynthwaveScene(GameContext.scene!);
     },
 
     _initGameTextures() {

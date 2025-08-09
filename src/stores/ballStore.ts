@@ -33,7 +33,7 @@ export const useBallStore = defineStore("ball", {
             this.def_speed = value;
         },
         setMaxSpeed(value: number) {
-            this.def_speed = value;
+            this.max_speed = value;
         },
         setAcceleration(value: number) {
             this.acceleration = value;

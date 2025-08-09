@@ -6,7 +6,7 @@ import {
 } from '@babylonjs/core';
 import { GameContext } from '../GameContext.ts';
 
-export function createPlaygroundMeshes(): void {
+export function createPongPlaygroundMeshes(): void {
     const scene = GameContext.scene!;
     const { width, depth } = GameContext.size;
 

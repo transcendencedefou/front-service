@@ -3,13 +3,14 @@ import {
     Vector3,
     Color4, Mesh,
 } from '@babylonjs/core';
-import { GameContext } from './GameContext';
-import { PlayerManager } from './PlayerManager';
-import { setupSynthwaveScene } from './meshes/setupSynthwaveScene.ts';
-import { createPlaygroundMeshes } from "@/games/PongGame/src/meshes/createPlaygroundMeshes.ts";
-import Ball from './Ball';
+import { GameContext } from '../GameContext.ts';
+import { PlayerManager } from '../PlayerManager.ts';
+import { setupSynthwaveScene } from '../meshes/setupSynthwaveScene.ts';
+import { createPongPlaygroundMeshes } from "@/games/PongGame/src/meshes/createPongPlaygroundMeshes.ts";
+import Ball from './Ball.ts';
 import { useBallStore } from '@/stores/ballStore.ts'
-import { updateAI } from './PongAIController';
+import { updateAI } from './PongAIController.ts';
+import {useGameStore} from "@/stores/gameStore.ts";
 
 function handlePlayerInputs(): void {
     const player0 = PlayerManager.getPlayer(0)
@@ -39,10 +40,12 @@ export default class PongInstance {
         const now = performance.now();
         const dt = now - this.lastTime;
         this.lastTime = now;
-        updateAI(dt);
 
         for (let player of PlayerManager.listPlayers()) {
             if (player.store.score === 3) {
+                if (useGameStore.winner !== player.store.name) {
+                    useGameStore.winner = player.store.namez
+                }
                 this.ended = true;
             }
         }
@@ -56,8 +59,6 @@ export default class PongInstance {
     }
 
     _initSceneSettings(): void {
-        GameContext.scene!.clearColor = new Color4(1, 1, 1, 0);
-
         const camera = new ArcRotateCamera('camera',
             -Math.PI / 2,
             Math.PI / 7,
@@ -67,16 +68,14 @@ export default class PongInstance {
         // camera.inputs.clear();
         camera.attachControl(camera);
         GameContext.scene!.activeCamera = camera;
-
-        setupSynthwaveScene(GameContext.scene!);
     }
 
     _initPlayGround(): void {
-        this.setBallDefaultSpeed(0.05);
-        this.setBallMaxSpeed(0.08);
-        this.setBallAcceleration(1.18);
+        this.setBallDefaultSpeed(0.04);
+        this.setBallMaxSpeed(0.12);
+        this.setBallAcceleration(1.1);
         this.ball = new Ball();
-        createPlaygroundMeshes();
+        createPongPlaygroundMeshes();
     }
 
     isEnded(): boolean {
@@ -86,6 +85,7 @@ export default class PongInstance {
     reset(): void {
         this.ended = false;
         this.ball?.reset();
+        useGameStore().winner = null
         for (const player of PlayerManager.listPlayers()) {
             player.resetPosition();
         }
@@ -96,13 +96,8 @@ export default class PongInstance {
         PlayerManager.clearLastHit()
         for (const player of PlayerManager.listPlayers()) {
             player.store.setScore(0);
-            player.resetPosition();
         }
         this.reset()
-    }
-
-    setTrailColors(color1: Color4, color2: Color4, colorDead: Color4): void {
-        this.ball?.setTrailColors(color1, color2, colorDead);
     }
 
     setBallDefaultSpeed(speed: number): void {
@@ -117,10 +112,6 @@ export default class PongInstance {
         useBallStore().setAcceleration(speed)
     }
 
-    getBallMesh() {
-        return this.ball ? this.ball.getMesh() : null;
-    }
-
     setBorders(name: string,border: Mesh) {
         this.borders.set(name, border);
     }
@@ -129,9 +120,14 @@ export default class PongInstance {
         return this.borders.get(name);
     }
 
+    getBallMesh() {
+        return this.ball ? this.ball.getMesh() : null;
+    }
+
     dispose(): void {
         this.ball?.dispose();
         this.ball = null;
+        useGameStore().winner = null
         this.borders.forEach((mesh) => mesh.dispose());
         this.borders.clear();
     }

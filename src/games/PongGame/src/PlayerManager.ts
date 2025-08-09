@@ -1,5 +1,5 @@
 import { Player } from './Player';
-import { initAI, dispose as disposeAI } from './PongAIController';
+import { initAI, dispose as disposeAI } from './PongGame/PongAIController.ts';
 import { GameContext } from './GameContext';
 
 const playerMap: Map<number, Player> = new Map();
@@ -27,7 +27,7 @@ export const PlayerManager = {
                     maxZ: GameContext.size.depth / 2 - player.store.bar_depth / 2 - 0.185,
                 },
                 homeZ: 0,
-                errorMargin: 0.5,
+                errorMargin: 0,
             });
         }
     },

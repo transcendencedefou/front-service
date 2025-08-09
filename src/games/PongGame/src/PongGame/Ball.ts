@@ -1,7 +1,7 @@
 import { Mesh, ParticleSystem, Color4 } from '@babylonjs/core';
-import { GameContext } from './GameContext';
-import { PlayerManager } from './PlayerManager';
-import { createSynthwaveBall, createBallTrailParticles  } from './meshes/createSynthwaveBall.ts';
+import { GameContext } from '../GameContext.ts';
+import { PlayerManager } from '../PlayerManager.ts';
+import { createSynthwaveBall, createBallTrailParticles  } from '../meshes/createSynthwaveBall.ts';
 import { useBallStore } from '@/stores/ballStore.ts'
 
 export default class Ball {

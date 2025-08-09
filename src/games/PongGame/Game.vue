@@ -2,7 +2,8 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { GameContext } from '@/games/PongGame/src/GameContext';
 import { PlayerManager } from '@/games/PongGame/src/PlayerManager';
-import PongInstance from './src/PongInstance';
+import PongInstance from './src/PongGame/PongInstance.ts';
+import {setupSynthwaveScene} from "@/games/PongGame/src/meshes/setupSynthwaveScene.ts";
 
 const canvas = ref<HTMLCanvasElement | null>(null);
 
@@ -29,7 +30,6 @@ function handleRemoveEventListener(): void {
 onMounted(() => {
   // temp
   GameContext.setSize(9, 6);
-
   GameContext._initGameContext(new PongInstance(), canvas.value!);
 
   // Ca c est temporaire, juste au moins on a les methodes

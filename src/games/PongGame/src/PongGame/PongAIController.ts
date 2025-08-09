@@ -1,5 +1,5 @@
 import { Mesh, Vector3 } from '@babylonjs/core';
-import { GameContext } from './GameContext';
+import { GameContext } from '../GameContext.ts';
 
 export interface AIOptions {
     ballMesh: Mesh;
