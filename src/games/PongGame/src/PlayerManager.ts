@@ -18,7 +18,7 @@ export const PlayerManager = {
         const player = new Player(id, name);
         let ballMesh = null;
         playerMap.set(id, player);
-        if (useGameStore().game_type == "pong")
+        if (useGameStore().game_type == 'pong')
             ballMesh = GameContext.game?.getBallMesh();
         if (ballMesh && player.bar) {
             initAI({

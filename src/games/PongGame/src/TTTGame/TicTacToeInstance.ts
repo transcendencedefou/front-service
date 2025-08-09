@@ -22,7 +22,7 @@ export default class TicTacToeInstance {
     private lastTime: number;
 
     constructor() {
-        useGameStore().game_type = 'TicTacToe';
+        useGameStore().game_type = 'tictactoe';
         this.ended = false;
         this.lastTime = performance.now();
     }
