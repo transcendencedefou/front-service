@@ -10,7 +10,8 @@ import {
 } from '@babylonjs/core';
 
 export function setupSynthwaveScene(scene: Scene): void {
-    scene.clearColor = new Color4(0, 0.0, 0, 1);
+
+    scene.clearColor = new Color4(0, 0, 0, 1);
 
     const glow = new GlowLayer("glow", scene);
     glow.intensity = 0.4;
@@ -26,19 +27,6 @@ export function setupSynthwaveScene(scene: Scene): void {
     curves.globalHue = 310;
     curves.globalSaturation = 50;
     pipeline.imageProcessing.colorCurves = curves;
-
-    // const grid = MeshBuilder.CreateGround("grid", {
-    //     width: 100,
-    //     height: 100,
-    //     subdivisions: 50
-    // }, scene);
-    // grid.position.set(0, 0, 0);
-    //
-    // const gridMat = new StandardMaterial("gridMat", scene);
-    // gridMat.emissiveColor = new Color3(0, 1, 1); // Cyan néon
-    // gridMat.wireframe = true;
-    // grid.material = gridMat;
-    // grid.position.y = -4;
 
     const sphere = MeshBuilder.CreateSphere("gridSphere", {
         diameter: 100,

@@ -3,11 +3,10 @@ import {
     Vector3,
     Color3,
     StandardMaterial,
-    Mesh,
 } from '@babylonjs/core';
 import { GameContext } from '../GameContext.ts';
 
-export function createPlaygroundMeshes(): void {
+export function createPongPlaygroundMeshes(): void {
     const scene = GameContext.scene!;
     const { width, depth } = GameContext.size;
 
@@ -34,8 +33,6 @@ export function createPlaygroundMeshes(): void {
     borderMaterial.emissiveColor = Color3.White();
     borderMaterial.alpha = 0.95;
 
-    GameContext.borders = new Map<string, Mesh>();
-
     const pw = playground._width;
     const ph = playground._height;
 
@@ -43,7 +40,7 @@ export function createPlaygroundMeshes(): void {
         const border = MeshBuilder.CreateBox(name, { ...dims, updatable: true }, scene);
         border.position = pos;
         border.material = borderMaterial;
-        GameContext.borders.set(name, border);
+        GameContext.game?.setBorders(name, border);
     };
 
     createBorder('left', { width: 0.1, height: 0.01, depth: ph + 0.1 }, new Vector3(-pw / 2 - 0.05, 0, 0));

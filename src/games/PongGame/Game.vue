@@ -2,7 +2,8 @@
 import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { GameContext } from '@/games/PongGame/src/GameContext';
 import { PlayerManager } from '@/games/PongGame/src/PlayerManager';
-import PongInstance from './src/PongInstance';
+import PongInstance from './src/PongGame/PongInstance.ts';
+import TicTacToeInstance from "@/games/PongGame/src/TTTGame/TicTacToeInstance.ts";
 
 const canvas = ref<HTMLCanvasElement | null>(null);
 
@@ -21,18 +22,23 @@ function handleAddEventListener(): void {
 function handleRemoveEventListener(): void {
   window.removeEventListener('keydown', GameContext.handleKeyDown);
   window.removeEventListener('keyup', GameContext.handleKeyUp);
+  window.removeEventListener('keyup', GameContext.switchRunningState);
+  window.removeEventListener('keyup', GameContext.resetGame);
   window.removeEventListener('resize', handleResize);
 }
 
 onMounted(() => {
   // temp
   GameContext.setSize(9, 6);
-
+  // GameContext._initGameContext(new TicTacToeInstance(), canvas.value!);
   GameContext._initGameContext(new PongInstance(), canvas.value!);
 
   // Ca c est temporaire, juste au moins on a les methodes
+
+  // Pour l'instant pour lancer le pong il faut mini deux joueur pour qu'il fonctionne
   PlayerManager.addPlayer('Albert');
-  PlayerManager.addPlayer('Richard');
+  PlayerManager.addPlayer('Robert');
+  // PlayerManager.addAI('Richard'); // L'ia est seulement pour le pong voir pour qu'elle s'adapte dynamiquement
 
   GameContext._render();
 
