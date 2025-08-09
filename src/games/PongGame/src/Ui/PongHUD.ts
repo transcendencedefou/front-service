@@ -5,6 +5,7 @@ import { PlayerManager } from "../PlayerManager";
 import { GameContext } from "@/games/PongGame/src/GameContext.ts";
 import { CreatePlayerBoard } from "./CreatePlayerBoard.ts"
 import { CreateControlsOverlay } from "./CreateControlsOverlay.ts";
+import { CreateMenuButton } from "./CreateMenuButton.ts";
 
 export default class PongHUD {
     private hud: AdvancedDynamicTexture;
@@ -18,5 +19,6 @@ export default class PongHUD {
         for (const [, player] of PlayerManager.playerMap())
             this.hud.addControl(CreatePlayerBoard(player))
         this.hud.addControl(CreateControlsOverlay())
+        this.hud.addControl(CreateMenuButton())
     }
 }
