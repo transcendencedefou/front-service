@@ -1,6 +1,6 @@
 import { useGameStore } from "@/stores/gameStore";
 import { PlayerManager } from "./PlayerManager";
-import { Engine, Scene, Mesh } from "@babylonjs/core";
+import { Engine, Scene } from "@babylonjs/core";
 import type PongInstance from "./PongInstance";
 
 interface Size {
@@ -13,11 +13,10 @@ interface GameContextType {
     canvas: HTMLCanvasElement | null;
     engine: Engine | null;
     scene: Scene | null;
-    borders: Map<string, Mesh>;
     store: ReturnType<typeof useGameStore> | null;
     hud_created: boolean;
     running: boolean;
-    animationFrameId: number | null;
+    loopTimeoutId: number | null;
     size: Size;
     keysPressed: Record<string, boolean>;
     setHudTrue(): void;
@@ -39,11 +38,10 @@ export const GameContext: GameContextType = {
     canvas: null,
     engine: null,
     scene: null,
-    borders: new Map<string, Mesh>(),
     store: null,
     hud_created: false,
     running: false,
-    animationFrameId: null,
+    loopTimeoutId: null,
     size: { depth: 0, width: 0 },
     keysPressed: {
         w: false,
@@ -125,11 +123,18 @@ export const GameContext: GameContextType = {
     },
 
     dispose() {
-        if (this.animationFrameId !== null) {
-            cancelAnimationFrame(this.animationFrameId);
+        if (this.loopTimeoutId !== null) {
+            clearTimeout(this.loopTimeoutId);
+            this.loopTimeoutId = null;
         }
+        this.game?.dispose();
+        this.game = null;
         this.engine?.stopRenderLoop();
         this.engine?.dispose();
+        this.engine = null;
         this.scene?.dispose();
+        this.scene = null;
+        this.canvas = null;
+        this.store = null;
     },
 };

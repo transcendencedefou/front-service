@@ -1,4 +1,6 @@
 import { Player } from './Player';
+import { initAI, dispose as disposeAI } from './PongAIController';
+import { GameContext } from './GameContext';
 
 const playerMap: Map<number, Player> = new Map();
 
@@ -8,6 +10,26 @@ export const PlayerManager = {
         const id = playerMap.size;
         const player = new Player(id, name);
         playerMap.set(id, player);
+    },
+
+    addAI(name: string) {
+        const id = playerMap.size;
+        const player = new Player(id, name);
+        playerMap.set(id, player);
+        const ballMesh = GameContext.game?.getBallMesh();
+        if (ballMesh && player.bar) {
+            initAI({
+                ballMesh,
+                paddleMesh: player.bar,
+                xAI: player.bar.position.x,
+                bounds: {
+                    minZ: -GameContext.size.depth / 2 + player.store.bar_depth / 2 + 0.15,
+                    maxZ: GameContext.size.depth / 2 - player.store.bar_depth / 2 - 0.185,
+                },
+                homeZ: 0,
+                errorMargin: 0.5,
+            });
+        }
     },
 
     getPlayer(id: number): Player | undefined {
@@ -20,11 +42,19 @@ export const PlayerManager = {
     },
 
     removePlayer(id: number) {
-        playerMap.delete(id);
+        const player = playerMap.get(id);
+        if (player) {
+            player.dispose();
+            playerMap.delete(id);
+        }
     },
 
     clearMap() {
+        for (const player of playerMap.values()) {
+            player.dispose();
+        }
         playerMap.clear();
+        disposeAI();
     },
 
     listPlayers(): Player[] {

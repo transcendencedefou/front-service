@@ -13,7 +13,6 @@ export class Player {
 
     constructor(id: number, name: string) {
         this.bar = null;
-
         this.store = createPlayerStore(id);
         this.store.setID(id);
         this.store.setName(name);
@@ -68,5 +67,10 @@ export class Player {
         if (this.bar) {
             this.bar.position.z = 0;
         }
+    }
+
+    dispose(): void {
+        this.bar?.dispose();
+        this.bar = null;
     }
 }

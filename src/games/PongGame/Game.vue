@@ -21,6 +21,8 @@ function handleAddEventListener(): void {
 function handleRemoveEventListener(): void {
   window.removeEventListener('keydown', GameContext.handleKeyDown);
   window.removeEventListener('keyup', GameContext.handleKeyUp);
+  window.removeEventListener('keyup', GameContext.switchRunningState);
+  window.removeEventListener('keyup', GameContext.resetGame);
   window.removeEventListener('resize', handleResize);
 }
 
@@ -32,7 +34,8 @@ onMounted(() => {
 
   // Ca c est temporaire, juste au moins on a les methodes
   PlayerManager.addPlayer('Albert');
-  PlayerManager.addPlayer('Richard');
+  // PlayerManager.addPlayer('Robert');
+  PlayerManager.addAI('Richard');
 
   GameContext._render();
 

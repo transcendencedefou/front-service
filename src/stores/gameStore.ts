@@ -25,7 +25,7 @@ export const useGameStore = defineStore("game", {
             this.game_type = value;
         },
         setRunning(value: boolean) {
-            (this as any).running = value; // running is dynamically added
+            (this as any).running = value;
         },
         addPlayer(player: string) {
             if (this.player_count >= 2) return;

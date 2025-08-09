@@ -1,80 +1,135 @@
+import { Control, StackPanel, TextBlock, Rectangle } from '@babylonjs/gui';
 import { Player } from "@/games/PongGame/src/Player.ts";
-import {Control, StackPanel, TextBlock, Rectangle} from '@babylonjs/gui';
-import { GameContext} from "../GameContext.ts"
+import { GameContext } from "../GameContext.ts";
 
 export function CreatePlayerBoard(player: Player): StackPanel {
-    const store = player.store!
-    const playerPanel = new StackPanel(`player-${store.id}`)
-    playerPanel.width = "30%"
-    playerPanel.height = "14%"
-    playerPanel.horizontalAlignment = (store.id === 0) ? Control.HORIZONTAL_ALIGNMENT_LEFT : Control.HORIZONTAL_ALIGNMENT_RIGHT
-    playerPanel.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM
-    playerPanel.paddingLeft = (store.id === 0) ? "13%" : "0%"
-    playerPanel.paddingRight = (store.id === 0) ? "0%" : "13%"
-    playerPanel.paddingBottom = "4%"
-    playerPanel.alpha = 1
+    const scene = GameContext.scene!;
+    const store = player.store!;
+    const { id, name } = store;
 
-    const scoreCount = new Rectangle(`ScoreCount-${player.store.id}`)
-    scoreCount.width = "100%"
-    scoreCount.height = "100%"
-    scoreCount.cornerRadius = 24
-    scoreCount.thickness = 0.5
-    scoreCount.alpha = 0.98
-    scoreCount.color = "#00D4FF"
-    scoreCount.paddingLeft = "2%"
-    scoreCount.paddingRight = "2%"
-    scoreCount.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER
-    scoreCount.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP
-    scoreCount.background = "#000000"
+    const PANEL = {
+        width: "30%",
+        height: "14%",
+        paddingLR: "13%",
+        paddingBottom: "4%",
+        borderColor: "#00D4FF",
+        bg: "#000000",
+        corner: 24,
+        alpha: 0.98,
+    } as const;
 
-    playerPanel.addControl(scoreCount)
-    const scoreText = new TextBlock(`scoreText-${player.store.id}`)
-    scoreText.color = (store.id === 0) ? "#ff0000" : "#0020ff"
-    scoreText.fontFamily = "'Inclusive Sans', sans-serif"
-    scoreText.fontSize = "40%"
-    scoreText.fontWeight = "500"
-    scoreText.text = `${player.store.name} : ${player.store.score}`
-    scoreText.width = "100%"
-    scoreText.height = "100%"
-    scoreText.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER
-    scoreText.textVerticalAlignment   = Control.VERTICAL_ALIGNMENT_CENTER
-    scoreText.zIndex = 1
-    scoreText.alpha = 0.3
+    const TEXT = {
+        basePercent: 40,
+        color: id === 0 ? "#ff0000" : "#0020ff",
+        family: "'Inclusive Sans', sans-serif",
+        weight: "500",
+        alpha: 0.3,
+    } as const;
+
+    const ANIM = { duration: 0.25, maxScale: 1.3 } as const;
+
+    const playerPanel = new StackPanel(`player-${id}`);
+    playerPanel.width = PANEL.width;
+    playerPanel.height = PANEL.height;
+    playerPanel.horizontalAlignment = (id === 0) ? Control.HORIZONTAL_ALIGNMENT_LEFT : Control.HORIZONTAL_ALIGNMENT_RIGHT;
+    playerPanel.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
+    playerPanel.paddingLeft = (id === 0) ? PANEL.paddingLR : "0%";
+    playerPanel.paddingRight = (id === 0) ? "0%" : PANEL.paddingLR;
+    playerPanel.paddingBottom = PANEL.paddingBottom;
+
+    const scoreCount = new Rectangle(`ScoreCount-${id}`);
+    scoreCount.width = "100%";
+    scoreCount.height = "100%";
+    scoreCount.cornerRadius = PANEL.corner;
+    scoreCount.thickness = 0.5;
+    scoreCount.alpha = PANEL.alpha;
+    scoreCount.color = PANEL.borderColor;
+    scoreCount.paddingLeft = "8%";
+    scoreCount.paddingTop = "8%";
+    scoreCount.paddingBottom = "8%";
+    scoreCount.paddingRight = "8%";
+    scoreCount.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
+    scoreCount.verticalAlignment = Control.VERTICAL_ALIGNMENT_TOP;
+    scoreCount.background = PANEL.bg;
+
+    // Rectangle fixe
+    scoreCount.scaleX = 1;
+    scoreCount.scaleY = 1;
+
+    playerPanel.addControl(scoreCount);
+
+    const scoreText = new TextBlock(`scoreText-${id}`);
+    scoreText.color = TEXT.color;
+    scoreText.fontFamily = TEXT.family;
+    scoreText.fontWeight = TEXT.weight;
+    scoreText.fontSize = `${TEXT.basePercent}%`;
+    scoreText.text = `${name} : ${store.score}`;
+    scoreText.width = "100%";
+    scoreText.height = "100%";
+    scoreText.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
+    scoreText.textVerticalAlignment   = Control.VERTICAL_ALIGNMENT_CENTER;
+    scoreText.zIndex = 1;
+    scoreText.alpha = TEXT.alpha;
+
+    // On anime seulement le texte
+    scoreText.transformCenterX = 0.5;
+    scoreText.transformCenterY = 0.5;
+    scoreText.scaleX = 1;
+    scoreText.scaleY = 1;
+
     scoreCount.addControl(scoreText);
 
     let lastScore = store.score;
     let animTime = 0;
     let animActive = false;
 
-    const baseFontSize = 0.4;
-    const maxScale = 1.3;
+    const easeOut = (t: number) => 1 - Math.pow(1 - t, 3);
+    const easeIn  = (t: number) => Math.pow(t, 3);
 
-    GameContext.scene!.onBeforeRenderObservable.add(() => {
-        if (animActive) {
-            animTime += GameContext.scene!.getEngine().getDeltaTime() / 1000; // secondes écoulées
-            const progress = animTime / 0.25; // animation de 0.25s
+    const beforeRenderObserver = scene.onBeforeRenderObservable.add(() => {
+        if (!animActive) return;
 
-            if (progress < 0.5) {
-                const scale = 1 + (maxScale - 1) * (progress / 0.5);
-                scoreText.fontSize = `${baseFontSize * scale * 100}%`;
-            } else if (progress < 1) {
-                const scale = maxScale - (maxScale - 1) * ((progress - 0.5) / 0.5);
-                scoreText.fontSize = `${baseFontSize * scale * 100}%`;
-            } else {
-                animActive = false;
-                scoreText.fontSize = "40%";
-            }
+        const dt = scene.getEngine().getDeltaTime() / 1000;
+        animTime += dt;
+        const p = Math.min(animTime / ANIM.duration, 1);
+
+        let scale: number;
+        if (p < 0.5) {
+            const k = easeOut(p / 0.5);
+            scale = 1 + (ANIM.maxScale - 1) * k;
+        } else {
+            const k = easeIn((p - 0.5) / 0.5);
+            scale = ANIM.maxScale - (ANIM.maxScale - 1) * k;
+        }
+
+        // → Seul le texte bouge
+        scoreText.scaleX = scale;
+        scoreText.scaleY = scale;
+
+        if (p >= 1) {
+            animActive = false;
+            scoreText.scaleX = 1;
+            scoreText.scaleY = 1;
         }
     });
 
-    player.store.$subscribe((mutation, state) => {
-        if (state.score > lastScore) {
-            animTime = 0;
-            animActive = true;
+    const unsubscribe = store.$subscribe((mutation, state) => {
+        if (state.score !== lastScore) {
+            scoreText.text = `${state.name} : ${state.score}`;
+            if (state.score > lastScore) {
+                animTime = 0;
+                animActive = true;
+            }
+            lastScore = state.score;
+        } else if (state.name !== name) {
+            scoreText.text = `${state.name} : ${state.score}`;
         }
-        lastScore = state.score;
-        scoreText.text = `${player.store.name} : ${player.store.score}`;
-    })
-    scoreCount.addControl(scoreText)
-    return playerPanel
+    });
+
+    playerPanel.onDisposeObservable.add(() => {
+        if (beforeRenderObserver) scene.onBeforeRenderObservable.remove(beforeRenderObserver);
+        if (typeof unsubscribe === 'function') unsubscribe();
+    });
+
+    return playerPanel;
 }

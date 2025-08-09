@@ -1,36 +1,46 @@
 import {
     ArcRotateCamera,
     Vector3,
-    Color4,
+    Color4, Mesh,
 } from '@babylonjs/core';
 import { GameContext } from './GameContext';
 import { PlayerManager } from './PlayerManager';
 import { setupSynthwaveScene } from './meshes/setupSynthwaveScene.ts';
 import { createPlaygroundMeshes } from "@/games/PongGame/src/meshes/createPlaygroundMeshes.ts";
 import Ball from './Ball';
+import { useBallStore } from '@/stores/ballStore.ts'
+import { updateAI } from './PongAIController';
 
 function handlePlayerInputs(): void {
+    const player0 = PlayerManager.getPlayer(0)
+    const player1 = PlayerManager.getPlayer(1)
     if (GameContext.running && !GameContext.game?.isEnded()) {
-        if (GameContext.keysPressed[' ']) GameContext.stopGame();
-        if (GameContext.keysPressed['w']) PlayerManager.getPlayer(0)?.moveUp();
-        if (GameContext.keysPressed['s']) PlayerManager.getPlayer(0)?.moveDown();
-        if (GameContext.keysPressed['arrowup']) PlayerManager.getPlayer(1)?.moveUp();
-        if (GameContext.keysPressed['arrowdown']) PlayerManager.getPlayer(1)?.moveDown();
-    } else {
-        if (GameContext.keysPressed[' ']) GameContext.startGame();
+        if (GameContext.keysPressed['w']) player0?.moveUp();
+        if (GameContext.keysPressed['s']) player0?.moveDown();
+        if (GameContext.keysPressed['arrowup']) player1?.moveUp();
+        if (GameContext.keysPressed['arrowdown']) player1?.moveDown();
     }
 }
 
 export default class PongInstance {
     private ball: Ball | null;
     private ended: boolean;
+    private lastTime: number;
+    private borders: Map<string, Mesh>;
 
     constructor() {
         this.ball = null;
         this.ended = false;
+        this.borders = new Map<string, Mesh>();
+        this.lastTime = performance.now();
     }
 
     gameLoop(): void {
+        const now = performance.now();
+        const dt = now - this.lastTime;
+        this.lastTime = now;
+        updateAI(dt);
+
         for (let player of PlayerManager.listPlayers()) {
             if (player.store.score === 3) {
                 this.ended = true;
@@ -42,7 +52,7 @@ export default class PongInstance {
                 this.ball?.move();
             }
         }
-        GameContext.animationFrameId = requestAnimationFrame(() => this.gameLoop());
+        GameContext.loopTimeoutId = window.setTimeout(() => this.gameLoop(), 1000 / 60);
     }
 
     _initSceneSettings(): void {
@@ -54,13 +64,17 @@ export default class PongInstance {
             11,
             new Vector3(0, -1, 0),
             GameContext.scene!);
-        camera.inputs.clear();
+        // camera.inputs.clear();
+        camera.attachControl(camera);
         GameContext.scene!.activeCamera = camera;
 
         setupSynthwaveScene(GameContext.scene!);
     }
 
     _initPlayGround(): void {
+        this.setBallDefaultSpeed(0.05);
+        this.setBallMaxSpeed(0.08);
+        this.setBallAcceleration(1.18);
         this.ball = new Ball();
         createPlaygroundMeshes();
     }
@@ -85,5 +99,40 @@ export default class PongInstance {
             player.resetPosition();
         }
         this.reset()
+    }
+
+    setTrailColors(color1: Color4, color2: Color4, colorDead: Color4): void {
+        this.ball?.setTrailColors(color1, color2, colorDead);
+    }
+
+    setBallDefaultSpeed(speed: number): void {
+        useBallStore().setDefSpeed(speed)
+    }
+
+    setBallMaxSpeed(speed: number): void {
+        useBallStore().setMaxSpeed(speed)
+    }
+
+    setBallAcceleration(speed: number): void {
+        useBallStore().setAcceleration(speed)
+    }
+
+    getBallMesh() {
+        return this.ball ? this.ball.getMesh() : null;
+    }
+
+    setBorders(name: string,border: Mesh) {
+        this.borders.set(name, border);
+    }
+
+    getBorder(name: string) {
+        return this.borders.get(name);
+    }
+
+    dispose(): void {
+        this.ball?.dispose();
+        this.ball = null;
+        this.borders.forEach((mesh) => mesh.dispose());
+        this.borders.clear();
     }
 }
