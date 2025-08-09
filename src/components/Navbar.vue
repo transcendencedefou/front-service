@@ -1,15 +1,15 @@
 <template>
   <nav
-    class="fixed top-0 left-0 w-full z-50 bg-bg/70 backdrop-blur-md border-b border-fg/10"
+    class="fixed top-0 left-0 w-full z-50 bg-bg/70 backdrop-blur-md border-b border-accent"
   >
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
       <div class="flex justify-between h-16 items-center">
         <!-- logo -->
         <router-link
           to="/"
-          class="font-display text-xl tracking-widest text-accent-1 hover:text-accent-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
+          class="logo-nav font-display text-xl tracking-widest text-fg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
         >
-          la commuuuuu
+          pong-tac-toe
         </router-link>
 
         <!-- desktop links -->
@@ -26,7 +26,7 @@
           >
             {{ t('nav.login') }}
           </router-link>
-          <button
+          <button 
             v-else
             @click="logout"
             class="nav-cta text-red-400 hover:text-red-300 focus-visible:ring-red-400"
@@ -37,7 +37,7 @@
           <!-- Light / Dark Mode -->
           <button
             @click="toggleTheme"
-            class="text-xl hover:scale-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
+            class="text-xl text-fg hover:scale-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
             :aria-label="theme === 'dark' ? 'Activer le thème clair' : 'Activer le thème sombre'"
           >
             <span v-if="theme === 'dark'">☀️</span>
@@ -47,7 +47,7 @@
           <!-- Language switch -->
           <select
             v-model="locale"
-            class="bg-transparent border border-fg/30 rounded px-2 py-1 text-sm outline-none"
+            class="bg-transparent border border-fg/30 rounded px-2 py-1 text-sm text-fg outline-none"
           >
             <option value="fr-FR">FR</option>
             <option value="en-US">EN</option>

@@ -1,18 +1,17 @@
 <template>
-  <div class="login-card">
-    <div class="flex justify-center"></div>
+  <div class="auth-card p-8 space-y-8">
+    <h2 class="auth-title">{{ t('auth.register.title') }}</h2>
 
-    <h2 class="login-title">{{ t('auth.register.title') }}</h2>
-    <p class="login-text">
+    <p class="auth-subtext">
       {{ t('auth.register.subtitle') }}
-      <router-link to="/auth/login" class="login-cta-text">{{ t('auth.register.cta') }}</router-link>
+      <router-link to="/auth/login" class="auth-link">{{ t('auth.register.cta') }}</router-link>
     </p>
 
     <form class="mt-8 space-y-6" @submit.prevent="onSubmit">
       <div class="space-y-4">
         <!-- Username -->
         <div>
-          <label for="username" class="login-label-text">{{ t('auth.register.username') }}</label>
+          <label for="username" class="auth-label">{{ t('auth.register.username') }}</label>
           <input
             id="username"
             name="username"
@@ -20,14 +19,15 @@
             v-model="username"
             @input="validate"
             required
-            :class="['login-label-box', usernameError ? 'border-red-500' : '']"
+            class="auth-input"
+            :class="{ 'border-red-500': usernameError }"
           />
-          <p v-if="usernameError" class="login-errors-text">{{ usernameError }}</p>
+          <p v-if="usernameError" class="text-xs text-red-500 mt-1">{{ usernameError }}</p>
         </div>
 
         <!-- Password -->
         <div>
-          <label for="password" class="login-label-text">{{ t('auth.register.password') }}</label>
+          <label for="password" class="auth-label">{{ t('auth.register.password') }}</label>
           <input
             id="password"
             name="password"
@@ -35,13 +35,13 @@
             v-model="password"
             @input="validate"
             required
-            class="login-label-box"
+            class="auth-input"
           />
         </div>
 
         <!-- Confirmation -->
         <div>
-          <label for="confirmPassword" class="login-label-text">{{ t('auth.register.confirm') }}</label>
+          <label for="confirmPassword" class="auth-label">{{ t('auth.register.confirm') }}</label>
           <input
             id="confirmPassword"
             name="confirmPassword"
@@ -49,34 +49,34 @@
             v-model="confirmPassword"
             @blur="validateConfirmPassword"
             required
-            :class="['login-label-box', confirmPasswordError ? 'border-red-500' : '']"
+            class="auth-input"
+            :class="{ 'border-red-500': confirmPasswordError }"
           />
-          <p v-if="confirmPasswordError" class="login-errors-text">{{ confirmPasswordError }}</p>
+          <p v-if="confirmPasswordError" class="text-xs text-red-500 mt-1">{{ confirmPasswordError }}</p>
         </div>
 
         <!-- Erreurs -->
-        <ul v-if="errors.length" class="login-errors-text">
+        <ul v-if="errors.length" class="text-xs text-red-500 list-disc ml-4">
           <li v-for="err in errors" :key="err">{{ err }}</li>
         </ul>
 
         <!-- Force du mot de passe -->
         <div class="mt-2">
-          <div class="w-full h-2 bg-gray-200 rounded">
+          <div class="w-full h-2 rounded" style="background-color: color-mix(in oklab, var(--fg) 12%, transparent)">
             <div
               class="h-2 rounded transition-all duration-300"
               :class="strengthColors[strength]"
               :style="{ width: ((strength + 1) * 20) + '%' }"
             ></div>
           </div>
-          <p class="text-xs text-gray-600 mt-1">{{ t(`auth.password.strength.${strength}`) }}</p>
+          <p class="text-xs mt-1" style="color: color-mix(in oklab, var(--fg) 70%, transparent)">
+            {{ t(`auth.password.strength.${strength}`) }}
+          </p>
         </div>
       </div>
 
       <div>
-        <button
-          type="submit"
-          class="login-main-button"
-        >
+        <button type="submit" class="auth-btn-primary">
           {{ t('auth.register.submit') }}
         </button>
       </div>
@@ -140,6 +140,7 @@ const onSubmit = async () => {
   if (errors.value.length > 0 || usernameError.value) return
 
   try {
+    console.log('[DEBUG] = buildApIUrl() => ', buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.REGISTER))
     const res = await fetch(buildApiUrl(API_CONFIG.ENDPOINTS.AUTH.REGISTER), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -149,7 +150,6 @@ const onSubmit = async () => {
     const data = await res.json()
     if (!res.ok || !data.success) throw new Error('Erreur lors de l’inscription.')
 
-    console.log('Inscription réussie:', username.value)
     router.push('/auth/login')
   } catch (err) {
     console.error(err)
