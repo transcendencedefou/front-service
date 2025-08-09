@@ -1,6 +1,7 @@
 import { Player } from './Player';
 import { initAI, dispose as disposeAI } from './PongGame/PongAIController.ts';
 import { GameContext } from './GameContext';
+import {useGameStore} from "@/stores/gameStore.ts";
 
 const playerMap: Map<number, Player> = new Map();
 
@@ -15,8 +16,10 @@ export const PlayerManager = {
     addAI(name: string) {
         const id = playerMap.size;
         const player = new Player(id, name);
+        let ballMesh = null;
         playerMap.set(id, player);
-        const ballMesh = GameContext.game?.getBallMesh();
+        if (useGameStore().game_type == "pong")
+            ballMesh = GameContext.game?.getBallMesh();
         if (ballMesh && player.bar) {
             initAI({
                 ballMesh,

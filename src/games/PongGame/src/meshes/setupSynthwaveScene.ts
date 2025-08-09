@@ -10,6 +10,7 @@ import {
 } from '@babylonjs/core';
 
 export function setupSynthwaveScene(scene: Scene): void {
+
     scene.clearColor = new Color4(0, 0, 0, 1);
 
     const glow = new GlowLayer("glow", scene);

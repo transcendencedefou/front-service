@@ -30,6 +30,7 @@ export default class PongInstance {
     private borders: Map<string, Mesh>;
 
     constructor() {
+        useGameStore().game_type = 'Pong'
         this.ball = null;
         this.ended = false;
         this.borders = new Map<string, Mesh>();

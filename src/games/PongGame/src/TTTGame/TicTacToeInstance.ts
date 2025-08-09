@@ -1,12 +1,11 @@
 import {
     ArcRotateCamera,
     Vector3,
-    Color4, Mesh,
 } from '@babylonjs/core';
 import { GameContext } from '../GameContext.ts';
 import { PlayerManager } from '../PlayerManager.ts';
-import { setupSynthwaveScene } from '../meshes/setupSynthwaveScene.ts';
-import {createTicTacToePlayroundMeshes} from "@/games/PongGame/src/meshes/createTicTacToePlaygroundMeshes.ts";
+import {createTicTacToePlaygroundMeshes} from "@/games/PongGame/src/meshes/createTicTacToePlaygroundMeshes.ts";
+import {useGameStore} from "@/stores/gameStore.ts";
 
 function handlePlayerInputs(): void {
     //A edit
@@ -23,13 +22,14 @@ export default class TicTacToeInstance {
     private lastTime: number;
 
     constructor() {
+        useGameStore().game_type = 'TicTacToe';
         this.ended = false;
         this.lastTime = performance.now();
     }
 
     gameLoop(): void {
         const now = performance.now();
-        const dt = now - this.lastTime;
+        const dt = now - this.lastTime; // for AI implementation
         this.lastTime = now;
 
         if (!this.ended) {
@@ -54,7 +54,7 @@ export default class TicTacToeInstance {
     }
 
     _initPlayGround(): void {
-        createTicTacToePlayroundMeshes();
+        createTicTacToePlaygroundMeshes();
     }
 
     isEnded(): boolean {

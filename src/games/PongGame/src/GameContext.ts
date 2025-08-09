@@ -2,6 +2,7 @@ import { useGameStore } from "@/stores/gameStore";
 import { PlayerManager } from "./PlayerManager";
 import { Engine, Scene } from "@babylonjs/core";
 import type PongInstance from "./PongGame/PongInstance.ts";
+import type TicTacToeInstance from "./TTTGame/TicTacToeInstance.ts";
 import {setupSynthwaveScene} from "@/games/PongGame/src/meshes/setupSynthwaveScene.ts";
 
 interface Size {
@@ -56,7 +57,7 @@ export const GameContext: GameContextType = {
         this.hud_created = true
     },
 
-    _initGameContext(game: PongInstance, canvas: HTMLCanvasElement) {
+    _initGameContext(game: PongInstance | TicTacToeInstance, canvas: HTMLCanvasElement) {
         this.game = game;
         this.canvas = canvas;
         this.engine = new Engine(canvas, true);

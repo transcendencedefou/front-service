@@ -3,7 +3,7 @@ import { ref, onMounted, onBeforeUnmount } from 'vue';
 import { GameContext } from '@/games/PongGame/src/GameContext';
 import { PlayerManager } from '@/games/PongGame/src/PlayerManager';
 import PongInstance from './src/PongGame/PongInstance.ts';
-import {setupSynthwaveScene} from "@/games/PongGame/src/meshes/setupSynthwaveScene.ts";
+import TicTacToeInstance from "@/games/PongGame/src/TTTGame/TicTacToeInstance.ts";
 
 const canvas = ref<HTMLCanvasElement | null>(null);
 
@@ -30,12 +30,13 @@ function handleRemoveEventListener(): void {
 onMounted(() => {
   // temp
   GameContext.setSize(9, 6);
-  GameContext._initGameContext(new PongInstance(), canvas.value!);
+  GameContext._initGameContext(new TicTacToeInstance(), canvas.value!);
+  // GameContext._initGameContext(new PongInstance(), canvas.value!);
 
   // Ca c est temporaire, juste au moins on a les methodes
   PlayerManager.addPlayer('Albert');
   // PlayerManager.addPlayer('Robert');
-  PlayerManager.addAI('Richard');
+  // PlayerManager.addAI('Richard'); // L'ia est seulement pour le pong voir pour qu'elle s'adapte dynamiquement
 
   GameContext._render();
 

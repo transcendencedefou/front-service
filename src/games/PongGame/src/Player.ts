@@ -6,6 +6,7 @@ import {
 } from '@babylonjs/core';
 import { createPlayerStore } from '@/stores/playerFactory';
 import { GameContext } from './GameContext';
+import {useGameStore} from "@/stores/gameStore.ts";
 
 export class Player {
     public bar: Mesh | null;
@@ -19,8 +20,10 @@ export class Player {
 
         this.store.setBarSpeed(0.13);
 
-        this._init();
-        this._initBarTexture();
+        if (useGameStore().game_type == 'pong') {
+            this._init();
+            this._initBarTexture();
+        }
     }
 
     private _init(): void {
