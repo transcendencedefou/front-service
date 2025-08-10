@@ -26,6 +26,7 @@ export default class GameSelectionHUD {
     homebtn.background = '#000000';
     homebtn.alpha = 0.8;
     homebtn.onPointerUpObservable.add(() => {
+      controller.dispose();
       router.push('/');
     });
     this.panel.addControl(homebtn);
