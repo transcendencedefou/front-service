@@ -1,30 +1,24 @@
 import { defineStore } from "pinia";
-import { GameContext } from "../games/PongGame/src/GameContext";
-import { PlayerManager } from "@/games/PongGame/src/PlayerManager.ts";
-
-interface SpawnPosition {
-    x: number;
-    z: number;
-}
+import { PlayerManager } from "@/games/Players/PlayerManager.ts";
 
 interface PlayerState {
     name: string;
     id: number;
     score: number;
-    spawn: SpawnPosition;
-    pos: SpawnPosition;
+    spawn: { x: number; y: number, z: number };
+    pos: { x: number; z: number };
     bar_speed: number;
     bar_depth: number;
     last_hit: boolean;
 }
 
-export function createPlayerStore(id: number) {
+export function createPlayerStore(id: number, depth: number) {
     return defineStore(`player-${id}`, {
         state: (): PlayerState => ({
             name: "",
             id: 0,
             score: 0,
-            spawn: { x: 0, z: 0 },
+            spawn: { x: 0, y: 0, z: 0 },
             pos: { x: 0, z: 0 },
             last_hit: false,
             bar_speed: 0,
@@ -49,8 +43,8 @@ export function createPlayerStore(id: number) {
             incrementScore(value: number) {
                 this.score += value;
             },
-            setSpawn(x: number, z: number) {
-                this.spawn = { x, z };
+            setSpawn(x: number,y: number, z: number) {
+                this.spawn = { x, y, z };
             },
             setPos(x: number, z: number) {
                 this.pos = { x, z };
@@ -59,7 +53,7 @@ export function createPlayerStore(id: number) {
                 this.bar_speed = value;
             },
             setBarDepth(value: number) {
-                this.bar_depth = value * (1 / 6) * GameContext.size.depth;
+                this.bar_depth = value * (1 / 6) * depth;
             },
         },
     })();
