@@ -91,9 +91,9 @@
         </div>
 
         <div class="mt-6 grid grid-cols-2 gap-3">
-          <button type="button" class="auth-btn-secondary">
-            <img src="https://www.svgrepo.com/show/475656/google-color.svg" class="w-5 h-5 mr-2" alt="Google" />
-            {{ t('auth.login.providers.google') }}
+          <button type="button" class="auth-btn-secondary" @click="oauthIntra">
+            <img src="https://profile.intra.42.fr/assets/42_logo-7dfc9110a5319a308863b96bda33cea995046d1731cebb735e41b16255106c12.svg" class="w-5 h-5 mr-2" alt="Google" />
+            {{ t('auth.login.providers.42') }}
           </button>
 
           <button type="button" class="auth-btn-secondary" @click="oauthGithub">
@@ -170,7 +170,10 @@ const submit2FA = async () => {
 
 // Déclenche l'OAuth GitHub (redirection backend -> GitHub -> callback -> front)
 const oauthGithub = () => {
-  // Route backend: GET /auth/auth/github
   window.location.href = '/auth/auth/github'
+}
+
+const oauthIntra = () => {
+  window.location.href = '/auth/auth/intra'
 }
 </script>
