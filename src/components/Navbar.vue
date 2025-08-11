@@ -17,7 +17,6 @@
           <router-link to="/" class="nav-text">{{ t('nav.home') }}</router-link>
           <router-link to="/pong" class="nav-text">{{ t('nav.games') }}</router-link>
           <router-link to="/dashboard" class="nav-text">{{ t('nav.user') }}</router-link>
-          <router-link to="/tournaments" class="nav-text">Tournois</router-link>
 
           <!-- Login / Logout -->
           <router-link
@@ -27,7 +26,7 @@
           >
             {{ t('nav.login') }}
           </router-link>
-          <button
+          <button 
             v-else
             @click="logout"
             class="nav-cta text-red-400 hover:text-red-300 focus-visible:ring-red-400"
@@ -105,7 +104,6 @@
       <router-link to="/" class="nav-text" @click="menuOpen = false">{{ t('nav.home') }}</router-link>
       <router-link to="/pong" class="nav-text" @click="menuOpen = false">{{ t('nav.games') }}</router-link>
       <router-link to="/dashboard" class="nav-text" @click="menuOpen = false">{{ t('nav.user') }}</router-link>
-      <router-link to="/tournaments" class="nav-text" @click="menuOpen = false">Tournois</router-link>
 
       <router-link
         v-if="!auth.isAuthenticated"

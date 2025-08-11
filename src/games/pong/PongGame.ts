@@ -45,31 +45,9 @@ export class PongGame implements IGame {
     this.size = { width: 9, depth: 6 };
     const size = this.size;
 
-    // Détection mode tournoi
-    let tournamentMode = false;
-    let participantNames: string[] = [];
-    try {
-      const raw = localStorage.getItem('currentTournamentMatch');
-      if (raw) {
-        const ctx = JSON.parse(raw);
-        if (ctx?.gameType === 'PONG' && Array.isArray(ctx.participants)) {
-          participantNames = ctx.participants.map((p: any) => p?.username).filter((n: any) => typeof n === 'string');
-          if (participantNames.length >= 2) tournamentMode = true;
-        }
-      }
-    } catch {}
-
     useGameStore().setGameType('pong');
-
-    if (tournamentMode) {
-      PlayerManager.addPlayer(participantNames[0] || 'Player1', scene, size, parent);
-      PlayerManager.addPlayer(participantNames[1] || 'Player2', scene, size, parent);
-      // Forcer scores à 0 et last_hit false
-      PlayerManager.listPlayers().forEach(p=>{ p.store.setScore(0); p.store.last_hit = false; });
-    } else {
-      PlayerManager.addPlayer('Player1', scene, size, parent);
-      PlayerManager.listPlayers().forEach(p=>{ p.store.setScore(0); p.store.last_hit = false; });
-    }
+    PlayerManager.addPlayer('Player', scene, size, parent);
+    // PlayerManager.addPlayer('Player', scene, size, parent);
 
     const borders = createPongPlaygroundMeshes(scene, size, parent);
     Object.entries(borders).forEach(([name, mesh]) => {
@@ -91,19 +69,8 @@ export class PongGame implements IGame {
     this.setBallAcceleration(1.1);
 
     this.ball = new Ball(scene, (n) => this.getBorder(n), parent);
-    PlayerManager.listPlayers().forEach(p=>{ if (p.store.score!==0) p.store.setScore(0); p.store.last_hit=false; });
-    // Direction neutre pour éviter départ immédiat vers un mur
-    if (this.ball) {
-      (this.ball as any).store.direction.x = Math.random() < 0.5 ? -1 : 1;
-      (this.ball as any).store.direction.z = 0;
-    }
 
-    if (!tournamentMode) {
-      PlayerManager.addAI('AI', this.ball.getMesh(), scene, size, this.keysPressed, parent);
-    } else {
-      // En tournoi on démarre directement
-      this.running = true;
-    }
+    PlayerManager.addAI('AI', this.ball.getMesh(), scene, size, this.keysPressed, parent);
   }
 
   start(): void {
@@ -121,10 +88,7 @@ export class PongGame implements IGame {
   update(dt: number): void {
     if (this.isEnded()) return;
 
-    // Exécuter IA seulement hors tournoi
-    if (!localStorage.getItem('currentTournamentMatch')) {
-      updateAI(dt * 1000);
-    }
+    updateAI(dt * 1000);
 
     if (this.running) {
       const p0 = PlayerManager.getPlayer(0);

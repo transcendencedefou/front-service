@@ -30,7 +30,6 @@ export class TicTacToeGame implements IGame {
   private cellMaterial!: StandardMaterial;
   private borderMat!: StandardMaterial;
   private playerMats: StandardMaterial[] = [];
-  private playersInitialized = false;
 
   init(scene: Scene, parent: TransformNode): void {
     this.scene = scene;
@@ -38,6 +37,8 @@ export class TicTacToeGame implements IGame {
     this.root.parent = parent;
 
     useGameStore().setGameType('ticTacToe');
+    PlayerManager.addBasicPlayer('Player 1');
+    PlayerManager.addBasicPlayer('Player 2');
 
     const colorStore = useColorStore();
 
@@ -73,32 +74,6 @@ export class TicTacToeGame implements IGame {
   }
 
   start(): void {
-    if (!this.playersInitialized) {
-      // Nettoyer joueurs hérités (ex: Pong)
-      PlayerManager.clearMap();
-      // Détection tournoi
-      let added = false;
-      try {
-        const raw = localStorage.getItem('currentTournamentMatch');
-        if (raw) {
-          const ctx = JSON.parse(raw);
-            if (ctx?.gameType === 'TICTACTOE' && Array.isArray(ctx.participants)) {
-              const names = ctx.participants.map((p:any)=>p?.username).filter((n:any)=>typeof n==='string');
-              if (names.length >= 2) {
-                PlayerManager.addBasicPlayer(names[0] || 'Player 1');
-                PlayerManager.addBasicPlayer(names[1] || 'Player 2');
-                added = true;
-              }
-            }
-        }
-      } catch {}
-      if (!added) {
-        PlayerManager.addBasicPlayer('Player 1');
-        PlayerManager.addBasicPlayer('Player 2');
-      }
-      this.playersInitialized = true;
-    }
-
     this.reset();
     this.pointerObserver = this.scene.onPointerObservable.add((pointerInfo) => {
       if (pointerInfo.type !== PointerEventTypes.POINTERDOWN) return;
@@ -127,8 +102,8 @@ export class TicTacToeGame implements IGame {
       }
 
       if (this.isBoardFull()) {
-        // Match nul: on reset simplement sans déclarer de vainqueur ni arrêter l'observer
-        this.reset();
+        useGameStore().setWinner('draw');
+        this.stop();
         return;
       }
 

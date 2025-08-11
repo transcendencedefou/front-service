@@ -43,10 +43,4 @@ export const buildApiUrl = (endpoint: string): string => {
   return `${API_CONFIG.BASE_URL}${endpoint}`;
 };
 
-export const GAME_URL = '/games'; // corrigé (proxy gateway)
-
-export function useRuntimeConfig() {
-  return { GAME_URL, API: API_CONFIG };
-}
-
 export default API_CONFIG;
