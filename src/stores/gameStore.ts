@@ -31,10 +31,13 @@ export const useGameStore = defineStore("game", {
             // Il faut que je mette les bon type des instances de pong et de tictactoe pour l'instant c'est saleore.winner
         },
         addPlayer(player: string) {
-            if (this.player_count >= 2) return;
             this.player_count += 1;
             this.player_name.push(player);
         },
+        removePlayer(name: string) {
+            this.player_name.remove(name);
+        },
+
         setWinner(value: string) {
             this.winner = value;
         },
