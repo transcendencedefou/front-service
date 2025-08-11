@@ -11,18 +11,12 @@
     <div class="dashboard-main">
       <!-- bannière -->
       <section class="banner">
-        <img 
-          :src="currentBanner || fallbackBanner" 
-          alt="Bannière" 
-          class="banner-img" />
+        <img src="/src/assets/img/test_banner.jpg" alt="Bannière" class="banner-img" />
 
         <div class="avatar-wrap">
           <div class="flex flex-col items-center md:items-start">
             <div class="avatar avatar-ring overflow-hidden">
-              <img 
-                :src="currentAvatar || fallbackAvatar" 
-                alt="Avatar" 
-                class="w-full h-full object-cover" />
+              <img src="/src/assets/img/test_avatar.jpg" alt="Avatar" class="w-full h-full object-cover" />
             </div>
             <p class="username">{{ auth.user?.username }}</p>
           </div>
@@ -93,7 +87,6 @@
   import PlayerSettings from './PlayerSettings.vue'
   import { Notebook, Settings, Users } from 'lucide-vue-next'
   import { useI18n } from 'vue-i18n'
-  import { useImageUpload } from '@/composables/useImageUpload'
 
   const { t } = useI18n()
   const auth = useAuthStore()
@@ -101,20 +94,7 @@
   const isLoading = ref(true)
   const error = ref('')
   const chartType = ref<ChartType | 'settings' | 'friends' | null>(null)
-  
-  const avatar = useImageUpload('avatar')
-  const banner = useImageUpload('banner')
-  const fallbackAvatar = "/src/assets/img/test_avatar.jpg"
-  const fallbackBanner = "/src/assets/img/test_banner.jpg"
-  const currentAvatar = ref<string | null>(null)
-  const currentBanner = ref<string | null>(null)
   // console.log(auth.user?.id) pour fake data
-
-  onMounted(async () =>{
-    currentAvatar.value = await avatar.fetchCurrent()
-    currentBanner.value = await banner.fetchCurrent()
-  })
-
   onMounted(async () => {
     try {
       /*
