@@ -380,4 +380,41 @@
     color: white;
   }
   .friends-btn-danger:hover { background-color: #dc2626; } /* red-600 */
+
+    /* Palette colorblind (Okabe–Ito) + contrastes renforcés */
+  .colorblind {
+    --bg: #ffffff;
+    --fg: #0a0a0a;
+    --accent-1: #0072b2; 
+    --accent-2: #e69f00; 
+    --accent-3: #009e73; 
+    --danger:   #d55e00;
+    --ok:       #009e73;
+    --accent-1-rgb: 0,114,178; /* RGB pour cursor perso */
+    --accent-3-rgb: 0,158,115; /* same */
+  }
+
+  .colorblind a { text-decoration: underline; text-underline-offset: 2px; }
+  .colorblind :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+
+  .colorblind.dark {
+    --bg: #0a0a0a; 
+    --fg: #f5f5f5; 
+    
+    /* Palette Okabe–Ito adaptee au dark */
+    --accent-1: #56b4e9; 
+    --accent-2: #f0e442; 
+    --accent-3: #009e73; 
+    --danger:   #e69f00; 
+    --ok:       #009e73;
+
+    /* Version RGB pour custom cursor et effets */
+    --accent-1-rgb: 86,180,233;
+    --accent-3-rgb: 0,158,115;
+  }
+
+  /* Boost accessibilite en dark aussi */
+  .colorblind.dark a { text-decoration: underline; text-underline-offset: 2px; }
+  .colorblind.dark :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+
 }

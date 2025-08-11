@@ -38,9 +38,9 @@
           <button
             @click="toggleTheme"
             class="text-xl text-fg hover:scale-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
-            :aria-label="theme === 'dark' ? 'Activer le thème clair' : 'Activer le thème sombre'"
+            :aria-label="scheme === 'dark' ? 'Activer le thème clair' : 'Activer le thème sombre'"
           >
-            <span v-if="theme === 'dark'">☀️</span>
+            <span v-if="scheme === 'dark'">☀️</span>
             <span v-else>🌙</span>
           </button>
 
@@ -124,9 +124,9 @@
       <button
         @click="toggleTheme"
         class="mt-6 text-2xl hover:scale-110 transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
-        :aria-label="theme === 'dark' ? 'Activer le thème clair' : 'Activer le thème sombre'"
+        :aria-label="scheme === 'dark' ? 'Activer le thème clair' : 'Activer le thème sombre'"
       >
-        <span v-if="theme === 'dark'">☀️</span>
+        <span v-if="scheme === 'dark'">☀️</span>
         <span v-else>🌙</span>
       </button>
 
@@ -150,7 +150,7 @@ import { useRouter } from 'vue-router'
 
 const { t, locale } = useI18n()
 const menuOpen = ref(false)
-const { theme, toggleTheme } = useTheme()
+const { scheme, toggleTheme } = useTheme()
 const auth = useAuthStore()
 const router = useRouter()
 

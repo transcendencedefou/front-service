@@ -1,26 +1,33 @@
 import { ref, watchEffect } from 'vue'
 import type { Ref } from 'vue'
 
-const theme: Ref<'light' | 'dark'> = ref(
-    (localStorage.getItem('theme') as 'light' | 'dark') || 'light'
-)
+type Scheme = 'light' | 'dark'
+
+const readScheme = (): Scheme =>
+  (localStorage.getItem('scheme') as Scheme) === 'dark' ? 'dark' : 'light'
+
+const readCB = (): boolean => localStorage.getItem('colorblind') === '1'
+
+const scheme: Ref<Scheme> = ref(readScheme())
+const colorblind: Ref<boolean> = ref(readCB())
 
 export function useTheme() {
   watchEffect(() => {
     const root = document.documentElement
+    root.classList.toggle('dark', scheme.value === 'dark')
+    root.classList.toggle('colorblind', colorblind.value)
 
-    if (theme.value === 'dark') {
-      root.classList.add('dark')
-  } else {
-    root.classList.remove('dark')
+    localStorage.setItem('scheme', scheme.value)
+    localStorage.setItem('colorblind', colorblind.value ? '1' : '0')
+  })
+
+  const toggleTheme = () => {
+    scheme.value = scheme.value === 'dark' ? 'light' : 'dark'
   }
-  
-  localStorage.setItem('theme', theme.value)
-})
 
-const toggleTheme = () => {
-  theme.value = theme.value === 'dark' ? 'light' : 'dark'
-}
+  const setColorblind = (enabled: boolean) => {
+    colorblind.value = !!enabled
+  }
 
-return { theme, toggleTheme }
+  return { scheme, colorblind, toggleTheme, setColorblind }
 }

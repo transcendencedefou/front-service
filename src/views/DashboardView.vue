@@ -1,6 +1,6 @@
 <template>
     <div>
-      <PlayerStatsChart />
+        <PlayerStatsChart />
     </div>
   </template>
   
