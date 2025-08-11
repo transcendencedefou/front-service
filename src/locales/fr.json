@@ -28,7 +28,7 @@
       "validate2fa": "Valider 2FA",
       "back": "Retour",
       "providers": {
-        "google": "Google",
+        "42": "42",
         "github": "GitHub"
       }
     },

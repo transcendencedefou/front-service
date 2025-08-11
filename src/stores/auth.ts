@@ -76,3 +76,21 @@ export const useAuthStore = defineStore('auth', () => {
 
   return { user, pending2FA, tempCredentials, isAuthenticated, login, verify2FA, logout, loadUserFromLocalStorage, setTwoFactorEnabled }
 })
+
+// Helper for OAuth token reception from hash params
+export function oauthLoginFromParams(params: URLSearchParams) {
+  const token = params.get('token')
+  const id = params.get('id')
+  const username = params.get('username')
+  if (token && id && username) {
+    const store = useAuthStore()
+    const u = new User(id, username, token, false)
+    store.user = u as any
+    localStorage.setItem('token', token)
+    localStorage.setItem('username', username)
+    localStorage.setItem('id', id)
+    localStorage.setItem('twoFactorEnabled', 'false')
+    return true
+  }
+  return false
+}
