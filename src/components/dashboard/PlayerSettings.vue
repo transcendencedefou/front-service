@@ -143,6 +143,108 @@
             {{ t('dashboard.2fa.cancel') }}
           </button>
         </div>
+
+        <p v-if="error2FA" class="msg-err text-center">{{ error2FA }}</p>
+      </div>
+    </div>
+
+    <!-- Séparateur -->
+    <div class="auth-sep-line mt-6"></div>
+
+    <!-- 🔐 2FA -->
+    <div class="space-y-3 pt-6">
+      <h3 class="text-lg font-semibold flex items-center justify-between" style="color: var(--fg);">
+        <span>{{ t('dashboard.2fa.title') }}</span>
+        <span
+          class="text-xs px-2 py-1 rounded"
+          :style="twoFactorEnabled
+            ? 'background-color: color-mix(in oklab, #16a34a 18%, transparent); color: #16a34a;'
+            : 'background-color: color-mix(in oklab, var(--fg) 10%, transparent); color: color-mix(in oklab, var(--fg) 60%, transparent);'"
+        >
+          {{ twoFactorEnabled ? t('dashboard.2fa.enabled') : t('dashboard.2fa.disabled') }}
+        </span>
+      </h3>
+
+      <p class="text-sm" style="color: color-mix(in oklab, var(--fg) 65%, transparent);">
+        {{ t('dashboard.2fa.desc') }}
+      </p>
+
+      <div class="flex gap-2">
+        <button
+          v-if="!twoFactorEnabled"
+          @click="open2FAModal"
+          class="auth-btn-primary flex-1"
+          :class="{ 'opacity-50 pointer-events-none': loading2FA }"
+        >
+          {{ loading2FA ? t('dashboard.2fa.loading') : t('dashboard.2fa.enable') }}
+        </button>
+
+        <button
+          v-else
+          @click="disable2FA"
+          class="auth-btn-secondary flex-1"
+          :class="{ 'opacity-50 pointer-events-none': loading2FA }"
+        >
+          {{ loading2FA ? t('dashboard.2fa.loading') : t('dashboard.2fa.disable') }}
+        </button>
+      </div>
+
+      <p v-if="message2FA" class="msg-ok">{{ message2FA }}</p>
+      <p v-if="error2FA" class="msg-err">{{ error2FA }}</p>
+    </div>
+
+    <!-- Popup / Modal Setup 2FA -->
+    <div v-if="show2FAModal" class="fixed inset-0 z-39 flex items-center justify-center">
+      <div class="absolute inset-0 bg-black/50" @click="close2FAModal" />
+      <div class="relative auth-card w-full max-w-sm p-6 space-y-4">
+        <h4 class="auth-title text-xl">{{ t('dashboard.2fa.setup-title') }}</h4>
+
+        <ol class="space-y-2 text-sm" style="color: color-mix(in oklab, var(--fg) 80%, transparent); list-style: decimal inside;">
+          <li>{{ t('dashboard.2fa.step1') }}</li>
+          <li>{{ t('dashboard.2fa.step2') }}</li>
+          <li>{{ t('dashboard.2fa.step3') }}</li>
+        </ol>
+
+        <div v-if="qrCodeDataUrl" class="flex flex-col items-center gap-2">
+          <img :src="qrCodeDataUrl" alt="QR Code 2FA" class="w-40 h-40" />
+          <code class="text-xs break-all px-2 py-1 rounded"
+                style="background-color: color-mix(in oklab, var(--bg) 90%, var(--fg) 10%); color: var(--fg);">
+            {{ secret }}
+          </code>
+        </div>
+        <div v-else class="text-center py-8 text-sm" style="color: color-mix(in oklab, var(--fg) 60%, transparent);">
+          {{ t('dashboard.2fa.loading') }}
+        </div>
+
+        <div class="space-y-2">
+          <label class="set-label text-xs">{{ t('dashboard.2fa.enter-code') }}</label>
+          <input
+            v-model="verificationCode"
+            type="text"
+            maxlength="6"
+            class="auth-input text-center tracking-widest"
+            placeholder="123456"
+            inputmode="numeric"
+            autocomplete="one-time-code"
+          />
+        </div>
+
+        <div class="flex gap-2 pt-2">
+          <button
+            @click="confirm2FASetup"
+            class="auth-btn-primary flex-1"
+            :class="{ 'opacity-50 pointer-events-none': loading2FA || verificationCode.length < 6 }"
+          >
+            {{ loading2FA ? t('dashboard.2fa.loading') : t('dashboard.2fa.confirm') }}
+          </button>
+
+          <button
+            @click="close2FAModal"
+            class="auth-btn-secondary flex-1"
+          >
+            {{ t('dashboard.2fa.cancel') }}
+          </button>
+        </div>
         <p v-if="error2FA" class="msg-err text-center">{{ error2FA }}</p>
       </div>
     </div>
