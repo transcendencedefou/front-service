@@ -4,6 +4,7 @@ import GameView from '../views/GameView.vue'
 import LoginForm from '../views/LoginView.vue'
 import RegisterForm from '../views/RegisterView.vue'
 import PlayerStatsChart from '../views/DashboardView.vue'
+import OAuthCallback from '../views/OAuthCallback.vue'
 
 const routes = [
     { path: '/',
@@ -24,6 +25,12 @@ const routes = [
       path: '/dashboard',
       name: 'Dashboard',
       component: PlayerStatsChart}
+    ,{
+      path: '/auth/oauth/callback',
+      name: 'OAuthCallback',
+      component: OAuthCallback,
+      meta: { hideNavbar: true }
+    }
 ]
 
 const router = createRouter({
