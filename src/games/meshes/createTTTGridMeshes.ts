@@ -6,9 +6,16 @@ import {
     Scene,
     TransformNode, Color3
 } from '@babylonjs/core';
+import { useColorStore } from '@/stores/colorStore';
+import { watch } from 'vue';
 
 export function createTTTGridMeshes(scene: Scene, parent: TransformNode | null, cells: Mesh[][], state: number[][] = [], cellMaterial: StandardMaterial, borderMaterial: StandardMaterial) {
-    cellMaterial.emissiveColor = new Color3(1, 1, 1);
+    const colorStore = useColorStore();
+    const updateCellColor = (hex: string) => {
+        cellMaterial.emissiveColor = Color3.FromHexString(hex);
+    };
+    updateCellColor(colorStore.tttCellColor);
+    watch(() => colorStore.tttCellColor, (v) => updateCellColor(v));
 
     const size = 1.2;
     const spacing = 1.75;
@@ -29,7 +36,11 @@ export function createTTTGridMeshes(scene: Scene, parent: TransformNode | null, 
     }
     
     const groundMat = new StandardMaterial('groundMat', scene);
-    groundMat.emissiveColor = new Color3(0, 0, 0);
+    const updateGroundColor = (hex: string) => {
+        groundMat.emissiveColor = Color3.FromHexString(hex);
+    };
+    updateGroundColor(colorStore.tttGroundColor);
+    watch(() => colorStore.tttGroundColor, (v) => updateGroundColor(v));
     groundMat.alpha = 0.95
     
     const ground = MeshBuilder.CreateGround('ground', {width: 7, height: 7}, scene);

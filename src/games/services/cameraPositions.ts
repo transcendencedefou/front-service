@@ -11,7 +11,7 @@ export const CAMERA_POSITIONS: Record<string, CameraState> = {
   menu: {
     alpha: -Math.PI / 2,
     beta: Math.PI / 7,
-    radius: 40,
+    radius: 35,
     target: new Vector3(0, 0, 0)
   },
   pong: {

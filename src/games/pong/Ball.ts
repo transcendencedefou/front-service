@@ -1,7 +1,9 @@
-import { Mesh, ParticleSystem, Color4, Scene, TransformNode } from '@babylonjs/core';
+import { Mesh, ParticleSystem, Color4, Color3, Scene, TransformNode } from '@babylonjs/core';
 import { PlayerManager } from '../Players/PlayerManager.ts';
 import { createSynthwaveBall, createBallTrailParticles  } from '@/games/meshes/createSynthwaveBall.ts';
 import { useBallStore } from '@/stores/ballStore.ts'
+import { useColorStore } from '@/stores/colorStore';
+import { watch } from 'vue';
 
 export default class Ball {
     private store: ReturnType<typeof useBallStore>;
@@ -29,7 +31,13 @@ export default class Ball {
         }
         this.trail = createBallTrailParticles(this.ball, this.scene);
         if (this.trail) {
-            this.setTrailColors(new Color4(1, 1, 1, 1), new Color4(1, 1, 1, 1), new Color4(1, 1, 1, 1));
+            const colorStore = useColorStore();
+            const updateTrail = (hex: string) => {
+                const c = Color4.FromColor3(Color3.FromHexString(hex), 1);
+                this.setTrailColors(c, c, c);
+            };
+            updateTrail(colorStore.ballParticleColor);
+            watch(() => colorStore.ballParticleColor, (v) => updateTrail(v));
         }
     }
 
@@ -79,19 +87,13 @@ export default class Ball {
                 this.store.speed *= this.store.acceleration;
             }
             if (player1Bar && this.ball.intersectsMesh(player1Bar, false)) {
-                if (player0) player0.store.setLastHit()
-                this.setTrailColors(
-                    new Color4(0 / 255, 50 / 255, 175 / 255, 1),
-                    new Color4(50 / 255, 50 / 255, 175 / 255, 1),
-                    new Color4(150 / 255, 150 / 255, 255 / 255, 1)
-                );
+                if (player0) player0.store.setLastHit();
+                const c = Color4.FromColor3(Color3.FromHexString(useColorStore().playerTwoColor), 1);
+                this.setTrailColors(c, c, c);
             } else if (player0Bar && this.ball.intersectsMesh(player0Bar, false)) {
                 if (player1) player1.store.setLastHit();
-                this.setTrailColors(
-                    new Color4(255 / 255, 50 / 255, 0 / 255, 1),
-                    new Color4(175 / 255, 0 / 255, 0 / 255, 1),
-                    new Color4(255 / 255, 255 / 255, 255 / 255, 1)
-                );
+                const c = Color4.FromColor3(Color3.FromHexString(useColorStore().playerOneColor), 1);
+                this.setTrailColors(c, c, c);
             }
             const bar = player0Bar && this.ball.intersectsMesh(player0Bar, false) ? player0Bar : player1Bar!;
             const impactOffset = this.ball.position.z - bar.position.z;
@@ -122,7 +124,9 @@ export default class Ball {
         }
         this._normalizeDirection();
         if (this.trail) {
-            this.setTrailColors(new Color4(1, 1, 1, 1), new Color4(1, 1, 1, 1), new Color4(1, 1, 1, 1));
+            const colorStore = useColorStore();
+            const c = Color4.FromColor3(Color3.FromHexString(colorStore.ballParticleColor), 1);
+            this.setTrailColors(c, c, c);
         }
         PlayerManager.resetPlayersPos();
     }

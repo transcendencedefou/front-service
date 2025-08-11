@@ -1,12 +1,18 @@
-import { Control, StackPanel, Rectangle, TextBlock } from '@babylonjs/gui';
+import { Control, StackPanel, Grid, Rectangle, TextBlock } from '@babylonjs/gui';
+import { useColorStore } from '@/stores/colorStore';
+import { watch } from 'vue';
 
 export function CreateControlsOverlay(): Rectangle {
+    const colorStore = useColorStore();
+
     const overlay = new Rectangle("ControlsOverlay");
     overlay.width = "18%";
     overlay.thickness = 1;
     overlay.cornerRadius = 16;
-    overlay.color = "#00D4FF";
-    overlay.background = "#000000";
+    overlay.color = colorStore.controlsOverlayBorder;
+    watch(() => colorStore.controlsOverlayBorder, (v) => (overlay.color = v));
+    overlay.background = colorStore.controlsOverlayBackground;
+    watch(() => colorStore.controlsOverlayBackground, (v) => (overlay.background = v));
     overlay.alpha = 0.97;
     overlay.paddingRight = "2%";
     overlay.paddingTop = "8%";
@@ -34,18 +40,22 @@ export function CreateControlsOverlay(): Rectangle {
     title.textVerticalAlignment   = Control.VERTICAL_ALIGNMENT_CENTER;
     title.fontSize = "26px";
     title.fontWeight = "700";
-    title.color = "#00D4FF";
+    title.color = colorStore.controlsTitleText;
+    watch(() => colorStore.controlsTitleText, (v) => (title.color = v));
     title.outlineWidth = 4;
-    title.outlineColor = "#000000";
+    title.outlineColor = colorStore.controlsTitleOutline;
+    watch(() => colorStore.controlsTitleOutline, (v) => (title.outlineColor = v));
     content.spacing = 16;
     content.addControl(title);
 
     const addKeyRow = (label: string, desc: string) => {
-        const row = new StackPanel();
-        row.isVertical = false;
+        const row = new Grid();
+        row.addColumnDefinition(64, true);
+        row.addColumnDefinition(1);
+        row.addRowDefinition(32, true);
         row.height = "32px";
         row.width = "100%";
-        row.spacing = 10;
+        row.columnSpacing = 10;
         row.horizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
 
         const key = new Rectangle();
@@ -53,8 +63,10 @@ export function CreateControlsOverlay(): Rectangle {
         key.height = "100%";
         key.thickness = 1;
         key.cornerRadius = 8;
-        key.color = "#FFFFFF";
-        key.background = "#111111";
+        key.color = colorStore.controlsKeyBorder;
+        watch(() => colorStore.controlsKeyBorder, (v) => (key.color = v));
+        key.background = colorStore.controlsKeyBackground;
+        watch(() => colorStore.controlsKeyBackground, (v) => (key.background = v));
         key.alpha = 0.9;
         key.clipChildren = false;
 
@@ -62,7 +74,8 @@ export function CreateControlsOverlay(): Rectangle {
         keyText.fontFamily = "'Inclusive Sans', sans-serif";
         keyText.fontSize = "18px";
         keyText.fontWeight = "700";
-        keyText.color = "#FFFFFF";
+        keyText.color = colorStore.controlsKeyText;
+        watch(() => colorStore.controlsKeyText, (v) => (keyText.color = v));
         keyText.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
         keyText.textVerticalAlignment   = Control.VERTICAL_ALIGNMENT_CENTER;
         key.addControl(keyText);
@@ -72,10 +85,11 @@ export function CreateControlsOverlay(): Rectangle {
         descText.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_LEFT;
         descText.textVerticalAlignment   = Control.VERTICAL_ALIGNMENT_CENTER;
         descText.fontSize = "18px";
-        descText.color = "#EDEDED";
+        descText.color = colorStore.controlsDescText;
+        watch(() => colorStore.controlsDescText, (v) => (descText.color = v));
 
-        row.addControl(key);
-        row.addControl(descText);
+        row.addControl(key, 0, 0);
+        row.addControl(descText, 0, 1);
         content.addControl(row);
     };
 

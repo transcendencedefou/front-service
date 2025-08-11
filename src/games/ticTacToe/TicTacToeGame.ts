@@ -13,6 +13,8 @@ import {createTTTGridMeshes} from "@/games/meshes/createTTTGridMeshes.ts";
 import { popCell, resetCellAnimation } from '@/games/animations/popupAnimation.ts';
 import { PlayerManager } from '@/games/Players/PlayerManager.ts';
 import { useGameStore } from '@/stores/gameStore';
+import { useColorStore } from '@/stores/colorStore';
+import { watch } from 'vue';
 
 
 export class TicTacToeGame implements IGame {
@@ -38,14 +40,35 @@ export class TicTacToeGame implements IGame {
     PlayerManager.addBasicPlayer('Player 1');
     PlayerManager.addBasicPlayer('Player 2');
 
+    const colorStore = useColorStore();
+
     this.playerMats[1] = new StandardMaterial('tttP1', scene);
-    this.playerMats[1].emissiveColor = Color3.Red();
+    const updateP1Color = (hex: string) => {
+      this.playerMats[1].emissiveColor = Color3.FromHexString(hex);
+    };
+    updateP1Color(colorStore.playerOneColor);
+    watch(() => colorStore.playerOneColor, (v) => updateP1Color(v));
+
     this.playerMats[2] = new StandardMaterial('tttP2', scene);
-    this.playerMats[2].emissiveColor = Color3.Blue();
+    const updateP2Color = (hex: string) => {
+      this.playerMats[2].emissiveColor = Color3.FromHexString(hex);
+    };
+    updateP2Color(colorStore.playerTwoColor);
+    watch(() => colorStore.playerTwoColor, (v) => updateP2Color(v));
 
     this.cellMaterial = new StandardMaterial('tttCell', scene);
+    const updateCellColor = (hex: string) => {
+      this.cellMaterial.emissiveColor = Color3.FromHexString(hex);
+    };
+    updateCellColor(colorStore.tttCellColor);
+    watch(() => colorStore.tttCellColor, (v) => updateCellColor(v));
+
     this.borderMat = new StandardMaterial('tttBorder', scene);
-    this.borderMat.emissiveColor = new Color3(1, 1, 1);
+    const updateBorderColor = (hex: string) => {
+      this.borderMat.emissiveColor = Color3.FromHexString(hex);
+    };
+    updateBorderColor(colorStore.tttBorderColor);
+    watch(() => colorStore.tttBorderColor, (v) => updateBorderColor(v));
 
     createTTTGridMeshes(this.scene, this.root, this.cells, this.state, this.cellMaterial, this.borderMat);
   }
@@ -103,7 +126,8 @@ export class TicTacToeGame implements IGame {
         resetCellAnimation(this.cells[x][z], 0.25);
       }
     }
-    this.borderMat.emissiveColor = Color3.White();
+    const colorStore = useColorStore();
+    this.borderMat.emissiveColor = Color3.FromHexString(colorStore.tttBorderColor);
     this.currentPlayer = 0;
     useGameStore().setWinner('');
   }

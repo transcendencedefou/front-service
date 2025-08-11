@@ -8,10 +8,17 @@ import {
     MeshBuilder,
     StandardMaterial, Mesh,
 } from '@babylonjs/core';
+import { useColorStore } from '@/stores/colorStore';
+import { watch } from 'vue';
 
 export function setupSynthwaveScene(scene: Scene): void {
 
-    scene.clearColor = new Color4(0, 0, 0, 1);
+    const colorStore = useColorStore();
+    const updateClearColor = (hex: string) => {
+        scene.clearColor = Color4.FromHexString(hex);
+    };
+    updateClearColor(colorStore.sceneClearColor);
+    watch(() => colorStore.sceneClearColor, (v) => updateClearColor(v));
 
     const glow = new GlowLayer("glow", scene);
     glow.intensity = 0.4;
@@ -37,7 +44,11 @@ export function setupSynthwaveScene(scene: Scene): void {
     sphere.rotation.z = Math.PI / 2;
 
     const sphereMat = new StandardMaterial("gridSphereMat", scene);
-    sphereMat.emissiveColor = new Color3(0, 1, 1); // Cyan néon
+    const updateSphereColor = (hex: string) => {
+        sphereMat.emissiveColor = Color3.FromHexString(hex);
+    };
+    updateSphereColor(colorStore.synthwaveGridColor);
+    watch(() => colorStore.synthwaveGridColor, (v) => updateSphereColor(v));
     sphereMat.wireframe = true;
     sphere.material = sphereMat;
 }

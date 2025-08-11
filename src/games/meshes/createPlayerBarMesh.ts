@@ -1,4 +1,6 @@
 import { MeshBuilder, Color3, StandardMaterial, Mesh, Scene, TransformNode } from '@babylonjs/core';
+import { useColorStore } from '@/stores/colorStore';
+import { watch } from 'vue';
 
 interface PlayerStoreLike {
   id: number;
@@ -11,11 +13,17 @@ export function createPlayerBarMesh(
   store: PlayerStoreLike,
   parent?: TransformNode | null,
 ): Mesh {
+  const colorStore = useColorStore();
   const neonMaterial = new StandardMaterial('neonMaterial', scene);
+  const updateColor = (hex: string) => {
+    neonMaterial.emissiveColor = Color3.FromHexString(hex);
+  };
   if (store.id === 0) {
-    neonMaterial.emissiveColor = new Color3(0.8, 0, 0);
+    updateColor(colorStore.playerOneColor);
+    watch(() => colorStore.playerOneColor, (v) => updateColor(v));
   } else if (store.id === 1) {
-    neonMaterial.emissiveColor = new Color3(0, 0, 0.8);
+    updateColor(colorStore.playerTwoColor);
+    watch(() => colorStore.playerTwoColor, (v) => updateColor(v));
   }
   neonMaterial.alpha = 1;
   neonMaterial.wireframe = true;

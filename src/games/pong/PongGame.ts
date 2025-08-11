@@ -47,7 +47,7 @@ export class PongGame implements IGame {
 
     useGameStore().setGameType('pong');
     PlayerManager.addPlayer('Player', scene, size, parent);
-    PlayerManager.addPlayer('Player', scene, size, parent);
+    // PlayerManager.addPlayer('Player', scene, size, parent);
 
     const borders = createPongPlaygroundMeshes(scene, size, parent);
     Object.entries(borders).forEach(([name, mesh]) => {
@@ -70,7 +70,7 @@ export class PongGame implements IGame {
 
     this.ball = new Ball(scene, (n) => this.getBorder(n), parent);
 
-    // PlayerManager.addAI('AI', this.ball.getMesh(), scene, size, this.keysPressed, parent);
+    PlayerManager.addAI('AI', this.ball.getMesh(), scene, size, this.keysPressed, parent);
   }
 
   start(): void {

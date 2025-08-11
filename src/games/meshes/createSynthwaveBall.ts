@@ -10,14 +10,22 @@ import {
     ParticleSystem,
     Texture
 } from '@babylonjs/core';
+import { useColorStore } from '@/stores/colorStore';
+import { watch } from 'vue';
 
 export function createBallTrailParticles(ball: Mesh, scene: Scene): ParticleSystem | null {
+    const colorStore = useColorStore();
     const particleSystem = new ParticleSystem("ballTrailParticles", 2000, scene);
     particleSystem.particleTexture = new Texture("https://assets.babylonjs.com/textures/flare.png", scene);
 
-    particleSystem.color1 = new Color4(112 / 255, 157 / 255, 255 / 255, 1);
-    particleSystem.color2 = new Color4(112 / 255, 157 / 255, 255 / 255, 1);
-    particleSystem.colorDead = new Color4(112 / 255, 157 / 255, 255 / 255, 1);
+    const updateParticleColor = (hex: string) => {
+        const c = Color4.FromColor3(Color3.FromHexString(hex), 1);
+        particleSystem.color1 = c;
+        particleSystem.color2 = c;
+        particleSystem.colorDead = c;
+    };
+    updateParticleColor(colorStore.ballParticleColor);
+    watch(() => colorStore.ballParticleColor, (v) => updateParticleColor(v));
 
     particleSystem.minSize = 0.1;
     particleSystem.maxSize = 0.2;
@@ -63,9 +71,15 @@ export function createBallTrailParticles(ball: Mesh, scene: Scene): ParticleSyst
 }
 
 export function createSynthwaveBall(scene: Scene): Mesh {
+    const colorStore = useColorStore();
     const ballMaterial = new StandardMaterial('ballMaterial', scene);
-    ballMaterial.emissiveColor = new Color3().fromHexString("#A9DFFF");
-    ballMaterial.diffuseColor = new Color3().fromHexString("#A9DFFF");
+    const updateBallColor = (hex: string) => {
+        const c = Color3.FromHexString(hex);
+        ballMaterial.emissiveColor = c;
+        ballMaterial.diffuseColor = c;
+    };
+    updateBallColor(colorStore.ballColor);
+    watch(() => colorStore.ballColor, (v) => updateBallColor(v));
     ballMaterial.alpha = 1;
 
     const ball = MeshBuilder.CreateSphere('ball', {
@@ -76,7 +90,11 @@ export function createSynthwaveBall(scene: Scene): Mesh {
     ball.position.y = 0.15;
 
     const light = new PointLight("ballLight", new Vector3(0, 1, 0), scene);
-    light.diffuse = new Color3(0.6, 0.8, 1);
+    const updateLightColor = (hex: string) => {
+        light.diffuse = Color3.FromHexString(hex);
+    };
+    updateLightColor(colorStore.ballLightColor);
+    watch(() => colorStore.ballLightColor, (v) => updateLightColor(v));
     light.intensity = 0.3
     light.range = 5
     light.parent = ball;

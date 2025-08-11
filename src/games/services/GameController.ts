@@ -46,7 +46,6 @@ export default class GameController {
     this.active = next;
     await this.sceneService.moveCameraTo(next.camera);
     this.active.game.start();
-    console.log(PlayerManager.listPlayers());
   }
 
   /**

@@ -1,15 +1,21 @@
 import { Button, Control } from '@babylonjs/gui';
 import GameController from "@/games/services/GameController.ts";
+import { useColorStore } from '@/stores/colorStore';
+import { watch } from 'vue';
 
 export function CreateHomeButton(text: string, controller: GameController): Button {
+    const colorStore = useColorStore();
+
     const btn = Button.CreateSimpleButton('MenuButton', text);
     btn.width = '8%';
     btn.height = '6.5%';
     btn.left = '2%';
     btn.top = '8%';
-    btn.color = '#ffffff';
+    btn.color = colorStore.homeButtonText;
+    watch(() => colorStore.homeButtonText, (v) => (btn.color = v));
     btn.cornerRadius = 20;
-    btn.background = '#000000';
+    btn.background = colorStore.homeButtonBackground;
+    watch(() => colorStore.homeButtonBackground, (v) => (btn.background = v));
     btn.fontSize = "16px";
     btn.thickness = 1;
     btn.alpha = 0.95;
