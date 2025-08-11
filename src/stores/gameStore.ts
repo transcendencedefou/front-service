@@ -5,7 +5,8 @@ interface GameState {
     game_type: string;
     player_name: string[];
     player_count: number;
-    winner: string;
+    games_padding: number;
+    winner: string | null;
 }
 
 export const useGameStore = defineStore("game", {
@@ -14,6 +15,7 @@ export const useGameStore = defineStore("game", {
         game_type: '',
         player_name: [],
         player_count: 0,
+        games_padding: 5,
         winner: '',
     }),
 
@@ -25,7 +27,8 @@ export const useGameStore = defineStore("game", {
             this.game_type = value;
         },
         setRunning(value: boolean) {
-            (this as any).running = value; // running is dynamically added
+            (this as any).running = value;
+            // Il faut que je mette les bon type des instances de pong et de tictactoe pour l'instant c'est saleore.winner
         },
         addPlayer(player: string) {
             if (this.player_count >= 2) return;

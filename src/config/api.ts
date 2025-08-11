@@ -24,6 +24,14 @@ export const API_CONFIG = {
       CREATE: '/games/create',
       JOIN: '/games/join',
       STATS: '/games/stats',
+    },
+    FRIENDS: {
+      LIST: '/friends/list',
+      ADD: '/friends/add',
+      REMOVE: (id: string) => `/friends/remove/${id}`,
+      SEARCH: (q: string) => `/friends/search?q=${encodeURIComponent(q)}`,
+      STATS: '/friends/stats',
+      HEARTBEAT: '/friends/heartbeat'
     }
   }
 };
