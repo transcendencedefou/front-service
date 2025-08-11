@@ -92,6 +92,10 @@
       "validate": "Validate 2FA",
       "back": "Back"
     },
+    "colorblind": {
+      "activate-colorblind": "Enable colorblind mode",
+      "activate-colorblind-details": "Accessible palette and enhanced constrast"
+    },
     "nav": {
       "doughnut": "Wins | Losses",
       "bar": "Power-Ups",

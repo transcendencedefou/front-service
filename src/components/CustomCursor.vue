@@ -24,7 +24,7 @@ import { useTheme } from '@/composables/useTheme'
 const cursor = ref(null)
 const ripple = ref(null)
 
-const { theme } = useTheme()
+const { scheme: theme } = useTheme()
 
 const themeClass = computed(() =>
   theme.value === 'dark'

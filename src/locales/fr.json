@@ -92,6 +92,10 @@
       "validate": "Valider 2FA",
       "back": "Retour"
     },
+    "colorblind": {
+      "activate-colorblind": "Activer le mode Daltonien",
+      "activate-colorblind-details": "Palette adaptée et contrastes renforcés"
+    },
     "nav": {
       "doughnut": "Victoires | Défaites",
       "bar": "Power-Ups",

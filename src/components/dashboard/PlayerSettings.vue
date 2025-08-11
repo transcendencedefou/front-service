@@ -143,9 +143,14 @@
             {{ t('dashboard.2fa.cancel') }}
           </button>
         </div>
-
         <p v-if="error2FA" class="msg-err text-center">{{ error2FA }}</p>
       </div>
+    </div>
+    <div class="space-y-2 pt-6">
+      <label class="set-label flex items-center gap-3">
+        <input type="checkbox" :checked="colorblind" @change="onCB($event)" /> <!-- maybe un fix sur $event -->
+        <span>{{ t('dashboard.colorblind.activate-colorblind') }} <br> {{ t('dashboard.colorblind.activate-colorblind-details') }}</span>
+      </label>
     </div>
   </div>
 </template>
@@ -155,6 +160,10 @@ import { ref, onMounted } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
 import { buildApiUrl, API_CONFIG } from '@/config/api'
+import { useTheme } from '@/composables/useTheme'
+
+const { colorblind, setColorblind } = useTheme()
+const onCB = (e: Event) => setColorblind((e.target as HTMLInputElement).checked)
 
 const { t } = useI18n()
 const auth = useAuthStore()

@@ -23,8 +23,7 @@
             repeating-linear-gradient(90deg, var(--grid-color) 0 1px, transparent 1px var(--grid-size))`,
           backgroundSize: `var(--grid-size) var(--grid-size)`,
           backgroundPosition: 'center bottom',
-          // masque plus doux (tu peux commenter pour tester)
-          WebkitMaskImage: 'linear-gradient(to top, black 60%, rgba(0,0,0,.4) 65%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to top, black 60%, rgba(0,0,0,.4) 65%, transparent 100)',
           maskImage:       'linear-gradient(to top, black 60%, rgba(0,0,0,.4) 65%, transparent 100%)'
         }"
       />
@@ -36,9 +35,7 @@
 </template>
 
 <script setup lang="ts">
-// rien ici pour Tailwind; tout est global via main.css
 </script>
 
 <style scoped>
-/* ici seulement des styles locaux au composant si besoin */
 </style>
