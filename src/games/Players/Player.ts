@@ -1,5 +1,6 @@
 import { Mesh } from '@babylonjs/core';
 import { createPlayerStore } from '@/stores/playerFactory.ts';
+import { useGameStore } from '@/stores/gameStore';
 
 export class Player {
     public bar: Mesh | null;
@@ -15,6 +16,7 @@ export class Player {
         this.store.setID(id);
         this.store.setName(name);
         this.store.setBarSpeed(0.13);
+        useGameStore().addPlayer(name);
     }
 
     initPong(size: { width: number; depth: number }): void {
@@ -46,6 +48,7 @@ export class Player {
     }
 
     dispose(): void {
+        useGameStore().removePlayer(this.store.name);
         this.bar?.dispose();
         this.bar = null;
     }
