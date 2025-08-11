@@ -9,7 +9,6 @@ export const useAuthStore = defineStore('auth', () => {
   const tempCredentials = ref({ username: '', password: '' })
 
   const isAuthenticated = computed(() => user.value !== null)
-  const token = computed(() => user.value?.token || '')
 
   async function login(username: string, password: string, twoFactorCode?: string): Promise<boolean> {
     const body: any = { username, password }
@@ -31,12 +30,14 @@ export const useAuthStore = defineStore('auth', () => {
     if (!res.ok || !data.success) {
       throw new Error(data.message || 'Erreur de connexion')
     }
-    const u = new User(data.user.id, data.user.username, data.token, !!data.user.twoFactorEnabled)
+    const u = new User(data.user.id, data.user.username, data.token, !!data.user.twoFactorEnabled, data.user.avatar, data.user.banner)
     user.value = u
     localStorage.setItem('token', u.token)
     localStorage.setItem('username', u.username)
     localStorage.setItem('id', u.id)
     localStorage.setItem('twoFactorEnabled', String(!!u.twoFactorEnabled))
+    localStorage.setItem('avatar', u.avatar || '/src/assets/img/test_avatar.jpg')
+    localStorage.setItem('banner', u.banner || '/src/assets/img/test_banner.jpg')
     pending2FA.value = false
     tempCredentials.value = { username: '', password: '' }
     return true
@@ -55,6 +56,8 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('username')
     localStorage.removeItem('id')
     localStorage.removeItem('twoFactorEnabled')
+    localStorage.removeItem('avatar')
+    localStorage.removeItem('banner')
   }
 
   function loadUserFromLocalStorage(): void {
@@ -62,9 +65,11 @@ export const useAuthStore = defineStore('auth', () => {
     const username = localStorage.getItem('username')
     const id = localStorage.getItem('id')
     const twoFactorEnabled = localStorage.getItem('twoFactorEnabled') === 'true'
+    const avatar = localStorage.getItem('avatar')
+    const banner = localStorage.getItem('banner')
 
     if (token && username && id) {
-      const u = new User(id, username, token, twoFactorEnabled)
+      const u = new User(id, username, token, twoFactorEnabled, avatar, banner)
       user.value = u
     }
   }
@@ -75,7 +80,7 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.setItem('twoFactorEnabled', String(v))
   }
 
-  return { user, token, pending2FA, tempCredentials, isAuthenticated, login, verify2FA, logout, loadUserFromLocalStorage, setTwoFactorEnabled }
+  return { user, pending2FA, tempCredentials, isAuthenticated, login, verify2FA, logout, loadUserFromLocalStorage, setTwoFactorEnabled }
 })
 
 // Helper for OAuth token reception from hash params
@@ -91,6 +96,8 @@ export function oauthLoginFromParams(params: URLSearchParams) {
     localStorage.setItem('username', username)
     localStorage.setItem('id', id)
     localStorage.setItem('twoFactorEnabled', 'false')
+    localStorage.setItem('avatar', u.avatar || '/src/assets/img/test_avatar.jpg')
+    localStorage.setItem('banner', u.banner || '/src/assets/img/test_banner.jpg')
     return true
   }
   return false

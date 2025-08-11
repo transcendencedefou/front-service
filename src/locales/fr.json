@@ -103,6 +103,10 @@
       "settings": "Réglages",
       "friends": "Amis",
       "global": "Statistiques globales"
+    },
+    "modify": {
+      "avatar": "Modifier l'avatar",
+      "banner": "Modifier la bannière"
     }
   }
 }

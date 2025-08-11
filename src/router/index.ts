@@ -6,7 +6,6 @@ import LoginForm from '../views/LoginView.vue'
 import RegisterForm from '../views/RegisterView.vue'
 import PlayerStatsChart from '../views/DashboardView.vue'
 import OAuthCallback from '../views/OAuthCallback.vue'
-import TournamentsView from '../views/TournamentsView.vue'
 import { useAuthStore } from '../stores/auth';
 
 const routes = [
@@ -32,16 +31,11 @@ const routes = [
       name: 'Dashboard',
       component: PlayerStatsChart},
     {
-      path: '/tournaments',
-      name: 'Tournaments',
-      component: TournamentsView},
-    {
       path: '/auth/oauth/callback',
       name: 'OAuthCallback',
       component: OAuthCallback,
       meta: { hideNavbar: true, public: true }
-    },
-    { path: '/tournament/match/:matchId', name: 'TournamentMatch', component: GameView, meta: { hideNavbar: true } },
+    }
 ]
 
 const router = createRouter({
