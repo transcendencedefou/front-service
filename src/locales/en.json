@@ -28,7 +28,7 @@
       "validate2fa": "Validate 2FA", 
       "back": "Back",
       "providers": {
-        "google": "Google",
+        "42": "42",
         "github": "GitHub"
           }
       },
@@ -103,6 +103,10 @@
       "settings": "Settings",
       "friends": "Friends",
       "global": "Global stats"
+    },
+    "modify": {
+      "avatar": "Change avatar",
+      "banner": "Change banner"
     }
   }
 }
