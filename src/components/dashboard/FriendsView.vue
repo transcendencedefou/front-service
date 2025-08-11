@@ -1,5 +1,5 @@
 <template>
-  <div class="p-4 space-y-6 bg-bg text-fg">
+  <div class="p-4 space-y-6">
     <!-- Messages -->
     <transition name="fade">
       <div v-if="feedback.message" :class="['rounded-md px-4 py-2 text-sm flex items-start gap-2', feedback.type==='success' ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300']">
