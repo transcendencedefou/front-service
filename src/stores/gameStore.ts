@@ -6,7 +6,7 @@ interface GameState {
     player_name: string[];
     player_count: number;
     games_padding: number;
-    winner: string;
+    winner: string | null;
 }
 
 export const useGameStore = defineStore("game", {

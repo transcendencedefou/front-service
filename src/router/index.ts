@@ -1,6 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import HomeView from '../views/HomeView.vue'
-import PongView from '../views/PongView.vue'
+import GameView from '../views/GameView.vue'
 import LoginForm from '../views/LoginView.vue'
 import RegisterForm from '../views/RegisterView.vue'
 import PlayerStatsChart from '../views/DashboardView.vue'
@@ -11,7 +11,7 @@ const routes = [
       component: HomeView },
     { path: '/pong',
       name: 'Pong Game',
-      component: PongView,
+      component: GameView,
       meta: { hideNavbar: true } },
     { path: '/auth/login',
       name: 'Login',

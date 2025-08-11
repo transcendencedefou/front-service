@@ -74,7 +74,7 @@ onMounted(() => {
       const right = w / 2 - margin
 
       gsap.killTweensOf(ball.value)
-      gsap.set(ball.value, { xPercent: -50, yPercent: -50, x: left })
+      gsap.set(ball.value, { xPercent: -5, yPercent: -50, x: left })
 
       if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         gsap.to(ball.value, {
