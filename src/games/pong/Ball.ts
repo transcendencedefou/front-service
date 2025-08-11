@@ -9,6 +9,8 @@ export default class Ball {
     private store: ReturnType<typeof useBallStore>;
     private ball!: Mesh;
     private trail: ParticleSystem | null;
+    private lastSpawnTime = 0;
+    private graceMs = 600; // délai sans scoring après spawn
 
     constructor(
         private scene: Scene,
@@ -20,7 +22,7 @@ export default class Ball {
         this.store.direction = { x: Math.random() < 0.5 ? -1 : 1, y: 0, z: 0 };
         this._normalizeDirection();
         this.trail = null;
-
+        this.lastSpawnTime = Date.now();
         this._init();
     }
 
@@ -49,17 +51,20 @@ export default class Ball {
     }
 
     move(): void {
+        const now = Date.now();
         const pos = this.ball.position;
         const leftBorder = this.getBorder('left');
         const rightBorder = this.getBorder('right');
         const upBorder = this.getBorder('up');
         const downBorder = this.getBorder('down');
 
-        if (leftBorder && this.ball.intersectsMesh(leftBorder, false) && PlayerManager.getPlayer(1)) {
+        const canScore = (now - this.lastSpawnTime) > this.graceMs;
+
+        if (canScore && leftBorder && this.ball.intersectsMesh(leftBorder, false) && PlayerManager.getPlayer(1)) {
             PlayerManager.getPlayer(1)!.store.incrementScore(+1);
             this.reset();
             return;
-        } else if (rightBorder && this.ball.intersectsMesh(rightBorder, false) && PlayerManager.getPlayer(0)) {
+        } else if (canScore && rightBorder && this.ball.intersectsMesh(rightBorder, false) && PlayerManager.getPlayer(0)) {
             PlayerManager.getPlayer(0)!.store.incrementScore(1);
             this.reset();
             return;
@@ -70,7 +75,6 @@ export default class Ball {
             this.store.direction.z *= -1;
         }
 
-        const now = Date.now();
         const player0 = PlayerManager.getPlayer(0);
         const player1 = PlayerManager.getPlayer(1);
         const player0Bar = player0?.bar ?? null;
@@ -112,6 +116,7 @@ export default class Ball {
         this.ball.position.x = 0;
         this.ball.position.z = 0;
         this.store.speed = this.store.def_speed;
+        this.lastSpawnTime = Date.now();
         if (PlayerManager.getPlayer(0)?.store.last_hit) {
             this.store.direction.x = 1
             this.store.direction.z = (Math.random() * 2 - 1) * 0.2;
