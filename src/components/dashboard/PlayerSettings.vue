@@ -146,6 +146,69 @@
         <p v-if="error2FA" class="msg-err text-center">{{ error2FA }}</p>
       </div>
     </div>
+    <div class="auth-sep-line mt-6"></div>
+
+    <!-- Modification image profil et bannière -->
+    <div class="space-y-6 pt-6">
+      <!-- Avatar -->
+      <div class="space-y-2">
+        <label class="set-label">{{ t('dashboard.modify.avatar') || 'Photo de profil' }}</label>
+
+        <div class="flex items-center gap-4">
+          <img
+            :src="currentAvatar || fallbackAvatar"
+            alt="Avatar actuel"
+            class="w-16 h-16 rounded-full object-cover"
+          />
+          <div class="flex-1">
+            <button class="auth-btn-primary" type="button" @click="avatarInput?.click()">
+              {{ t('dashboard.modify.avatar') || 'Changer l\'avatar' }}
+            </button>
+            <input
+              ref="avatarInput"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              class="hidden"
+              @change="onAvatarFileChange"
+            />
+            <p v-if="avatarMsg" class="msg-ok mt-2">{{ avatarMsg }}</p>
+            <p v-if="avatar.error" class="msg-err mt-2">{{ avatar.error }}</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="auth-sep-line"></div>
+
+      <!-- Bannière -->
+      <div class="space-y-2">
+        <label class="set-label">{{ t('dashboard.modify.banner') || 'Image de bannière' }}</label>
+
+        <div class="space-y-3">
+          <img
+            :src="currentBanner || fallbackBanner"
+            alt="Bannière actuelle"
+            class="w-full rounded-lg object-cover"
+            style="aspect-ratio: 16 / 5;"
+          />
+          <div>
+            <button class="auth-btn-primary" type="button" @click="bannerInput?.click()">
+              {{ t('dashboard.modify.banner') || 'Changer l’image de bannière' }}
+            </button>
+            <input
+              ref="bannerInput"
+              type="file"
+              accept="image/png,image/jpeg,image/webp"
+              class="hidden"
+              @change="onBannerFileChange"
+            />
+            <p v-if="bannerMsg" class="msg-ok mt-2">{{ bannerMsg }}</p>
+            <p v-if="banner.error" class="msg-err mt-2">{{ banner.error }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="auth-sep-line mt-6"></div>
     <div class="space-y-2 pt-6">
       <label class="set-label flex items-center gap-3">
         <input type="checkbox" :checked="colorblind" @change="onCB($event)" /> <!-- maybe un fix sur $event -->
@@ -161,7 +224,64 @@ import { useAuthStore } from '@/stores/auth'
 import { useI18n } from 'vue-i18n'
 import { buildApiUrl, API_CONFIG } from '@/config/api'
 import { useTheme } from '@/composables/useTheme'
+import { useImageUpload } from '@/composables/useImageUpload'
+import { useRouter } from 'vue-router'
 
+const router = useRouter()
+
+// AVATR / BANNER 
+
+const avatar = useImageUpload('avatar')
+const banner = useImageUpload('banner')
+
+const avatarInput = ref<HTMLInputElement | null>(null)
+const bannerInput = ref<HTMLInputElement | null>(null)
+
+const fallbackAvatar = '/src/assets/img/test_avatar.jpg'
+const fallbackBanner = '/src/assets/img/test_banner.jpg'
+
+const currentAvatar = ref<string | null>(null)
+const currentBanner = ref<string | null>(null)
+
+const avatarMsg = ref('')
+const bannerMsg = ref('')
+
+onMounted(async () => {
+  currentAvatar.value = await avatar.fetchCurrent()
+  currentBanner.value = await banner.fetchCurrent()
+})
+
+const onAvatarFileChange = async (e: Event) => {
+  avatarMsg.value = ''
+  const target = e.target as HTMLInputElement
+  const f = target.files?.[0]
+  if (!f) return
+
+  const ok = await avatar.uploadFile(f)
+  if (ok) {
+    currentAvatar.value = await avatar.fetchCurrent()
+    avatarMsg.value = t('dashboard.modify.avatar') || 'Image de profil mise à jour.'
+    router.go(0)
+  }
+  target.value = '' // autorise re-upload du meme fichier
+}
+
+const onBannerFileChange = async (e: Event) => {
+  bannerMsg.value = ''
+  const target = e.target as HTMLInputElement
+  const f = target.files?.[0]
+  if (!f) return
+
+  const ok = await banner.uploadFile(f)
+  if (ok) {
+    currentBanner.value = await banner.fetchCurrent()
+    bannerMsg.value = t('dashboard.modify.banner') || 'Bannière mise à jour.'
+    router.go(0)
+  }
+  target.value = ''
+}
+
+// PAS TOUCHER
 const { colorblind, setColorblind } = useTheme()
 const onCB = (e: Event) => setColorblind((e.target as HTMLInputElement).checked)
 
