@@ -91,6 +91,12 @@ export default class GameController {
     return Array.from(this.games.keys());
   }
 
+  /** Get a game instance by name. */
+  getGame(name: string): IGame | null {
+    const entry = this.games.get(name);
+    return entry ? entry.game : null;
+  }
+
   /** Name of the currently active game. */
   getActiveGame(): string | null {
     return this.active?.game.name ?? null;

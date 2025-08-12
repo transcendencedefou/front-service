@@ -1,6 +1,21 @@
 {
   "common": {
-    "loading": "Chargement..."
+    "loading": "Chargement...",
+    "cancel": "Annuler"
+  },
+  "game": {
+    "selectGame": "Sélection du Jeu",
+    "chooseGame": "Choisir un jeu",
+    "player1Name": "Nom du Joueur 1",
+    "player2Name": "Nom du Joueur 2",
+    "player2": "Joueur 2",
+    "player1Placeholder": "Entrez le nom du joueur 1",
+    "player2Placeholder": "Entrez le nom du joueur 2",
+    "humanPlayer": "Joueur Humain",
+    "aiPlayer": "Joueur IA",
+    "aiOpponent": "Adversaire IA",
+    "startGame": "Commencer le Jeu",
+    "currentUserNote": "Verrouillé à l'utilisateur actuel"
   },
   "nav": {
     "home": "Accueil",
