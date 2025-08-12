@@ -25,11 +25,6 @@ export default class PongHUD {
         for (const [, player] of PlayerManager.playerMap())
             this.hud.addControl(CreatePlayerBoard(player, scene))
         this.hud.addControl(CreateControlsOverlay(this.t))
-        const homeBtn = CreateHomeButton(this.t('pong.home') ?? 'Game Selection', this.controller);
-        this.hud.addControl(homeBtn);
-        if (localStorage.getItem('currentTournamentMatch')) {
-            homeBtn.isVisible = false;
-        }
     }
 
     show(): void {
