@@ -34,6 +34,8 @@ const gameSessionStore = useGameSessionStore();
 let tournamentContext: any = null;
 // Garde pour éviter les appels multiples à la fin d'une partie
 let submitting = false;
+let readyToSubmit = false;
+let currentGameType: 'PONG' | 'TICTACTOE' | null = null;
 
 
 function authHeaders(hasBody = false) {
@@ -60,6 +62,9 @@ async function reportAndReturn(winnerUsername: string) {
 }
 
 function normalizeGameType(): 'PONG' | 'TICTACTOE' {
+  if (currentGameType) return currentGameType;
+  const active = controller?.getActiveGame?.();
+  if (active) return active === 'Pong' ? 'PONG' : 'TICTACTOE';
   const t = (gameStore.game_type || '').toLowerCase();
   return t.includes('pong') ? 'PONG' : 'TICTACTOE';
 }
@@ -73,34 +78,33 @@ function collectScores() {
 }
 
 async function saveCasualResult(winnerUsername: string) {
-  try {
-    // Demander le pseudo invité (mémo dans localStorage)
-    let guestUsername = localStorage.getItem('guestUsername') || '';
+    try {
+    // Récupérer le pseudo invité depuis les joueurs initialisés dans le jeu
+    let guestUsername = (PlayerManager.getPlayer(1)?.store.name || '').trim();
+    // Fallback (ancien comportement) si non défini
     if (!guestUsername) {
-      guestUsername = window.prompt('Pseudo de l\'invité (adversaire non connecté) ?', 'Guest') || '';
-      guestUsername = guestUsername.trim();
-      if (guestUsername) localStorage.setItem('guestUsername', guestUsername);
+      guestUsername = (localStorage.getItem('guestUsername') || '').trim();
     }
-    if (!guestUsername) return; // annulation
+    if (!guestUsername) guestUsername = 'Guest';
 
-    const gameType = normalizeGameType();
-    // Déterminer la side gagnante en comparant au joueur index 0 (hôte humain)
-    const hostPlayer = PlayerManager.getPlayer(0);
-    const hostName = hostPlayer?.store.name || '';
-    const winner = winnerUsername === hostName ? 'HOST' : 'GUEST';
-    const scores = collectScores();
-    const ballStore = useBallStore();
-    const ballHit = ballStore.hits.slice();
+     const gameType = normalizeGameType();
+     // Déterminer la side gagnante en comparant au joueur index 0 (hôte humain)
+     const hostPlayer = PlayerManager.getPlayer(0);
+     const hostName = hostPlayer?.store.name || '';
+     const winner = winnerUsername === hostName ? 'HOST' : 'GUEST';
+     const scores = collectScores();
+     const ballStore = useBallStore();
+     const ballHit = ballStore.hits.slice();
 
-    await fetch(`${api.GAME_URL}/match`, {
-      method: 'POST',
-      headers: authHeaders(true),
-      body: JSON.stringify({ gameType, guestUsername, winner, scores, ballHit })
-    });
+     await fetch(`${api.GAME_URL}/match`, {
+       method: 'POST',
+       headers: authHeaders(true),
+       body: JSON.stringify({ gameType, guestUsername, winner, scores, ballHit })
+     });
 
-    // Nettoyage du journal
-    ballStore.clearHits();
-  } catch {}
+     // Nettoyage du journal
+     ballStore.clearHits();
+   } catch {}
 }
 
 onMounted(async () => {
@@ -108,6 +112,11 @@ onMounted(async () => {
   controller = new GameController(scene);
   controller.registerGame('TicTacToe', () => new TicTacToeGame(), 'B', CAMERA_POSITIONS.tictactoe);
   controller.registerGame('Pong', () => new PongGame(), 'A', CAMERA_POSITIONS.pong);
+
+  // Reset state at game start to avoid stale submissions
+  const ballStore = useBallStore();
+  ballStore.clearHits();
+  gameStore.setWinner('');
 
   // Check for tournament context
   const stored = localStorage.getItem('currentTournamentMatch');
@@ -127,6 +136,7 @@ onMounted(async () => {
     
     // Launch game first to initialize scene and get proper sizing
     await controller.launchGame(gameSession.gameType);
+    currentGameType = gameSession.gameType === 'Pong' ? 'PONG' : 'TICTACTOE';
     
     // Now add players with proper scene and sizing information
     if (gameSession.gameType === 'Pong' && scene) {
@@ -155,14 +165,21 @@ onMounted(async () => {
     
     // Clear session after use
     gameSessionStore.clearGameSession();
+    // Allow submissions after clean start
+    readyToSubmit = true;
   }
   // If we have tournament context, use it
   else if (tournamentContext) {
+    // Ensure no stale players from previous scenes
+    PlayerManager.clearMap();
     if (tournamentContext.gameType === 'PONG') {
       await controller.launchGame('Pong');
     } else if (tournamentContext.gameType === 'TICTACTOE') {
       await controller.launchGame('TicTacToe');
     }
+    currentGameType = tournamentContext.gameType === 'PONG' ? 'PONG' : 'TICTACTOE';
+    // Allow submissions after clean start
+    readyToSubmit = true;
   }
   // Otherwise redirect to home (no game selection HUD)
   else {
@@ -182,18 +199,18 @@ onMounted(async () => {
     }
     
     if (active === 'TicTacToe' && cameraStopped) {
-      if (!ttthud) ttthud = new TTTHUD(scene!.scene, controller);
+      if (!ttthud) ttthud = new TTTHUD(scene!.scene);
       ttthud.show();
     } else {
       ttthud?.hide();
     }
 
-    if (tournamentContext && gameStore.winner && !submitting) {
+    if (tournamentContext && readyToSubmit && gameStore.winner && !submitting) {
       submitting = true;
       const w = gameStore.winner;
       reportAndReturn(w).finally(() => { submitting = false; });
     }
-    if (!tournamentContext && gameStore.winner && !submitting) {
+    if (!tournamentContext && readyToSubmit && gameStore.winner && !submitting) {
       // Partie casual: envoyer l'enregistrement une seule fois
       submitting = true;
       const w = gameStore.winner;
@@ -206,9 +223,8 @@ onMounted(async () => {
 });
 
 function handleResize() {
-  if (canvas.value && scene) {
-    const rect = canvas.value.getBoundingClientRect();
-    scene.resize(rect.width, rect.height);
+  if (scene) {
+    scene.engine.resize();
   }
 }
 
