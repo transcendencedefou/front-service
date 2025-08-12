@@ -13,6 +13,7 @@
     "player2Placeholder": "Ingresa el nombre del jugador 2",
     "humanPlayer": "Jugador Humano",
     "aiPlayer": "Jugador IA",
+    "aiNotAvailable": "IA No Disponible",
     "aiOpponent": "Oponente IA",
     "startGame": "Comenzar Juego",
     "currentUserNote": "Bloqueado al usuario actual"

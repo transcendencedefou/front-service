@@ -13,6 +13,7 @@
     "player2Placeholder": "Enter player 2 name",
     "humanPlayer": "Human Player",
     "aiPlayer": "AI Player",
+    "aiNotAvailable": "AI Not Available",
     "aiOpponent": "AI Opponent",
     "startGame": "Start Game",
     "currentUserNote": "Locked to current user"
