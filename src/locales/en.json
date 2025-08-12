@@ -128,5 +128,22 @@
       "avatar": "Change avatar",
       "banner": "Change banner"
     }
+  },
+  "pong": {
+    "controls": {
+      "player1": "Player 1",
+      "player2": "Player 2",
+      "title": "Controls:"
+    },
+    "actions": {
+      "start_stop": "Start / Stop",
+      "reset_restart": "Reset / Restart"
+    },
+    "keys": {
+      "w_s": "W  \\\\  S",
+      "up_down": "↑  \\\\  ↓",
+      "space": "Space",
+      "r": "R"
+    }
   }
 }

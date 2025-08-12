@@ -2,7 +2,7 @@ import { Control, StackPanel, Grid, Rectangle, TextBlock } from '@babylonjs/gui'
 import { useColorStore } from '@/stores/colorStore';
 import { watch } from 'vue';
 
-export function CreateControlsOverlay(): Rectangle {
+export function CreateControlsOverlay(t: (k: string) => string): Rectangle {
     const colorStore = useColorStore();
 
     const overlay = new Rectangle("ControlsOverlay");
@@ -33,7 +33,7 @@ export function CreateControlsOverlay(): Rectangle {
     content.zIndex = 1;
     content.adaptHeightToChildren = true;
 
-    const title = new TextBlock("ControlsTitle", "Contrôles");
+    const title = new TextBlock("ControlsTitle", t('pong.controls.title'));
     title.fontFamily = "'Inclusive Sans', sans-serif";
     title.height = "34px";
     title.textHorizontalAlignment = Control.HORIZONTAL_ALIGNMENT_CENTER;
@@ -93,13 +93,11 @@ export function CreateControlsOverlay(): Rectangle {
         content.addControl(row);
     };
 
-    addKeyRow("W  \\  S", "Player 1");
-    addKeyRow("↑  \\  ↓", "Player 2");
-    addKeyRow("Space",   "Start / Stop");
-    addKeyRow("Soon",    "Menu / Quitter");
-    addKeyRow("R",       "Reset / Restart");
+    addKeyRow(t('pong.keys.w_s'), t('pong.controls.player1'));
+    addKeyRow(t('pong.keys.up_down'), t('pong.controls.player2'));
+    addKeyRow(t('pong.keys.space'), t('pong.actions.start_stop'));
+    addKeyRow(t('pong.keys.r'), t('pong.actions.reset_restart'));
 
     overlay.addControl(content);
-
     return overlay;
 }
