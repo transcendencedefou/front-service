@@ -51,6 +51,7 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
   function logout(): void {
+    console.log('🔓 Logout called - clearing user data')
     user.value = null
     pending2FA.value = false
     tempCredentials.value = { username: '', password: '' }
@@ -60,9 +61,11 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.removeItem('twoFactorEnabled')
     localStorage.removeItem('avatar')
     localStorage.removeItem('banner')
+    console.log('🔓 Logout complete - localStorage cleared')
   }
 
   function loadUserFromLocalStorage(): void {
+    console.log('🔄 Loading user from localStorage...')
     const token = localStorage.getItem('token')
     const username = localStorage.getItem('username')
     const id = localStorage.getItem('id')
@@ -73,6 +76,9 @@ export const useAuthStore = defineStore('auth', () => {
     if (token && username && id) {
       const u = new User(id, username, token, twoFactorEnabled, avatar, banner)
       user.value = u
+      console.log('✅ User loaded from localStorage:', username)
+    } else {
+      console.log('❌ No valid user data in localStorage')
     }
   }
 
