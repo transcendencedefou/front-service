@@ -76,156 +76,47 @@
           <div class="winrate">{{ winRate }}%</div>
           <p class="stat-label col-span-2 text-center">{{ t('dashboard.winrate') }}</p>
         </div>
+
+        <!-- Matchs récents -->
+        <div v-if="!chartType" class="panel mt-4">
+          <div class="flex items-center justify-between mb-3">
+            <h3 class="text-lg font-semibold">Matchs récents</h3>
+            <span class="text-xs text-gray-400">{{ recentMatches.length }} derniers</span>
+          </div>
+          <ul class="divide-y divide-gray-700/40">
+            <li v-for="m in recentMatches" :key="m.id" class="py-3 flex items-center gap-3">
+              <span class="text-[10px] px-2 py-1 rounded-full"
+                    :class="m.gameType === 'PONG' ? 'bg-indigo-600/30 text-indigo-200' : 'bg-emerald-600/30 text-emerald-200'">
+                {{ m.gameType || 'N/A' }}
+              </span>
+              <div class="flex-1 min-w-0">
+                <p class="truncate">
+                  <span class="font-medium">{{ displayNames(m)[0] }}</span>
+                  <span class="mx-2 text-gray-400">vs</span>
+                  <span class="font-medium">{{ displayNames(m)[1] }}</span>
+                </p>
+                <p class="text-xs text-gray-400">{{ formatDate(m.createdAt) }}</p>
+              </div>
+              <div class="flex items-center gap-3">
+                <span class="text-sm font-semibold">{{ m.scores.player1 }} - {{ m.scores.player2 }}</span>
+                <span class="text-[11px] px-2 py-0.5 rounded"
+                      :class="m.winnerId === userId ? 'bg-green-600/30 text-green-200' : 'bg-red-600/30 text-red-200'">
+                  {{ m.winnerId === userId ? 'Victoire' : 'Défaite' }}
+                </span>
+              </div>
+            </li>
+          </ul>
+        </div>
       </section>
     </div>
   </div>
 </template>
-
-<!-- <script lang="ts" setup>
-  import { ref, onMounted, computed } from 'vue'
-  import { useAuthStore } from '@/stores/auth'
-  import DashboardSidebar from '@components/dashboard/DashboardSidebar.vue'
-  import { type ChartType } from '@/types/chart'
-  import BarChart from '@/components/charts/BarChart.vue'
-  import DoughnutChart from '@/components/charts/DoughnutChart.vue'
-  import LineChart from '@/components/charts/LineChart.vue'
-  import FriendsView from './FriendsView.vue'
-  import PlayerSettings from './PlayerSettings.vue'
-  import { Notebook, Settings, Users } from 'lucide-vue-next'
-  import { useI18n } from 'vue-i18n'
-  import { useImageUpload } from '@/composables/useImageUpload'
-
-  const { t } = useI18n()
-  const auth = useAuthStore()
-  const isLoading = ref(true)
-  const error = ref('')
-  const chartType = ref<ChartType | 'settings' | 'friends' | null>(null)
-  
-  const avatar = useImageUpload('avatar')
-  const banner = useImageUpload('banner')
-  const fallbackAvatar = "/src/assets/img/test_avatar.jpg"
-  const fallbackBanner = "/src/assets/img/test_banner.jpg"
-  const currentAvatar = ref<string | null>(null)
-  const currentBanner = ref<string | null>(null)
-  // console.log(auth.user?.id) pour fake data
-  const matches = ref<Match[]>([])
-
-  onMounted(async () =>{
-    currentAvatar.value = await avatar.fetchCurrent()
-    currentBanner.value = await banner.fetchCurrent()
-  })
-
-  onMounted(async () => {
-    try {
-
-      const res = await fetch(`https://localhost/games/matches/user/${auth.user?.id}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      })
-      if (!res.ok) throw new Error('Erreur lors du chargement des matchs.')
-      
-      matches.value = await res.json()
-    } catch (err: any) {
-      error.value = err.message || 'Erreur inconnue'
-    } finally {
-      isLoading.value = false
-    }
-  })
-
-  const getChartComponent = (type: ChartType) => {
-  switch (type) {
-    case 'doughnut':
-      return DoughnutChart
-    case 'line':
-      return LineChart
-    default:
-      return BarChart
-  }
-}
-</script> -->
-
-<!-- <script lang="ts" setup>
-import { ref, onMounted, computed, toRef } from 'vue'          // + toRef
-import { useAuthStore } from '@/stores/auth'
-import DashboardSidebar from '@components/dashboard/DashboardSidebar.vue'
-import { type ChartType } from '@/types/chart'
-import BarChart from '@/components/charts/BarChart.vue'
-import DoughnutChart from '@/components/charts/DoughnutChart.vue'
-import LineChart from '@/components/charts/LineChart.vue'
-import FriendsView from './FriendsView.vue'
-import PlayerSettings from './PlayerSettings.vue'
-import { Notebook, Settings, Users } from 'lucide-vue-next'
-import { useI18n } from 'vue-i18n'
-import { useImageUpload } from '@/composables/useImageUpload'
-import { useMatchStats, type Match } from '@/composables/useMatchStats'
-
-const { t } = useI18n()
-const auth = useAuthStore()
-
-const isLoading = ref(true)
-const error = ref('')
-const chartType = ref<ChartType | 'settings' | 'friends' | null>(null)
-
-const avatar = useImageUpload('avatar')
-const banner = useImageUpload('banner')
-const fallbackAvatar = "/src/assets/img/test_avatar.jpg"
-const fallbackBanner = "/src/assets/img/test_banner.jpg"
-const currentAvatar = ref<string | null>(null)
-const currentBanner = ref<string | null>(null)
-
-const matches = ref<Match[]>([])
-
-const userId = computed(() => auth.user?.id ?? '')
-
-onMounted(async () => {
-  currentAvatar.value = await avatar.fetchCurrent()
-  currentBanner.value = await banner.fetchCurrent()
-})
-
-onMounted(async () => {
-  try {
-    if (!userId.value) return 
-    const res = await fetch(`https://localhost/games/matches/user/${userId.value}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    })
-    if (!res.ok) throw new Error('Erreur lors du chargement des matchs.')
-    matches.value = await res.json()
-  } catch (err: any) {
-    error.value = err.message || 'Erreur inconnue'
-  } finally {
-    isLoading.value = false
-  }
-})
-
-const {
-  totalMatches,
-  totalWins,
-  totalLosses,
-  totalBallHits,
-  winRate,
-} = useMatchStats(toRef({ value: matches.value }, 'value') as any ?? toRef({value: matches.value}, 'value'), toRef({ value: userId.value }, 'value') as any ?? toRef({value: userId.value}, 'value'))
-
-const getChartComponent = (type: ChartType) => {
-  switch (type) {
-    case 'doughnut':
-      return DoughnutChart
-    case 'line':
-      return LineChart
-    default:
-      return BarChart
-  }
-}
-</script> -->
 
 <script lang="ts" setup>
 import { ref, computed, onMounted, watch } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import DashboardSidebar from '@components/dashboard/DashboardSidebar.vue'
 import { type ChartType } from '@/types/chart'
-import BarChart from '@/components/charts/BarChart.vue'
 import DoughnutChart from '@/components/charts/DoughnutChart.vue'
 import LineChart from '@/components/charts/LineChart.vue'
 import FriendsView from './FriendsView.vue'
@@ -269,15 +160,6 @@ async function fetchMatches(id: string) {
     if (!res.ok) throw new Error('Erreur lors du chargement des matchs.')
     const raw = await res.json()
     matches.value = normalizeMatches(raw)
-    console.table(matches.value.map(m => ({
-      id: m.id,
-      me: userId.value,
-      p1: m.userId[0],
-      p2: m.userId[1],
-      scores: `${m.scores.player1}-${m.scores.player2}`,
-      winnerId: m.winnerId,
-      iAmWinner: m.winnerId === userId.value,
-    })))
   } catch (err: any) {
     error.value = err.message || 'Erreur inconnue'
   } finally {
@@ -296,6 +178,8 @@ watch(
 const { totalMatches, totalWins, totalLosses, totalBallHits, winRate } =
   useMatchStats(matches, userId)
 
+const recentMatches = computed(() => matches.value.slice(0, 10))
+
 const getChartComponent = (type: ChartType) => {
   switch (type) {
     case 'doughnut':
@@ -303,7 +187,22 @@ const getChartComponent = (type: ChartType) => {
     case 'line':
       return LineChart
     default:
-      return BarChart
+      return LineChart
   }
 }
+
+function formatDate(d: string) {
+  try { return new Date(d).toLocaleString() } catch { return d }
+}
+
+function displayNames(m: Match): [string, string] {
+  // Utiliser les noms s’ils sont disponibles (participantsNames), sinon masquer les IDs
+  const names = (m as any).participantsNames as [string, string] | undefined
+  if (names && (names[0] || names[1])) return [names[0] || 'Joueur 1', names[1] || 'Joueur 2']
+  return ['Joueur 1', 'Joueur 2']
+}
 </script>
+
+<style scoped>
+/* vous pouvez ajuster le style si nécessaire */
+</style>
