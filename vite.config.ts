@@ -14,6 +14,11 @@ export default defineConfig({
       protocol: 'ws',
       host: 'localhost',
       port: 3004
+    },
+    watch: {
+      ignored: ['**/node_modules/**', '**/dist/**', '**/coverage/**', '**/.cache/**', '**/logs/**', '**/tmp/**'],
+      usePolling: true,
+      interval: 1000
     }
   },
   build: {
