@@ -10,10 +10,13 @@ export type Match = {
   ballHit?: number
   createdAt: string
   updatedAt: string
+  // Champs additionnels pour l'affichage
+  gameType?: 'PONG' | 'TICTACTOE'
+  participantsNames?: [string, string]
 }
 
 export function useMatchStats(matches: Ref<Match[]>, userId: Ref<string>) {
-  const sideOf = (m: Match, uid: string) => m.userId.indexOf(uid) as 0 | 1 | -1
+  const sideOf = (m: Match, uid: string) => (Array.isArray(m.userId) ? (m.userId.indexOf(uid) as 0 | 1 | -1) : -1)
   const scoreFor = (m: Match, uid: string) => {
     const s = sideOf(m, uid)
     return s === 0 ? (m.scores.player1 ?? 0) : s === 1 ? (m.scores.player2 ?? 0) : 0

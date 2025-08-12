@@ -128,5 +128,22 @@
       "avatar": "Modifier l'avatar",
       "banner": "Modifier la bannière"
     }
+  },
+  "pong": {
+    "controls": {
+      "player1": " Joueur 1",
+      "player2": " Joueur 2",
+      "title": "Controles :"
+    },
+    "actions": {
+      "start_stop": " Pause",
+      "reset_restart": " Réinitialiser"
+    },
+    "keys": {
+      "w_s": "W  \\  S",
+      "up_down": "↑  \\  ↓",
+      "space": "Espace",
+      "r": "R"
+    }
   }
 }

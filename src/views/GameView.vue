@@ -15,7 +15,9 @@ import { useGameStore } from '@/stores/gameStore';
 import { useBallStore } from '@/stores/ballStore';
 import { useGameSessionStore } from '@/stores/gameSession';
 import { aiControlStore } from '@/stores/aiControl';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 
 const canvas = ref<HTMLCanvasElement | null>(null);
 let scene: SceneService | null;
@@ -50,10 +52,11 @@ async function reportAndReturn(winnerUsername: string) {
   try {
     const ballStore = useBallStore();
     const ballHit = ballStore.hits.slice();
+    const scores = collectScores();
     await fetch(`${api.GAME_URL}/match/${tournamentContext.matchId}/report`, {
       method: 'POST',
       headers: authHeaders(true),
-      body: JSON.stringify({ winner: { username: winnerUsername }, scores: { winner: winnerUsername }, ballHit })
+      body: JSON.stringify({ winner: { username: winnerUsername }, scores, ballHit })
     });
     ballStore.clearHits();
   } catch {}
@@ -170,15 +173,20 @@ onMounted(async () => {
   }
   // If we have tournament context, use it
   else if (tournamentContext) {
-    // Ensure no stale players from previous scenes
-    PlayerManager.clearMap();
+    // Ne pas nettoyer les joueurs ici: le jeu a déjà été initialisé à l'enregistrement
+    // Assurer que le jeu Pong est bien prêt avec les joueurs du tournoi
     if (tournamentContext.gameType === 'PONG') {
+      // Si pour une raison quelconque il n'y a pas 2 joueurs, on réenregistre le jeu pour relancer init()
+      if (PlayerManager.listPlayers().length < 2) {
+        controller.disposeGame('Pong');
+        controller.registerGame('Pong', () => new PongGame(), 'A', CAMERA_POSITIONS.pong);
+      }
       await controller.launchGame('Pong');
     } else if (tournamentContext.gameType === 'TICTACTOE') {
       await controller.launchGame('TicTacToe');
     }
     currentGameType = tournamentContext.gameType === 'PONG' ? 'PONG' : 'TICTACTOE';
-    // Allow submissions after clean start
+    // Autoriser l'envoi de résultat après un démarrage propre
     readyToSubmit = true;
   }
   // Otherwise redirect to home (no game selection HUD)
@@ -192,7 +200,7 @@ onMounted(async () => {
     const cameraStopped = !scene!.isCameraMoving();
     
     if (active === 'Pong' && cameraStopped) {
-      if (!pongHud) pongHud = new PongHUD(scene!.scene, controller);
+      if (!pongHud) pongHud = new PongHUD(scene!.scene, controller, t);
       pongHud.show();
     } else {
       pongHud?.hide();
