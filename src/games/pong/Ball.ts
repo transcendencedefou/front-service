@@ -90,14 +90,17 @@ export default class Ball {
             if (this.store.speed < this.store.max_speed) {
                 this.store.speed *= this.store.acceleration;
             }
+            let hitter = '';
             if (player1Bar && this.ball.intersectsMesh(player1Bar, false)) {
                 if (player0) player0.store.setLastHit();
                 const c = Color4.FromColor3(Color3.FromHexString(useColorStore().playerTwoColor), 1);
                 this.setTrailColors(c, c, c);
+                hitter = player1?.store.name || 'Player2';
             } else if (player0Bar && this.ball.intersectsMesh(player0Bar, false)) {
                 if (player1) player1.store.setLastHit();
                 const c = Color4.FromColor3(Color3.FromHexString(useColorStore().playerOneColor), 1);
                 this.setTrailColors(c, c, c);
+                hitter = player0?.store.name || 'Player1';
             }
             const bar = player0Bar && this.ball.intersectsMesh(player0Bar, false) ? player0Bar : player1Bar!;
             const impactOffset = this.ball.position.z - bar.position.z;
@@ -106,6 +109,15 @@ export default class Ball {
             const length = Math.sqrt(this.store.direction.x ** 2 + this.store.direction.z ** 2);
             this.store.direction.x /= length;
             this.store.direction.z /= length;
+
+            // Journaliser l'impact pour ballHit
+            this.store.addHit({
+                t: now,
+                by: hitter,
+                pos: { x: this.ball.position.x, z: this.ball.position.z },
+                speed: this.store.speed,
+                dir: { x: this.store.direction.x, z: this.store.direction.z }
+            });
         }
         pos.x += this.store.direction.x * this.store.speed;
         pos.z += this.store.direction.z * this.store.speed;
