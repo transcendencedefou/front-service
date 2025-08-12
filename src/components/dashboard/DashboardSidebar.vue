@@ -37,7 +37,6 @@
 <script setup lang="ts">
 import { defineProps, defineEmits } from 'vue'
 import {
-  BarChart,
   PieChart,
   LineChart,
   Notebook,
@@ -64,7 +63,6 @@ const staticTabs: ('settings' | 'friends')[] = ['settings', 'friends']
 
 const icons = {
   doughnut: PieChart,
-  bar: BarChart,
   line: LineChart,
   settings: Settings,
   friends: Users,
