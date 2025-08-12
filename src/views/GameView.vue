@@ -12,6 +12,8 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useRuntimeConfig } from '@/config/api';
 import { useGameStore } from '@/stores/gameStore';
+import { PlayerManager } from '@/games/Players/PlayerManager.ts';
+import { useBallStore } from '@/stores/ballStore.ts';
 
 const canvas = ref<HTMLCanvasElement | null>(null);
 let scene: SceneService | null;
@@ -28,6 +30,8 @@ const api = useRuntimeConfig();
 
 let tournamentContext: any = null;
 const gameStore = useGameStore();
+// Garde pour éviter les appels multiples à la fin d'une partie
+let submitting = false;
 
 function authHeaders(hasBody = false) {
   const token = (authStore as any).token ? (typeof (authStore as any).token === 'string' ? (authStore as any).token : (authStore as any).token.value) : localStorage.getItem('token') || '';
@@ -39,19 +43,62 @@ function authHeaders(hasBody = false) {
 async function reportAndReturn(winnerUsername: string) {
   if (!tournamentContext) return;
   try {
+    const ballStore = useBallStore();
+    const ballHit = ballStore.hits.slice();
     await fetch(`${api.GAME_URL}/match/${tournamentContext.matchId}/report`, {
       method: 'POST',
       headers: authHeaders(true),
-      body: JSON.stringify({ winner: { username: winnerUsername }, scores: { winner: winnerUsername } })
+      body: JSON.stringify({ winner: { username: winnerUsername }, scores: { winner: winnerUsername }, ballHit })
     });
+    ballStore.clearHits();
   } catch {}
   // Nettoyage et retour
   localStorage.removeItem('currentTournamentMatch');
   router.push('/tournaments');
 }
 
-function handleResize(): void {
-  scene!.engine?.resize();
+function normalizeGameType(): 'PONG' | 'TICTACTOE' {
+  const t = (gameStore.game_type || '').toLowerCase();
+  return t.includes('pong') ? 'PONG' : 'TICTACTOE';
+}
+
+function collectScores() {
+  // Récupère des scores simples depuis PlayerManager si disponibles
+  const players = PlayerManager.listPlayers();
+  return {
+    players: players.map(p => ({ name: p.store.name, score: p.store.score }))
+  };
+}
+
+async function saveCasualResult(winnerUsername: string) {
+  try {
+    // Demander le pseudo invité (mémo dans localStorage)
+    let guestUsername = localStorage.getItem('guestUsername') || '';
+    if (!guestUsername) {
+      guestUsername = window.prompt('Pseudo de l\'invité (adversaire non connecté) ?', 'Guest') || '';
+      guestUsername = guestUsername.trim();
+      if (guestUsername) localStorage.setItem('guestUsername', guestUsername);
+    }
+    if (!guestUsername) return; // annulation
+
+    const gameType = normalizeGameType();
+    // Déterminer la side gagnante en comparant au joueur index 0 (hôte humain)
+    const hostPlayer = PlayerManager.getPlayer(0);
+    const hostName = hostPlayer?.store.name || '';
+    const winner = winnerUsername === hostName ? 'HOST' : 'GUEST';
+    const scores = collectScores();
+    const ballStore = useBallStore();
+    const ballHit = ballStore.hits.slice();
+
+    await fetch(`${api.GAME_URL}/match`, {
+      method: 'POST',
+      headers: authHeaders(true),
+      body: JSON.stringify({ gameType, guestUsername, winner, scores, ballHit })
+    });
+
+    // Nettoyage du journal
+    ballStore.clearHits();
+  } catch {}
 }
 
 onMounted(async () => {
@@ -95,8 +142,16 @@ onMounted(async () => {
       if (active === 'Pong') { if (!pongHud) pongHud = new PongHUD(scene!.scene, controller); pongHud.show(); }
       if (active === 'TicTacToe') { if (!ttthud) ttthud = new TTTHUD(scene!.scene); ttthud.show(); }
     }
-    if (tournamentContext && gameStore.winner) {
-      reportAndReturn(gameStore.winner);
+    if (tournamentContext && gameStore.winner && !submitting) {
+      submitting = true;
+      const w = gameStore.winner;
+      reportAndReturn(w).finally(() => { submitting = false; });
+    }
+    if (!tournamentContext && gameStore.winner && !submitting) {
+      // Partie casual: envoyer l'enregistrement une seule fois
+      submitting = true;
+      const w = gameStore.winner;
+      saveCasualResult(w).finally(() => { gameStore.setWinner(''); submitting = false; });
     }
   });
 });
