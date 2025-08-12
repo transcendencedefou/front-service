@@ -2,7 +2,7 @@
   <!-- Curseur principal -->
   <div
     ref="cursor"
-    class="pointer-events-none fixed z-50 w-8 h-8 rounded-full blur-[1px] transition-colors duration-300"
+    class="pointer-events-none fixed z-[9999] w-8 h-8 rounded-full blur-[1px] transition-colors duration-300"
     :class="themeClass"
     :style="themeStyle"
   ></div>
@@ -10,7 +10,7 @@
   <!-- Onde autour -->
   <div
     ref="ripple"
-    class="pointer-events-none fixed z-50 w-8 h-8 rounded-full border"
+    class="pointer-events-none fixed z-[9999] w-8 h-8 rounded-full border"
     :class="themeClass"
     :style="themeStyle"
   ></div>

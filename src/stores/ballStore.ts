@@ -6,6 +6,14 @@ interface Position {
     z: number;
 }
 
+interface BallHitEvent {
+    t: number; // timestamp ms
+    by: string; // player name or side
+    pos: { x: number; z: number };
+    speed: number;
+    dir: { x: number; z: number };
+}
+
 interface BallState {
     speed: number;
     def_speed: number;
@@ -15,6 +23,7 @@ interface BallState {
     direction: Position;
     lastBarCollisionTime: number;
     barCollisionCooldown: number;
+    hits: BallHitEvent[];
 }
 
 export const useBallStore = defineStore("ball", {
@@ -27,6 +36,7 @@ export const useBallStore = defineStore("ball", {
         direction: { x: 0, y: 0, z: 0 },
         lastBarCollisionTime: 0,
         barCollisionCooldown: 200,
+        hits: [],
     }),
     actions: {
         setDefSpeed(value: number) {
@@ -37,6 +47,12 @@ export const useBallStore = defineStore("ball", {
         },
         setAcceleration(value: number) {
             this.acceleration = value;
+        },
+        addHit(hit: BallHitEvent) {
+            this.hits.push(hit);
+        },
+        clearHits() {
+            this.hits = [];
         }
     },
 });

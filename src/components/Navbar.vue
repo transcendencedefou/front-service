@@ -15,7 +15,7 @@
         <!-- desktop links -->
         <div class="hidden md:flex items-center gap-6">
           <router-link to="/" class="nav-text">{{ t('nav.home') }}</router-link>
-          <router-link to="/pong" class="nav-text">{{ t('nav.games') }}</router-link>
+          <button @click="openGameModal" class="nav-text">{{ t('nav.games') }}</button>
           <router-link to="/dashboard" class="nav-text">{{ t('nav.user') }}</router-link>
           <router-link to="/tournaments" class="nav-text">Tournois</router-link>
 
@@ -103,7 +103,7 @@
       </button>
 
       <router-link to="/" class="nav-text" @click="menuOpen = false">{{ t('nav.home') }}</router-link>
-      <router-link to="/pong" class="nav-text" @click="menuOpen = false">{{ t('nav.games') }}</router-link>
+      <button @click="openGameModal; menuOpen = false" class="nav-text">{{ t('nav.games') }}</button>
       <router-link to="/dashboard" class="nav-text" @click="menuOpen = false">{{ t('nav.user') }}</router-link>
       <router-link to="/tournaments" class="nav-text" @click="menuOpen = false">Tournois</router-link>
 
@@ -156,8 +156,16 @@ const { scheme, toggleTheme } = useTheme()
 const auth = useAuthStore()
 const router = useRouter()
 
+const emit = defineEmits<{
+  'open-game-modal': []
+}>()
+
 function logout() {
   auth.logout()
   router.push('/auth/login')
+}
+
+function openGameModal() {
+  emit('open-game-modal')
 }
 </script>
