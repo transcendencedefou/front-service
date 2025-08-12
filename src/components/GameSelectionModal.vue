@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isVisible" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center">
+  <div v-if="isVisible && authStore.isAuthenticated" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center">
     <div class="bg-bg border border-accent rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
       <!-- Header -->
       <div class="flex justify-between items-center mb-6">
