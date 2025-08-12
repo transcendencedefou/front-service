@@ -4,13 +4,11 @@ import {
     Control,
     Grid,
     Rectangle,
-    StackPanel,
     TextBlock
 } from '@babylonjs/gui';
 import { Scene } from '@babylonjs/core';
-import { watch } from 'vue';
 import { useColorStore } from '@/stores/colorStore';
-import { GameController } from '@/games/services/GameController.ts'
+import GameController from '@/games/services/GameController.ts'
 import router from "@/router";
 
 function AnimateButton(btn: Button, scale: number): void {
@@ -83,6 +81,8 @@ export default class GameSelectionHUD {
     private hud: AdvancedDynamicTexture;
     private mainPanel: Rectangle;
     private selectedGame: string | null = null;
+    private selectBtn?: Button;
+    private startBtn?: Button;
 
     constructor(scene: Scene, controller: GameController) {
         this.hud = AdvancedDynamicTexture.CreateFullscreenUI('GameSelectionUI', true, scene);
@@ -199,6 +199,7 @@ export default class GameSelectionHUD {
 
 
         const startBtn = Button.CreateSimpleButton("button-start", "Start Game");
+        this.startBtn = startBtn;
         startBtn.isEnabled = false;
         startBtn.thickness = 1;
         startBtn.cornerRadius = 20;
@@ -211,13 +212,14 @@ export default class GameSelectionHUD {
         AnimateButton(startBtn, 1.03);
         startBtn.onPointerUpObservable.add( () => {
             if (!this.selectedGame) return;
-            selectBtn.textBlock.text = "Select game";
+            if (selectBtn.textBlock) selectBtn.textBlock.text = "Select game";
             controller.launchGame(this.selectedGame);
             this.selectedGame = null;
         });
         layout.addControl(startBtn, 2, 1);
 
         const selectBtn = Button.CreateSimpleButton("button-select", "Select game");
+        this.selectBtn = selectBtn;
         selectBtn.thickness = 1;
         selectBtn.cornerRadius = 20;
         selectBtn.width = '100%';
@@ -230,17 +232,27 @@ export default class GameSelectionHUD {
         selectBtn.onPointerUpObservable.add(async () => {
             const choice = await selectMenu(this.mainPanel, selectBtn);
             this.selectedGame = choice;
-            selectBtn.textBlock.text = choice;
+            if (selectBtn.textBlock) selectBtn.textBlock.text = choice;
             startBtn.isEnabled = true;
             startBtn.alpha = 1.0;
         });
         layout.addControl(selectBtn, 2, 0);
+
+        // Mode tournoi: masquer tout de suite si contexte tournoi
+        if (localStorage.getItem('currentTournamentMatch')) {
+            this.mainPanel.isVisible = false;
+        }
 
         //   zone.color = colors.selectionColorZoneBorder;
         //   watch(() => colors.selectionColorZoneBorder, v => (zone.color = v));
         //   zone.background = colors.selectionColorZoneBackground;
         //   watch(() => colors.selectionColorZoneBackground, v => (zone.background = v));
 
+    }
+
+    disableGameSelection(): void {
+        if (this.selectBtn) this.selectBtn.isVisible = false;
+        if (this.startBtn) this.startBtn.isVisible = false;
     }
 
     show(): void {

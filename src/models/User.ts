@@ -1,5 +1,3 @@
-import { StringMappingType } from "typescript"
-
 export class User {
     id: string
     username: string

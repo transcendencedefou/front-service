@@ -8,7 +8,9 @@ export const useAuthStore = defineStore('auth', () => {
   const pending2FA = ref(false)
   const tempCredentials = ref({ username: '', password: '' })
 
+
   const isAuthenticated = computed(() => user.value !== null)
+  const token = computed(() => user.value?.token || '')
 
   async function login(username: string, password: string, twoFactorCode?: string): Promise<boolean> {
     const body: any = { username, password }
@@ -80,7 +82,7 @@ export const useAuthStore = defineStore('auth', () => {
     localStorage.setItem('twoFactorEnabled', String(v))
   }
 
-  return { user, pending2FA, tempCredentials, isAuthenticated, login, verify2FA, logout, loadUserFromLocalStorage, setTwoFactorEnabled }
+  return { user, token, pending2FA, tempCredentials, isAuthenticated, login, verify2FA, logout, loadUserFromLocalStorage, setTwoFactorEnabled }
 })
 
 // Helper for OAuth token reception from hash params
