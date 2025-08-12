@@ -18,6 +18,7 @@
           <button @click="openGameModal" class="nav-text">{{ t('nav.games') }}</button>
           <router-link to="/dashboard" class="nav-text">{{ t('nav.user') }}</router-link>
           <router-link to="/tournaments" class="nav-text">Tournois</router-link>
+          <router-link to="/cgu" class="nav-text">CGU</router-link>
 
           <!-- Login / Logout -->
           <router-link
@@ -107,6 +108,7 @@
       <button @click="openGameModal; menuOpen = false" class="nav-text">{{ t('nav.games') }}</button>
       <router-link to="/dashboard" class="nav-text" @click="menuOpen = false">{{ t('nav.user') }}</router-link>
       <router-link to="/tournaments" class="nav-text" @click="menuOpen = false">Tournois</router-link>
+  <router-link to="/cgu" class="nav-text" @click="menuOpen = false">CGU</router-link>
 
       <router-link
         v-if="!auth.isAuthenticated"
