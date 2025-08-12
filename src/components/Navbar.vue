@@ -30,7 +30,7 @@
           <button
             v-else
             @click="logout"
-            class="nav-cta text-red-400 hover:text-red-300 focus-visible:ring-red-400"
+            class="nav-cta"
           >
             {{ t('nav.logout') }}
           </button>
@@ -119,7 +119,7 @@
       <button
         v-else
         @click="logout"
-        class="nav-cta text-red-400 hover:text-red-300"
+        class="nav-cta"
       >
         {{ t('nav.logout') }}
       </button>
