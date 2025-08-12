@@ -7,13 +7,21 @@ import {
 import { Scene } from '@babylonjs/core';
 import { PlayerManager } from '@/games/Players/PlayerManager.ts';
 import { useColorStore } from '@/stores/colorStore';
+import GameEndMenu from "./GameEndMenu.ts";
+import GameController from "@/games/services/GameController.ts";
+import { useGameStore } from '@/stores/gameStore';
+import { watch } from 'vue';
 
 export default class TTTHUD {
     private hud: AdvancedDynamicTexture;
+    private endMenu: GameEndMenu;
+    private winnerWatcher: (() => void) | null = null;
 
-    constructor(scene: Scene) {
+    constructor(scene: Scene, controller: GameController) {
         this.hud = AdvancedDynamicTexture.CreateFullscreenUI("TTTUI", true, scene);
+        this.endMenu = new GameEndMenu(scene, controller);
         this._initHud();
+        this._setupWinnerWatcher();
         this.hide();
     }
 
@@ -46,6 +54,25 @@ export default class TTTHUD {
         });
     }
 
+    private _setupWinnerWatcher(): void {
+        const gameStore = useGameStore();
+        this.winnerWatcher = watch(
+            () => gameStore.winner,
+            (winner: string | null) => {
+                if (winner) {
+                    // Petit délai pour que l'animation de victoire se termine
+                    setTimeout(() => {
+                        if (winner === 'Draw') {
+                            this.endMenu.showWinner('', true);
+                        } else {
+                            this.endMenu.showWinner(winner);
+                        }
+                    }, 1000);
+                }
+            }
+        );
+    }
+
     show(): void {
         this.hud.rootContainer.isVisible = true;
     }
@@ -55,6 +82,11 @@ export default class TTTHUD {
     }
 
     dispose(): void {
+        if (this.winnerWatcher) {
+            this.winnerWatcher();
+            this.winnerWatcher = null;
+        }
+        this.endMenu.dispose();
         this.hud.dispose();
     }
 }

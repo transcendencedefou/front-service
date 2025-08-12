@@ -34,7 +34,7 @@ export class Player {
     }
 
     moveDown(): void {
-        if (this.bar && this.bar.position.z > -this.size.depth / 2 - this.store.bar_depth / 2) {
+        if (this.bar && this.bar.position.z > -this.size.depth / 2 + this.store.bar_depth / 2 + 0.185) {
             this.bar.position.z -= this.store.bar_speed;
         }
     }

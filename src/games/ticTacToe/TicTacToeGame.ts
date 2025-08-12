@@ -127,8 +127,9 @@ export class TicTacToeGame implements IGame {
       }
 
       if (this.isBoardFull()) {
-        // Match nul: on reset simplement sans déclarer de vainqueur ni arrêter l'observer
-        this.reset();
+        // Match nul: déclarer un match nul et arrêter le jeu
+        useGameStore().setWinner('Draw');
+        this.stop();
         return;
       }
 
