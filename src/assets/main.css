@@ -47,6 +47,66 @@
     --accent-3: #ff9fb0;
     --accent-3-rgb: 255, 159, 176;
   }
+  /* ===== DALTONIEN (LIGHT par défaut) ===== */
+  :root.colorblind {
+    --bg: #ffffff;
+    --fg: #0a0a0a;
+    --accent-1: #0072b2;
+    --accent-2: #e69f00;
+    --accent-3: #009e73;
+    --danger:   #d55e00;
+    --ok:       #009e73;
+    --accent-1-rgb: 0,114,178;
+    --accent-3-rgb: 0,158,115;
+  }
+  :root.colorblind.dark {
+    --bg:#0a0a0a; --fg:#f5f5f5;
+    --accent-1:#56b4e9; --accent-2:#f0e442; --accent-3:#009e73;
+    --danger:#e69f00; --ok:#009e73;
+    --accent-1-rgb:86,180,233; --accent-3-rgb:0,158,115;
+  }
+
+  /* —— PROTAN —— */
+  :root.colorblind.cb-protan {
+    --bg:#ffffff; --fg:#0a0a0a;
+    --accent-1:#0072b2; --accent-2:#56b4e9; --accent-3:#e69f00;
+    --danger:#aa6f00; --ok:#009e73;
+    --accent-1-rgb:0,114,178; --accent-3-rgb:230,159,0;
+  }
+  :root.colorblind.cb-protan.dark {
+    --bg:#0a0a0a; --fg:#f5f5f5;
+    --accent-1:#56b4e9; --accent-2:#9ad9fb; --accent-3:#f0a500;
+    --danger:#b57a00; --ok:#21c497;
+    --accent-1-rgb:86,180,233; --accent-3-rgb:240,165,0;
+  }
+
+  /* —— DEUTAN —— */
+  :root.colorblind.cb-deutan {
+    --bg:#ffffff; --fg:#0a0a0a;
+    --accent-1:#0072b2; --accent-2:#e69f00; --accent-3:#cc79a7;
+    --danger:#d55e00; --ok:#009e73;
+    --accent-1-rgb:0,114,178; --accent-3-rgb:204,121,167;
+  }
+  :root.colorblind.cb-deutan.dark {
+    --bg:#0a0a0a; --fg:#f5f5f5;
+    --accent-1:#56b4e9; --accent-2:#f0e442; --accent-3:#e19bc7;
+    --danger:#ff8c42; --ok:#22c59a;
+    --accent-1-rgb:86,180,233; --accent-3-rgb:225,155,199;
+  }
+
+  /* —— TRITAN —— */
+  :root.colorblind.cb-tritan {
+    --bg:#ffffff; --fg:#0a0a0a;
+    --accent-1:#d55e00; --accent-2:#cc79a7; --accent-3:#009e73;
+    --danger:#9e3d00; --ok:#009e73;
+    --accent-1-rgb:213,94,0; --accent-3-rgb:0,158,115;
+  }
+  :root.colorblind.cb-tritan.dark {
+    --bg:#0a0a0a; --fg:#f5f5f5;
+    --accent-1:#ff8a3d; --accent-2:#e6a9cf; --accent-3:#1fd0a2;
+    --danger:#c65a16; --ok:#22c59a;
+    --accent-1-rgb:255,138,61; --accent-3-rgb:31,208,162;
+  }
 
   body {
     @apply font-sans;
@@ -380,41 +440,4 @@
     color: white;
   }
   .friends-btn-danger:hover { background-color: #dc2626; } /* red-600 */
-
-    /* Palette colorblind (Okabe–Ito) + contrastes renforcés */
-  .colorblind {
-    --bg: #ffffff;
-    --fg: #0a0a0a;
-    --accent-1: #0072b2; 
-    --accent-2: #e69f00; 
-    --accent-3: #009e73; 
-    --danger:   #d55e00;
-    --ok:       #009e73;
-    --accent-1-rgb: 0,114,178; /* RGB pour cursor perso */
-    --accent-3-rgb: 0,158,115; /* same */
-  }
-
-  .colorblind a { text-decoration: underline; text-underline-offset: 2px; }
-  .colorblind :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
-
-  .colorblind.dark {
-    --bg: #0a0a0a; 
-    --fg: #f5f5f5; 
-    
-    /* Palette Okabe–Ito adaptee au dark */
-    --accent-1: #56b4e9; 
-    --accent-2: #f0e442; 
-    --accent-3: #009e73; 
-    --danger:   #e69f00; 
-    --ok:       #009e73;
-
-    /* Version RGB pour custom cursor et effets */
-    --accent-1-rgb: 86,180,233;
-    --accent-3-rgb: 0,158,115;
-  }
-
-  /* Boost accessibilite en dark aussi */
-  .colorblind.dark a { text-decoration: underline; text-underline-offset: 2px; }
-  .colorblind.dark :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
-
 }

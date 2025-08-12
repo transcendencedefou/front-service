@@ -207,15 +207,29 @@
         </div>
       </div>
     </div>
-
-    <div class="auth-sep-line mt-6"></div>
     <div class="space-y-2 pt-6">
-      <label class="set-label flex items-center gap-3">
-        <input type="checkbox" :checked="colorblind" @change="onCB($event)" /> <!-- maybe un fix sur $event -->
-        <span>{{ t('dashboard.colorblind.activate-colorblind') }} <br> {{ t('dashboard.colorblind.activate-colorblind-details') }}</span>
-      </label>
-    </div>
+  <label class="set-label">{{ t('dashboard.colorblind.title') }}</label>
+
+  <div class="grid gap-2 md:grid-cols-2">
+    <!-- Optionnel : interrupteur général -->
+    <label class="flex items-center gap-3">
+      <input type="checkbox" :checked="colorblind" @change="onCB($event)" />
+      <span class="text-xs">{{ t('dashboard.colorblind.enable') }}</span>
+    </label>
+
+    <!-- Sélecteur de type -->
+    <select v-model="cbMode" class="set-input" @change="onCBModeChange">
+      <option value="none">{{ t('dashboard.colorblind.none') }}</option>
+      <option value="protan">{{ t('dashboard.colorblind.protan') }}</option>
+      <option value="deutan">{{ t('dashboard.colorblind.deutan') }}</option>
+      <option value="tritan">{{ t('dashboard.colorblind.tritan') }}</option>
+    </select>
   </div>
+  <p class="text-xs" style="color: color-mix(in oklab, var(--fg) 60%, transparent);">
+    {{ t('dashboard.colorblind.hint') }}
+  </p>
+</div>
+</div>
 </template>
 
 <script setup lang="ts">
@@ -282,9 +296,11 @@ const onBannerFileChange = async (e: Event) => {
 }
 
 // PAS TOUCHER
-const { colorblind, setColorblind } = useTheme()
-const onCB = (e: Event) => setColorblind((e.target as HTMLInputElement).checked)
+const { colorblind, setColorblind, colorblindMode, setColorblindMode } = useTheme()
+const cbMode = ref(colorblindMode.value)
 
+const onCB = (e: Event) => setColorblind((e.target as HTMLInputElement).checked)
+const onCBModeChange = () => setColorblindMode(cbMode.value)
 const { t } = useI18n()
 const auth = useAuthStore()
 

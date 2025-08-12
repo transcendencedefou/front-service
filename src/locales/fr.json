@@ -93,8 +93,13 @@
       "back": "Retour"
     },
     "colorblind": {
-      "activate-colorblind": "Activer le mode Daltonien",
-      "activate-colorblind-details": "Palette adaptée et contrastes renforcés"
+      "title": "Accessibilité — daltonisme",
+      "enable": "Activer la palette adaptée",
+      "none": "Aucun (désactivé)",
+      "protan": "Protanopie (rouges faibles)",
+      "deutan": "Deutéranopie (verts faibles)",
+      "tritan": "Tritanopie (bleu/jaune)",
+      "hint": "Choisissez le type qui vous convient ; les couleurs des boutons/graphes s’adaptent."
     },
     "nav": {
       "doughnut": "Victoires | Défaites",
