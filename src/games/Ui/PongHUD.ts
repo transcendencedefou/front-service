@@ -11,9 +11,11 @@ import GameController from "@/games/services/GameController.ts";
 export default class PongHUD {
     private hud: AdvancedDynamicTexture;
     private controller: GameController;
+    private t: (k: string) => string
 
-    constructor(scene: Scene, controller: GameController) {
+    constructor(scene: Scene, controller: GameController, t: (k: string) => string) {
         this.controller = controller;
+        this.t = t;
         this.hud = AdvancedDynamicTexture.CreateFullscreenUI("PongUI", true, scene);
         this._initHud(scene);
         this.hide();
@@ -22,8 +24,8 @@ export default class PongHUD {
     _initHud(scene: Scene): void {
         for (const [, player] of PlayerManager.playerMap())
             this.hud.addControl(CreatePlayerBoard(player, scene))
-        this.hud.addControl(CreateControlsOverlay())
-        const homeBtn = CreateHomeButton("Game selection",this.controller);
+        this.hud.addControl(CreateControlsOverlay(this.t))
+        const homeBtn = CreateHomeButton(this.t('pong.home') ?? 'Game Selection', this.controller);
         this.hud.addControl(homeBtn);
         if (localStorage.getItem('currentTournamentMatch')) {
             homeBtn.isVisible = false;

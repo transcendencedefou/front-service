@@ -15,7 +15,9 @@ import { useGameStore } from '@/stores/gameStore';
 import { useBallStore } from '@/stores/ballStore';
 import { useGameSessionStore } from '@/stores/gameSession';
 import { aiControlStore } from '@/stores/aiControl';
+import { useI18n } from 'vue-i18n'
 
+const { t } = useI18n()
 
 const canvas = ref<HTMLCanvasElement | null>(null);
 let scene: SceneService | null;
@@ -198,7 +200,7 @@ onMounted(async () => {
     const cameraStopped = !scene!.isCameraMoving();
     
     if (active === 'Pong' && cameraStopped) {
-      if (!pongHud) pongHud = new PongHUD(scene!.scene, controller);
+      if (!pongHud) pongHud = new PongHUD(scene!.scene, controller, t);
       pongHud.show();
     } else {
       pongHud?.hide();
