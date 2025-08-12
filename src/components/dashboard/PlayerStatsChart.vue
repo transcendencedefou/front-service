@@ -153,7 +153,7 @@ onMounted(async () => {
 async function fetchMatches(id: string) {
   try {
     isLoading.value = true
-    const res = await fetch(`https://localhost/games/matches/user/${id}`, {
+    const res = await fetch(`https://localhost:8443/games/matches/user/${id}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     })
