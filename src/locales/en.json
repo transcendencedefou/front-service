@@ -93,8 +93,13 @@
       "back": "Back"
     },
     "colorblind": {
-      "activate-colorblind": "Enable colorblind mode",
-      "activate-colorblind-details": "Accessible palette and enhanced constrast"
+      "title": "Accessibility — Color vision",
+      "enable": "Enable accessible palette",
+      "none": "None (disabled)",
+      "protan": "Protanopia (weak reds)",
+      "deutan": "Deuteranopia (weak greens)",
+      "tritan": "Tritanopia (blue/yellow)",
+      "hint": "Pick your type; UI and charts adapt their colors."
     },
     "nav": {
       "doughnut": "Wins | Losses",
