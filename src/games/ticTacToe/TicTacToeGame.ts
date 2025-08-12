@@ -16,7 +16,6 @@ import { useGameStore } from '@/stores/gameStore';
 import { useColorStore } from '@/stores/colorStore';
 import { watch } from 'vue';
 
-
 export class TicTacToeGame implements IGame {
   readonly name = 'TicTacToe';
 
@@ -26,11 +25,16 @@ export class TicTacToeGame implements IGame {
   private state: number[][] = [];
   private currentPlayer = 0;
   private pointerObserver: Observer<PointerInfo> | null = null;
+  private hudInstance: any = null; // Reference to TTTHUD instance
 
   private cellMaterial!: StandardMaterial;
   private borderMat!: StandardMaterial;
   private playerMats: StandardMaterial[] = [];
   private playersInitialized = false;
+
+  setHUD(hud: any): void {
+    this.hudInstance = hud;
+  }
 
   init(scene: Scene, parent: TransformNode): void {
     this.scene = scene;
@@ -74,14 +78,14 @@ export class TicTacToeGame implements IGame {
 
   start(): void {
     if (!this.playersInitialized) {
-      // Nettoyer joueurs hérités (ex: Pong)
-      PlayerManager.clearMap();
-      // Détection tournoi
-      let added = false;
-      try {
-        const raw = localStorage.getItem('currentTournamentMatch');
-        if (raw) {
-          const ctx = JSON.parse(raw);
+      const existingPlayers = PlayerManager.listPlayers();
+      if (existingPlayers.length < 2) {
+        // Mode tournoi: tenter de récupérer les noms
+        let added = false;
+        try {
+          const raw = localStorage.getItem('currentTournamentMatch');
+          if (raw) {
+            const ctx = JSON.parse(raw);
             if (ctx?.gameType === 'TICTACTOE' && Array.isArray(ctx.participants)) {
               const names = ctx.participants.map((p:any)=>p?.username).filter((n:any)=>typeof n==='string');
               if (names.length >= 2) {
@@ -90,17 +94,18 @@ export class TicTacToeGame implements IGame {
                 added = true;
               }
             }
+          }
+        } catch {}
+        if (!added) {
+          PlayerManager.addBasicPlayer('Player 1');
+          PlayerManager.addBasicPlayer('Player 2');
         }
-      } catch {}
-      if (!added) {
-        PlayerManager.addBasicPlayer('Player 1');
-        PlayerManager.addBasicPlayer('Player 2');
       }
       this.playersInitialized = true;
     }
 
     this.reset();
-    this.pointerObserver = this.scene.onPointerObservable.add((pointerInfo) => {
+  this.pointerObserver = this.scene.onPointerObservable.add((pointerInfo: PointerInfo) => {
       if (pointerInfo.type !== PointerEventTypes.POINTERDOWN) return;
 
       const pick = pointerInfo.pickInfo;
@@ -134,6 +139,11 @@ export class TicTacToeGame implements IGame {
       }
 
       this.currentPlayer = this.currentPlayer === 0 ? 1 : 0;
+      
+      // Update current player indicator in HUD
+      if (this.hudInstance && this.hudInstance.updateCurrentPlayer) {
+        this.hudInstance.updateCurrentPlayer(this.currentPlayer);
+      }
     });
   }
 
@@ -156,6 +166,16 @@ export class TicTacToeGame implements IGame {
     this.borderMat.emissiveColor = Color3.FromHexString(colorStore.tttBorderColor);
     this.currentPlayer = 0;
     useGameStore().setWinner('');
+    
+    // Refresh HUD display with correct player names and current player
+    if (this.hudInstance) {
+      if (this.hudInstance.refreshDisplay) {
+        this.hudInstance.refreshDisplay();
+      }
+      if (this.hudInstance.updateCurrentPlayer) {
+        this.hudInstance.updateCurrentPlayer(this.currentPlayer);
+      }
+    }
   }
 
   update(_dt: number): void {
