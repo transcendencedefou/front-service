@@ -207,7 +207,7 @@ onMounted(async () => {
     }
     
     if (active === 'TicTacToe' && cameraStopped) {
-      if (!ttthud) ttthud = new TTTHUD(scene!.scene);
+      if (!ttthud) ttthud = new TTTHUD(scene!.scene, controller);
       ttthud.show();
     } else {
       ttthud?.hide();
