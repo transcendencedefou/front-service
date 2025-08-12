@@ -1,0 +1,149 @@
+{
+  "common": {
+    "loading": "Cargando...",
+    "cancel": "Cancelar"
+  },
+  "game": {
+    "selectGame": "Seleccionar Juego",
+    "chooseGame": "Elegir un juego",
+    "player1Name": "Nombre del Jugador 1",
+    "player2Name": "Nombre del Jugador 2",
+    "player2": "Jugador 2",
+    "player1Placeholder": "Ingresa el nombre del jugador 1",
+    "player2Placeholder": "Ingresa el nombre del jugador 2",
+    "humanPlayer": "Jugador Humano",
+    "aiPlayer": "Jugador IA",
+    "aiOpponent": "Oponente IA",
+    "startGame": "Comenzar Juego",
+    "currentUserNote": "Bloqueado al usuario actual"
+  },
+  "nav": {
+    "home": "Inicio",
+    "games": "Juegos",
+    "user": "Perfil",
+    "login": "Iniciar Sesión",
+    "logout": "Cerrar Sesión"
+  },
+  "home": {
+    "title": "PONG.",
+    "cta": "¡Ve a jugar Pong!"
+  },
+  "auth": {
+    "login": {
+      "title": "¡Inicia Sesión!",
+      "subtitle": "¿Aún no eres miembro?",
+      "cta": "¿Qué esperas?",
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "remember": "¿Recordarme?",
+      "forgot": "¿Olvidaste la contraseña?",
+      "submit": "Iniciar Sesión",
+      "separator": "Iniciar sesión a través de",
+      "2faPrompt": "Ingresa tu código 2FA de 6 dígitos.",
+      "validate2fa": "Validar 2FA",
+      "back": "Atrás",
+      "providers": {
+        "42": "42",
+        "github": "GitHub"
+      }
+    },
+    "register": {
+      "title": "¡Regístrate hermano!",
+      "subtitle": "¿Ya tienes cuenta?",
+      "cta": "¡Inicia sesión!",
+      "username": "Nombre de usuario",
+      "password": "Contraseña",
+      "confirm": "Repetir contraseña",
+      "submit": "Crear cuenta",
+      "error": {
+        "mismatch": "Las contraseñas no coinciden",
+        "server": "Ocurrió un error."
+      }
+    },
+    "password": {
+      "strength": {
+        "0": "Muy débil",
+        "1": "Débil",
+        "2": "Medio",
+        "3": "Fuerte",
+        "4": "Muy fuerte"
+      }
+    }
+  },
+  "dashboard": {
+    "profile": "Perfil de",
+    "match-played": "Partidas jugadas",
+    "ball-hit": "Golpes de pelota",
+    "wins": "Victorias",
+    "losses": "Derrotas",
+    "winrate": "Porcentaje de victorias",
+    "account-settings": "Configuración de cuenta",
+    "username": "Nombre de usuario",
+    "new-username": "Nuevo nombre de usuario",
+    "current-password": "Contraseña actual",
+    "new-password": "Nueva contraseña",
+    "save-changes": "Guardar cambios",
+    "required-password": "Se requiere contraseña actual",
+    "no-changes": "No se detectaron cambios",
+    "error-occured": "Ocurrió un error",
+    "changes-error": "Ocurrió un error al modificar",
+    "2fa": {
+      "title": "Autenticación de Dos Factores (2FA)",
+      "enabled": "HABILITADA",
+      "disabled": "DESHABILITADA",
+      "desc": "Agrega una capa extra de seguridad con una aplicación de autenticación.",
+      "loading": "Cargando...",
+      "enable": "Habilitar 2FA",
+      "disable": "Deshabilitar 2FA",
+      "disable-confirm": "¿Estás seguro de que quieres deshabilitar 2FA?",
+      "setup-title": "Configurar 2FA",
+      "step1": "Instala una aplicación de autenticación (Google Authenticator, Authy, etc.).",
+      "step2": "Escanea el código QR o ingresa el secreto manualmente.",
+      "step3": "Ingresa el código de 6 dígitos para validar.",
+      "enter-code": "Código de 6 dígitos",
+      "confirm": "Confirmar",
+      "cancel": "Cancelar",
+      "prompt": "Ingresa tu código 2FA de 6 dígitos.",
+      "validate": "Validar 2FA",
+      "back": "Atrás"
+    },
+    "colorblind": {
+      "title": "Accesibilidad — Visión del color",
+      "enable": "Habilitar paleta accesible",
+      "none": "Ninguna (deshabilitada)",
+      "protan": "Protanopia (rojos débiles)",
+      "deutan": "Deuteranopia (verdes débiles)",
+      "tritan": "Tritanopia (azul/amarillo)",
+      "hint": "Elige tu tipo; la interfaz y los gráficos adaptan sus colores."
+    },
+    "nav": {
+      "doughnut": "Victorias | Derrotas",
+      "bar": "Power-Ups",
+      "line": "Golpes de pelota",
+      "settings": "Configuración",
+      "friends": "Amigos",
+      "global": "Estadísticas globales"
+    },
+    "modify": {
+      "avatar": "Cambiar avatar",
+      "banner": "Cambiar banner"
+    }
+  },
+  "pong": {
+    "controls": {
+      "player1": "Jugador 1",
+      "player2": "Jugador 2",
+      "title": "Controles:"
+    },
+    "actions": {
+      "start_stop": "Iniciar / Pausar",
+      "reset_restart": "Reiniciar"
+    },
+    "keys": {
+      "w_s": "W  \\\\  S",
+      "up_down": "↑  \\\\  ↓",
+      "space": "Espacio",
+      "r": "R"
+    }
+  }
+}

@@ -52,6 +52,7 @@
           >
             <option value="fr-FR">FR</option>
             <option value="en-US">EN</option>
+            <option value="es-ES">ES</option>
           </select>
         </div>
 
@@ -138,6 +139,7 @@
       >
         <option value="fr-FR">FR</option>
         <option value="en-US">EN</option>
+        <option value="es-ES">ES</option>
       </select>
     </div>
   </transition>

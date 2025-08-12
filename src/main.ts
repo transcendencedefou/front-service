@@ -4,6 +4,7 @@ import { createI18n } from 'vue-i18n'
 import App from './App.vue'
 import fr from './locales/fr.json'
 import en from './locales/en.json'
+import es from './locales/es.json'
 import './assets/main.css'
 import router from './router/index.ts'
 import { useAuthStore } from './stores/auth.ts'
@@ -15,6 +16,7 @@ const i18n = createI18n({
     messages: {
       'fr-FR': fr,
       'en-US': en,
+      'es-ES': es,
     },
 })
 
