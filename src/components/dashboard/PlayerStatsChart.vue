@@ -9,7 +9,7 @@
 
     <!-- main -->
     <div class="dashboard-main">
-      <!-- bannière -->
+      <!-- banniere -->
       <section class="banner">
         <img 
           :src="currentBanner || fallbackBanner" 
@@ -55,7 +55,7 @@
           <component :is="getChartComponent(chartType)" :matches="matches" :user-id="userId" />
         </div>
 
-        <!-- tuiles chiffrées -->
+        <!-- tuiles chiffrees -->
         <div v-else class="panel stats-grid">
           <div>
             <p class="stat-value">{{ totalMatches }}</p>
@@ -146,7 +146,7 @@
 }
 </script> -->
 
-<script lang="ts" setup>
+<!-- <script lang="ts" setup>
 import { ref, onMounted, computed, toRef } from 'vue'          // + toRef
 import { useAuthStore } from '@/stores/auth'
 import DashboardSidebar from '@components/dashboard/DashboardSidebar.vue'
@@ -159,12 +159,11 @@ import PlayerSettings from './PlayerSettings.vue'
 import { Notebook, Settings, Users } from 'lucide-vue-next'
 import { useI18n } from 'vue-i18n'
 import { useImageUpload } from '@/composables/useImageUpload'
-
-// 👉 importe le type + le composable
 import { useMatchStats, type Match } from '@/composables/useMatchStats'
 
 const { t } = useI18n()
 const auth = useAuthStore()
+
 const isLoading = ref(true)
 const error = ref('')
 const chartType = ref<ChartType | 'settings' | 'friends' | null>(null)
@@ -208,6 +207,94 @@ const {
   totalBallHits,
   winRate,
 } = useMatchStats(toRef({ value: matches.value }, 'value') as any ?? toRef({value: matches.value}, 'value'), toRef({ value: userId.value }, 'value') as any ?? toRef({value: userId.value}, 'value'))
+
+const getChartComponent = (type: ChartType) => {
+  switch (type) {
+    case 'doughnut':
+      return DoughnutChart
+    case 'line':
+      return LineChart
+    default:
+      return BarChart
+  }
+}
+</script> -->
+
+<script lang="ts" setup>
+import { ref, computed, onMounted, watch } from 'vue'
+import { useAuthStore } from '@/stores/auth'
+import DashboardSidebar from '@components/dashboard/DashboardSidebar.vue'
+import { type ChartType } from '@/types/chart'
+import BarChart from '@/components/charts/BarChart.vue'
+import DoughnutChart from '@/components/charts/DoughnutChart.vue'
+import LineChart from '@/components/charts/LineChart.vue'
+import FriendsView from './FriendsView.vue'
+import PlayerSettings from './PlayerSettings.vue'
+import { Notebook, Settings, Users } from 'lucide-vue-next'
+import { useI18n } from 'vue-i18n'
+import { useImageUpload } from '@/composables/useImageUpload'
+import { useMatchStats, type Match } from '@/composables/useMatchStats'
+import { normalizeMatches } from '@/composables/normalizeMatches'
+
+const { t } = useI18n()
+const auth = useAuthStore()
+
+const isLoading = ref(true)
+const error = ref('')
+const chartType = ref<ChartType | 'settings' | 'friends' | null>(null)
+
+const avatar = useImageUpload('avatar')
+const banner = useImageUpload('banner')
+const fallbackAvatar = '/src/assets/img/test_avatar.jpg'
+const fallbackBanner = '/src/assets/img/test_banner.jpg'
+const currentAvatar = ref<string | null>(null)
+const currentBanner = ref<string | null>(null)
+
+const matches = ref<Match[]>([])
+
+const userId = computed(() => auth.user?.id ?? '')
+
+onMounted(async () => {
+  currentAvatar.value = await avatar.fetchCurrent()
+  currentBanner.value = await banner.fetchCurrent()
+})
+
+async function fetchMatches(id: string) {
+  try {
+    isLoading.value = true
+    const res = await fetch(`https://localhost/games/matches/user/${id}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    })
+    if (!res.ok) throw new Error('Erreur lors du chargement des matchs.')
+    const raw = await res.json()
+    matches.value = normalizeMatches(raw)
+    console.table(matches.value.map(m => ({
+      id: m.id,
+      me: userId.value,
+      p1: m.userId[0],
+      p2: m.userId[1],
+      scores: `${m.scores.player1}-${m.scores.player2}`,
+      winnerId: m.winnerId,
+      iAmWinner: m.winnerId === userId.value,
+    })))
+  } catch (err: any) {
+    error.value = err.message || 'Erreur inconnue'
+  } finally {
+    isLoading.value = false
+  }
+}
+
+watch(
+  userId,
+  (id) => {
+    if (id) fetchMatches(id)
+  },
+  { immediate: true }
+)
+
+const { totalMatches, totalWins, totalLosses, totalBallHits, winRate } =
+  useMatchStats(matches, userId)
 
 const getChartComponent = (type: ChartType) => {
   switch (type) {

@@ -3,7 +3,7 @@ import { computed, type Ref } from 'vue'
 export type Match = {
   id: string
   tournoiId?: string
-  userId: [string, string]               // [player1Id, player2Id]
+  userId: [string, string]            // [player1Id, player2Id]
   winnerId?: string
   scores: { player1: number; player2: number }
   powerUp?: boolean
