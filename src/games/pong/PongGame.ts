@@ -6,6 +6,7 @@ import { createPongPlaygroundMeshes } from '@/games/meshes/createPongPlaygroundM
 import { updateAI } from '@/games/pong/PongAIController.ts';
 import { useGameStore } from '@/stores/gameStore';
 import { useBallStore } from '@/stores/ballStore';
+import { aiControlStore } from '@/stores/aiControl';
 
 /** Pong game adapted from legacy implementation. */
 export class PongGame implements IGame {
@@ -61,12 +62,16 @@ export class PongGame implements IGame {
 
     useGameStore().setGameType('pong');
 
+    // Check if we have players already added from modal
+    const hasExistingPlayers = PlayerManager.listPlayers().length > 0;
+
     if (tournamentMode) {
       PlayerManager.addPlayer(participantNames[0] || 'Player1', scene, size, parent);
       PlayerManager.addPlayer(participantNames[1] || 'Player2', scene, size, parent);
       // Forcer scores à 0 et last_hit false
       PlayerManager.listPlayers().forEach(p=>{ p.store.setScore(0); p.store.last_hit = false; });
-    } else {
+    } else if (!hasExistingPlayers) {
+      // Only add default players if none exist (not from modal)
       PlayerManager.addPlayer('Player1', scene, size, parent);
       PlayerManager.listPlayers().forEach(p=>{ p.store.setScore(0); p.store.last_hit = false; });
     }
@@ -98,10 +103,14 @@ export class PongGame implements IGame {
       (this.ball as any).store.direction.z = 0;
     }
 
-    if (!tournamentMode) {
+    // Only add AI automatically if we don't have players from modal and not in tournament
+    const currentPlayerCount = PlayerManager.listPlayers().length;
+    if (!tournamentMode && !aiControlStore.shouldDisableAutoAI() && currentPlayerCount === 1) {
       PlayerManager.addAI('AI', this.ball.getMesh(), scene, size, this.keysPressed, parent);
-    } else {
-      // En tournoi on démarre directement
+    }
+    
+    // Start the game if we have 2 players or in tournament mode
+    if (currentPlayerCount >= 2 || tournamentMode) {
       this.running = true;
     }
   }

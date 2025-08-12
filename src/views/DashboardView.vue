@@ -2,9 +2,9 @@
     <div>
         <PlayerStatsChart />
     </div>
-  </template>
+</template>
   
-  <script lang="ts" setup>
-  import PlayerStatsChart from '@/components/dashboard/PlayerStatsChart.vue'
-  </script>
+<script lang="ts" setup>
+import PlayerStatsChart from '@/components/dashboard/PlayerStatsChart.vue'
+</script>
   

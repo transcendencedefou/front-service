@@ -13,18 +13,17 @@
             filter: 'saturate(1.1)'
           }" />
 
-        <!-- texte -->
         <div class="relative z-10 text-center px-4">
           <h1 ref="title"
               class="text-5xl md:text-7xl font-black tracking-tight text-fg">
             {{ t('home.title') }}
           </h1>
-          <router-link
-            to="/pong"
+          <button
+            @click="openGameModal"
             class="mt-6 inline-block text-lg font-semibold text-accent-1 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-2 rounded"
           >
             {{ t('home.cta') }}
-          </router-link>
+          </button>
         </div>
       </section>
     </SynthGridBackground>
@@ -37,9 +36,11 @@ import { gsap } from 'gsap'
 import { TextPlugin } from 'gsap/TextPlugin'
 import { useI18n } from 'vue-i18n'
 import SynthGridBackground from '@/components/SynthGridBackground.vue'
+import { useGameModal } from '@/composables/useGameModal'
 
 gsap.registerPlugin(TextPlugin)
 const { t } = useI18n()
+const { openGameModal } = useGameModal()
 
 const stage = ref<HTMLElement | null>(null)
 const title = ref<HTMLElement | null>(null)

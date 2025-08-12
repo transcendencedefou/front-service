@@ -1,6 +1,21 @@
 {
   "common": {
-      "loading": "Loading..."
+      "loading": "Loading...",
+      "cancel": "Cancel"
+  },
+  "game": {
+    "selectGame": "Select Game",
+    "chooseGame": "Choose a game",
+    "player1Name": "Player 1 Name",
+    "player2Name": "Player 2 Name", 
+    "player2": "Player 2",
+    "player1Placeholder": "Enter player 1 name",
+    "player2Placeholder": "Enter player 2 name",
+    "humanPlayer": "Human Player",
+    "aiPlayer": "AI Player",
+    "aiOpponent": "AI Opponent",
+    "startGame": "Start Game",
+    "currentUserNote": "Locked to current user"
   },
   "nav":{
     "home": "Home",
