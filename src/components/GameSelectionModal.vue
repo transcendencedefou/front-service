@@ -100,12 +100,8 @@
         <button 
           @click="startGame" 
           :disabled="!canStartGame"
-          :class="[
-            'flex-1 px-4 py-2 rounded-lg font-medium transition',
-            canStartGame 
-              ? 'bg-accent text-white hover:bg-accent/90' 
-              : 'bg-fg/20 text-fg/50 cursor-not-allowed'
-          ]"
+          class="auth-btn-primary flex-1"
+          :class="{ 'opacity-50 pointer-events-none': !canStartGame }"
         >
           {{ $t('game.startGame') }}
         </button>
