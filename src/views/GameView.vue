@@ -12,8 +12,7 @@ import { useRoute, useRouter } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { useRuntimeConfig } from '@/config/api';
 import { useGameStore } from '@/stores/gameStore';
-import { PlayerManager } from '@/games/Players/PlayerManager.ts';
-import { useBallStore } from '@/stores/ballStore.ts';
+import { useBallStore } from '@/stores/ballStore';
 import { useGameSessionStore } from '@/stores/gameSession';
 import { aiControlStore } from '@/stores/aiControl';
 
@@ -33,7 +32,6 @@ const gameStore = useGameStore();
 const gameSessionStore = useGameSessionStore();
 
 let tournamentContext: any = null;
-const gameStore = useGameStore();
 // Garde pour éviter les appels multiples à la fin d'une partie
 let submitting = false;
 
@@ -200,18 +198,19 @@ onMounted(async () => {
       submitting = true;
       const w = gameStore.winner;
       saveCasualResult(w).finally(() => { gameStore.setWinner(''); submitting = false; });
-
-//MERGE
-    // Handle tournament winner reporting
-   // if (tournamentContext && gameStore.winner) {
-     // reportAndReturn(gameStore.winner);
-
-   // }
+    }
   });
 
   window.addEventListener('resize', handleResize);
   handleResize();
 });
+
+function handleResize() {
+  if (canvas.value && scene) {
+    const rect = canvas.value.getBoundingClientRect();
+    scene.resize(rect.width, rect.height);
+  }
+}
 
 onBeforeUnmount(() => {
   if (tournamentContext) localStorage.removeItem('currentTournamentMatch');
