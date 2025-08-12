@@ -127,6 +127,19 @@
     "modify": {
       "avatar": "Change avatar",
       "banner": "Change banner"
+    },
+    "account": {
+      "danger-zone": "Danger Zone",
+      "anonymize": "Anonymize Account",
+      "anonymize-warning": "Account anonymization will permanently delete all your personal data. This action is irreversible.",
+      "confirm-anonymize": "Confirm Anonymization",
+      "anonymize-explanation": "This action will permanently anonymize your account. All your personal data will be deleted and you will be automatically logged out.",
+      "irreversible": "This action is irreversible!",
+      "type-confirm": "Type \"DELETE\" to confirm:",
+      "type-delete": "DELETE",
+      "confirm-required": "Please confirm by typing \"DELETE\"",
+      "anonymized-success": "Account successfully anonymized",
+      "anonymize-error": "Error during account anonymization"
     }
   },
   "pong": {

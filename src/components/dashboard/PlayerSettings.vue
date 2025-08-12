@@ -229,6 +229,86 @@
     {{ t('dashboard.colorblind.hint') }}
   </p>
 </div>
+
+    <!-- Séparateur -->
+    <div class="auth-sep-line mt-6"></div>
+
+    <!-- Zone de suppression du compte -->
+    <div class="space-y-4 pt-6">
+      <h3 class="text-lg font-semibold text-red-500">
+        {{ t('dashboard.account.danger-zone') || 'Zone dangereuse' }}
+      </h3>
+      
+      <div class="p-4 rounded border border-red-500/30 bg-red-500/5">
+        <p class="text-sm mb-3" style="color: color-mix(in oklab, var(--fg) 80%, transparent);">
+          {{ t('dashboard.account.anonymize-warning') || 'L\'anonymisation de votre compte supprimera définitivement toutes vos données personnelles. Cette action est irréversible.' }}
+        </p>
+        
+        <button
+          @click="confirmAccountAnonymization"
+          class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors"
+          :class="{ 'opacity-50 pointer-events-none': loadingAnonymize }"
+        >
+          {{ loadingAnonymize ? (t('common.loading') || 'Chargement...') : (t('dashboard.account.anonymize') || 'Anonymiser le compte') }}
+        </button>
+      </div>
+
+      <p v-if="messageAnonymize" class="msg-ok">{{ messageAnonymize }}</p>
+      <p v-if="errorAnonymize" class="msg-err">{{ errorAnonymize }}</p>
+    </div>
+
+    <!-- Modal de confirmation -->
+    <div v-if="showAnonymizeModal" class="fixed inset-0 z-50 flex items-center justify-center">
+      <div class="absolute inset-0 bg-black/50" @click="closeAnonymizeModal" />
+      <div class="relative auth-card w-full max-w-md p-6 space-y-4">
+        <h4 class="auth-title text-xl text-red-500">
+          {{ t('dashboard.account.confirm-anonymize') || 'Confirmer l\'anonymisation' }}
+        </h4>
+
+        <div class="space-y-3">
+          <p class="text-sm" style="color: color-mix(in oklab, var(--fg) 80%, transparent);">
+            {{ t('dashboard.account.anonymize-explanation') || 'Cette action va anonymiser votre compte de manière permanente. Toutes vos données personnelles seront supprimées et vous serez automatiquement déconnecté.' }}
+          </p>
+          
+          <p class="text-sm font-semibold text-red-500">
+            {{ t('dashboard.account.irreversible') || 'Cette action est irréversible !' }}
+          </p>
+
+          <div class="space-y-2">
+            <label class="set-label text-sm">
+              {{ t('dashboard.account.type-confirm') || 'Tapez "SUPPRIMER" pour confirmer :' }}
+            </label>
+            <input
+              v-model="confirmationText"
+              type="text"
+              class="auth-input"
+              :placeholder="t('dashboard.account.type-delete') || 'SUPPRIMER'"
+              autocomplete="off"
+            />
+          </div>
+        </div>
+
+        <div class="flex gap-2 pt-4">
+          <button
+            @click="anonymizeAccount"
+            class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors flex-1"
+            :class="{ 'opacity-50 pointer-events-none': loadingAnonymize || confirmationText !== (t('dashboard.account.type-delete') || 'SUPPRIMER') }"
+          >
+            {{ loadingAnonymize ? (t('common.loading') || 'Chargement...') : (t('dashboard.account.anonymize') || 'Anonymiser') }}
+          </button>
+
+          <button
+            @click="closeAnonymizeModal"
+            class="auth-btn-secondary flex-1"
+            :disabled="loadingAnonymize"
+          >
+            {{ t('common.cancel') || 'Annuler' }}
+          </button>
+        </div>
+
+        <p v-if="errorAnonymize" class="msg-err text-center">{{ errorAnonymize }}</p>
+      </div>
+    </div>
 </div>
 </template>
 
@@ -455,4 +535,75 @@ onMounted(async () => {
     }
   } catch (_) {}
 })
+
+/* ------- ANONYMISATION DU COMPTE ------- */
+const showAnonymizeModal = ref(false)
+const confirmationText = ref('')
+const loadingAnonymize = ref(false)
+const messageAnonymize = ref('')
+const errorAnonymize = ref('')
+
+const resetAnonymizeFeedback = () => {
+  messageAnonymize.value = ''
+  errorAnonymize.value = ''
+}
+
+const confirmAccountAnonymization = () => {
+  resetAnonymizeFeedback()
+  confirmationText.value = ''
+  showAnonymizeModal.value = true
+}
+
+const closeAnonymizeModal = () => {
+  if (!loadingAnonymize.value) {
+    showAnonymizeModal.value = false
+    confirmationText.value = ''
+  }
+}
+
+const anonymizeAccount = async () => {
+  resetAnonymizeFeedback()
+  
+  const expectedText = t('dashboard.account.type-delete') || 'SUPPRIMER'
+  if (confirmationText.value !== expectedText) {
+    errorAnonymize.value = t('dashboard.account.confirm-required') || 'Veuillez confirmer en tapant "SUPPRIMER"'
+    return
+  }
+
+  if (!auth.user?.id) {
+    errorAnonymize.value = t('dashboard.error-occured') || 'Erreur: utilisateur non identifié'
+    return
+  }
+
+  try {
+    loadingAnonymize.value = true
+    
+    const res = await fetch(buildApiUrl(`/user/${auth.user.id}/anonymize`), {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${auth.user.token}`,
+      },
+    })
+    
+    const data = await res.json()
+    
+    if (!res.ok || !data.success) {
+      throw new Error(data.message || t('dashboard.error-occured'))
+    }
+
+    // Succès - afficher le message et déconnecter l'utilisateur
+    messageAnonymize.value = t('dashboard.account.anonymized-success') || 'Compte anonymisé avec succès'
+    
+    // Attendre un peu pour que l'utilisateur voie le message
+    setTimeout(() => {
+      auth.logout()
+      router.push('/auth/login')
+    }, 2000)
+    
+  } catch (err: any) {
+    errorAnonymize.value = err.message || t('dashboard.account.anonymize-error') || 'Erreur lors de l\'anonymisation du compte'
+  } finally {
+    loadingAnonymize.value = false
+  }
+}
 </script>

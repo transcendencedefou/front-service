@@ -127,6 +127,19 @@
     "modify": {
       "avatar": "Cambiar avatar",
       "banner": "Cambiar banner"
+    },
+    "account": {
+      "danger-zone": "Zona Peligrosa",
+      "anonymize": "Anonimizar Cuenta",
+      "anonymize-warning": "La anonimización de su cuenta eliminará permanentemente todos sus datos personales. Esta acción es irreversible.",
+      "confirm-anonymize": "Confirmar Anonimización",
+      "anonymize-explanation": "Esta acción anonimizará permanentemente su cuenta. Todos sus datos personales serán eliminados y será desconectado automáticamente.",
+      "irreversible": "¡Esta acción es irreversible!",
+      "type-confirm": "Escriba \"ELIMINAR\" para confirmar:",
+      "type-delete": "ELIMINAR",
+      "confirm-required": "Por favor confirme escribiendo \"ELIMINAR\"",
+      "anonymized-success": "Cuenta anonimizada con éxito",
+      "anonymize-error": "Error durante la anonimización de la cuenta"
     }
   },
   "pong": {
