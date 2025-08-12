@@ -103,6 +103,10 @@
       "settings": "Settings",
       "friends": "Friends",
       "global": "Global stats"
+    },
+    "modify": {
+      "avatar": "Change avatar",
+      "banner": "Change banner"
     }
   }
 }
