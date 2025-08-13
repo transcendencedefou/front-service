@@ -27,36 +27,9 @@ export default class TTTHUD {
     }
 
     _initHud(): void {
-        const colors = useColorStore();
         
         // Current Player Indicator
         this._createCurrentPlayerIndicator();
-        
-        // Scores
-        PlayerManager.listPlayers().forEach(p => {
-            const board = new Rectangle(`ttt-score-${p.store.id}`);
-            board.width = '12%';
-            board.height = '6%';
-            board.thickness = 1;
-            board.cornerRadius = 14;
-            board.alpha = 0.9;
-            board.color = '#ffffff';
-            board.background = p.store.id === 0 ? colors.playerOneColor + '55' : colors.playerTwoColor + '55';
-            board.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
-            board.horizontalAlignment = p.store.id === 0 ? Control.HORIZONTAL_ALIGNMENT_LEFT : Control.HORIZONTAL_ALIGNMENT_RIGHT;
-            board.left = p.store.id === 0 ? '2%' : '-2%';
-            board.top = '-2%';
-
-            const txt = new TextBlock();
-            txt.text = `${p.store.name}: ${p.store.score}`;
-            txt.color = '#fff';
-            txt.fontSize = '20px';
-            board.onBeforeDrawObservable.add(() => {
-                txt.text = `${p.store.name}: ${p.store.score}`;
-            });
-            board.addControl(txt);
-            this.hud.addControl(board);
-        });
     }
 
     private _createCurrentPlayerIndicator(): void {
@@ -117,33 +90,6 @@ export default class TTTHUD {
         // Recreate HUD with current players
         this._createCurrentPlayerIndicator();
         
-        const colors = useColorStore();
-        // Recreate scores
-        PlayerManager.listPlayers().forEach(p => {
-            const board = new Rectangle(`ttt-score-${p.store.id}`);
-            board.width = '12%';
-            board.height = '6%';
-            board.thickness = 1;
-            board.cornerRadius = 14;
-            board.alpha = 0.9;
-            board.color = '#ffffff';
-            board.background = p.store.id === 0 ? colors.playerOneColor + '55' : colors.playerTwoColor + '55';
-            board.verticalAlignment = Control.VERTICAL_ALIGNMENT_BOTTOM;
-            board.horizontalAlignment = p.store.id === 0 ? Control.HORIZONTAL_ALIGNMENT_LEFT : Control.HORIZONTAL_ALIGNMENT_RIGHT;
-            board.left = p.store.id === 0 ? '2%' : '-2%';
-            board.top = '-2%';
-
-            const txt = new TextBlock();
-            txt.text = `${p.store.name}: ${p.store.score}`;
-            txt.color = '#fff';
-            txt.fontSize = '20px';
-            board.onBeforeDrawObservable.add(() => {
-                txt.text = `${p.store.name}: ${p.store.score}`;
-            });
-            board.addControl(txt);
-            this.hud.addControl(board);
-        });
-        
         // Initialize current player indicator with first player
         this.updateCurrentPlayer(0);
     }
@@ -153,14 +99,10 @@ export default class TTTHUD {
         this.winnerWatcher = watch(
             () => gameStore.winner,
             (winner: string | null) => {
-                if (winner) {
+                if (winner && winner !== 'Draw') {
                     // Petit délai pour que l'animation de victoire se termine
                     setTimeout(() => {
-                        if (winner === 'Draw') {
-                            this.endMenu.showWinner('', true);
-                        } else {
-                            this.endMenu.showWinner(winner);
-                        }
+                        this.endMenu.showWinner(winner);
                     }, 1000);
                 }
             }

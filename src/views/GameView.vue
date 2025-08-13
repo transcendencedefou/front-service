@@ -189,6 +189,8 @@ onMounted(async () => {
       }
       await controller.launchGame('Pong');
     } else if (tournamentContext.gameType === 'TICTACTOE') {
+      // Nettoyer d'éventuels joueurs résiduels (ex: Player1/AI du Pong)
+      PlayerManager.clearMap();
       await controller.launchGame('TicTacToe');
     }
     currentGameType = tournamentContext.gameType === 'PONG' ? 'PONG' : 'TICTACTOE';

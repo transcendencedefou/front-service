@@ -78,25 +78,30 @@ export class TicTacToeGame implements IGame {
 
   start(): void {
     if (!this.playersInitialized) {
-      const existingPlayers = PlayerManager.listPlayers();
-      if (existingPlayers.length < 2) {
-        // Mode tournoi: tenter de récupérer les noms
-        let added = false;
-        try {
-          const raw = localStorage.getItem('currentTournamentMatch');
-          if (raw) {
-            const ctx = JSON.parse(raw);
-            if (ctx?.gameType === 'TICTACTOE' && Array.isArray(ctx.participants)) {
-              const names = ctx.participants.map((p:any)=>p?.username).filter((n:any)=>typeof n==='string');
-              if (names.length >= 2) {
-                PlayerManager.addBasicPlayer(names[0] || 'Player 1');
-                PlayerManager.addBasicPlayer(names[1] || 'Player 2');
-                added = true;
-              }
+      // Toujours privilégier les noms de tournoi si disponibles, même si des joueurs existent déjà
+      let tournamentApplied = false;
+      try {
+        const raw = localStorage.getItem('currentTournamentMatch');
+        if (raw) {
+          const ctx = JSON.parse(raw);
+          if (ctx?.gameType === 'TICTACTOE' && Array.isArray(ctx.participants)) {
+            const names = ctx.participants
+              .map((p: any) => p?.username)
+              .filter((n: any) => typeof n === 'string');
+            if (names.length >= 2) {
+              // Écraser tout état précédent (ex: Player1/AI laissé par Pong)
+              PlayerManager.clearMap();
+              PlayerManager.addBasicPlayer(names[0] || 'Player 1');
+              PlayerManager.addBasicPlayer(names[1] || 'Player 2');
+              tournamentApplied = true;
             }
           }
-        } catch {}
-        if (!added) {
+        }
+      } catch {}
+
+      if (!tournamentApplied) {
+        const existingPlayers = PlayerManager.listPlayers();
+        if (existingPlayers.length < 2) {
           PlayerManager.addBasicPlayer('Player 1');
           PlayerManager.addBasicPlayer('Player 2');
         }
@@ -132,9 +137,8 @@ export class TicTacToeGame implements IGame {
       }
 
       if (this.isBoardFull()) {
-        // Match nul: déclarer un match nul et arrêter le jeu
-        useGameStore().setWinner('Draw');
-        this.stop();
+        // Match nul: on relance automatiquement une manche sans déclarer de vainqueur
+        this.reset();
         return;
       }
 

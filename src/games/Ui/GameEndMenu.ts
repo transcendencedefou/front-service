@@ -61,7 +61,7 @@ export default class GameEndMenu {
 
         // Titre "Game Over"
         const titleText = new TextBlock();
-        titleText.text = "Game Over";
+        titleText.text = " ";
         titleText.color = "#ffffff";
         titleText.fontSize = "48px";
         titleText.fontFamily = "'Inclusive Sans', sans-serif";
