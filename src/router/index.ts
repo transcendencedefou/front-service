@@ -7,6 +7,7 @@ import RegisterForm from '../views/RegisterView.vue'
 import PlayerStatsChart from '../views/DashboardView.vue'
 import OAuthCallback from '../views/OAuthCallback.vue'
 import TournamentsView from '../views/TournamentsView.vue'
+import CGUView from '../views/CGUView.vue'
 import { useAuthStore } from '../stores/auth';
 
 const routes = [
@@ -35,6 +36,12 @@ const routes = [
       path: '/tournaments',
       name: 'Tournaments',
       component: TournamentsView},
+    {
+      path: '/cgu',
+      name: 'CGU',
+      component: CGUView,
+      meta: { public: true }
+    },
     {
       path: '/auth/oauth/callback',
       name: 'OAuthCallback',

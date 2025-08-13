@@ -13,6 +13,7 @@
     "player2Placeholder": "Entrez le nom du joueur 2",
     "humanPlayer": "Joueur Humain",
     "aiPlayer": "Joueur IA",
+    "aiNotAvailable": "IA Non Disponible",
     "aiOpponent": "Adversaire IA",
     "startGame": "Commencer le Jeu",
     "currentUserNote": "Verrouillé à l'utilisateur actuel"
@@ -127,6 +128,19 @@
     "modify": {
       "avatar": "Modifier l'avatar",
       "banner": "Modifier la bannière"
+    },
+    "account": {
+      "danger-zone": "Zone dangereuse",
+      "anonymize": "Anonymiser le compte",
+      "anonymize-warning": "L'anonymisation de votre compte supprimera définitivement toutes vos données personnelles. Cette action est irréversible.",
+      "confirm-anonymize": "Confirmer l'anonymisation",
+      "anonymize-explanation": "Cette action va anonymiser votre compte de manière permanente. Toutes vos données personnelles seront supprimées et vous serez automatiquement déconnecté.",
+      "irreversible": "Cette action est irréversible !",
+      "type-confirm": "Tapez \"SUPPRIMER\" pour confirmer :",
+      "type-delete": "SUPPRIMER",
+      "confirm-required": "Veuillez confirmer en tapant \"SUPPRIMER\"",
+      "anonymized-success": "Compte anonymisé avec succès",
+      "anonymize-error": "Erreur lors de l'anonymisation du compte"
     }
   },
   "pong": {

@@ -109,10 +109,11 @@ export class PongGame implements IGame {
       PlayerManager.addAI('AI', this.ball.getMesh(), scene, size, this.keysPressed, parent);
     }
     
-    // Start the game if we have 2 players or in tournament mode
-    if (currentPlayerCount >= 2 || tournamentMode) {
+    // Start the game if we have 2 players (but not in tournament mode - wait for space bar)
+    if (currentPlayerCount >= 2 && !tournamentMode) {
       this.running = true;
     }
+    // In tournament mode, always wait for space bar to start
   }
 
   start(): void {

@@ -161,9 +161,15 @@ onMounted(async () => {
         PlayerManager.addPlayer(gameSession.player2Name, scene.scene, size, scene.zoneGameA);
       }
     } else if (gameSession.gameType === 'TicTacToe') {
-      // For TicTacToe, we still use basic players as it doesn't need 3D pads
-      PlayerManager.addBasicPlayer(gameSession.player1Name);
-      PlayerManager.addBasicPlayer(gameSession.player2Name);
+      // TicTacToe: si des joueurs par défaut existent déjà (Player 1 / Player 2), on les renomme
+      const players = PlayerManager.listPlayers();
+      if (players.length >= 2) {
+        players[0].store.setName(gameSession.player1Name);
+        players[1].store.setName(gameSession.player2Name);
+      } else {
+        PlayerManager.addBasicPlayer(gameSession.player1Name);
+        PlayerManager.addBasicPlayer(gameSession.player2Name);
+      }
     }
     
     // Clear session after use
@@ -183,6 +189,8 @@ onMounted(async () => {
       }
       await controller.launchGame('Pong');
     } else if (tournamentContext.gameType === 'TICTACTOE') {
+      // Nettoyer d'éventuels joueurs résiduels (ex: Player1/AI du Pong)
+      PlayerManager.clearMap();
       await controller.launchGame('TicTacToe');
     }
     currentGameType = tournamentContext.gameType === 'PONG' ? 'PONG' : 'TICTACTOE';
@@ -207,7 +215,18 @@ onMounted(async () => {
     }
     
     if (active === 'TicTacToe' && cameraStopped) {
-      if (!ttthud) ttthud = new TTTHUD(scene!.scene, controller);
+      if (!ttthud) {
+        ttthud = new TTTHUD(scene!.scene, controller);
+        // Connect HUD to the TicTacToe game
+        const tttGame = controller.getGame('TicTacToe');
+        if (tttGame && (tttGame as any).setHUD) {
+          (tttGame as any).setHUD(ttthud);
+        }
+        // Refresh display to show correct player names
+        if (ttthud.refreshDisplay) {
+          ttthud.refreshDisplay();
+        }
+      }
       ttthud.show();
     } else {
       ttthud?.hide();

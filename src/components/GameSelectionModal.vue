@@ -1,5 +1,5 @@
 <template>
-  <div v-if="isVisible" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center">
+  <div v-if="isVisible && authStore.isAuthenticated" class="fixed inset-0 bg-black/70 backdrop-blur-md z-50 flex items-center justify-center">
     <div class="bg-bg border border-accent rounded-2xl p-8 max-w-md w-full mx-4 shadow-2xl">
       <!-- Header -->
       <div class="flex justify-between items-center mb-6">
@@ -48,7 +48,7 @@
         <!-- Player 2 Selection -->
         <div>
           <label class="block text-sm font-medium text-fg mb-2">{{ $t('game.player2') }}</label>
-          <div class="flex gap-3 mb-3">
+          <div class="flex gap-3 mb-3" v-if="selectedGame !== 'TicTacToe'">
             <button 
               @click="isPlayer2AI = false"
               :class="[
@@ -72,16 +72,24 @@
               🤖 {{ $t('game.aiPlayer') }}
             </button>
           </div>
+          <div v-else class="flex gap-3 mb-3">
+            <div class="flex-1 px-4 py-2 border-2 border-accent bg-accent/20 text-accent rounded-lg font-medium text-center">
+              👤 {{ $t('game.humanPlayer') }}
+            </div>
+            <div class="flex-1 px-4 py-2 border-2 border-fg/30 bg-fg/10 text-fg/50 rounded-lg font-medium text-center cursor-not-allowed">
+              🤖 {{ $t('game.aiNotAvailable') }}
+            </div>
+          </div>
           
           <input 
-            v-if="!isPlayer2AI"
+            v-if="!isPlayer2AI || selectedGame === 'TicTacToe'"
             v-model="player2Name" 
             type="text" 
             :placeholder="$t('game.player2Placeholder')"
             class="w-full px-4 py-2 bg-bg-2 border border-fg/30 rounded-lg text-fg placeholder-fg/50 focus:outline-none focus:ring-2 focus:ring-accent focus:border-transparent"
           />
           <div 
-            v-else
+            v-else-if="isPlayer2AI && selectedGame !== 'TicTacToe'"
             class="w-full px-4 py-2 bg-bg-2/50 border border-fg/30 rounded-lg text-fg/70 italic"
           >
             🤖 {{ $t('game.aiOpponent') }}
@@ -100,12 +108,8 @@
         <button 
           @click="startGame" 
           :disabled="!canStartGame"
-          :class="[
-            'flex-1 px-4 py-2 rounded-lg font-medium transition',
-            canStartGame 
-              ? 'bg-accent text-white hover:bg-accent/90' 
-              : 'bg-fg/20 text-fg/50 cursor-not-allowed'
-          ]"
+          class="auth-btn-primary flex-1"
+          :class="{ 'opacity-50 pointer-events-none': !canStartGame }"
         >
           {{ $t('game.startGame') }}
         </button>
@@ -160,7 +164,7 @@ const isPlayer2AI = ref<boolean>(false);
 const canStartGame = computed(() => {
   return selectedGame.value && 
          player1Name.value.trim() && 
-         (isPlayer2AI.value || player2Name.value.trim());
+         (selectedGame.value === 'TicTacToe' ? player2Name.value.trim() : (isPlayer2AI.value || player2Name.value.trim()));
 });
 
 // Reset form when modal opens
@@ -170,6 +174,13 @@ watch(() => props.isVisible, (visible) => {
     // Set player 1 name to current user's username
     player1Name.value = authStore.user?.username || 'Player1';
     player2Name.value = '';
+    isPlayer2AI.value = false;
+  }
+});
+
+// Reset AI selection when changing to TicTacToe
+watch(() => selectedGame.value, (newGame) => {
+  if (newGame === 'TicTacToe') {
     isPlayer2AI.value = false;
   }
 });
@@ -191,8 +202,10 @@ function startGame() {
   const gameData: GameData = {
     gameType: selectedGame.value,
     player1Name: player1Name.value.trim(),
-    player2Name: isPlayer2AI.value ? 'AI' : player2Name.value.trim(),
-    isPlayer2AI: isPlayer2AI.value
+    player2Name: (selectedGame.value === 'TicTacToe' || !isPlayer2AI.value) 
+      ? player2Name.value.trim() 
+      : 'AI',
+    isPlayer2AI: selectedGame.value !== 'TicTacToe' && isPlayer2AI.value
   };
 
   emit('gameSelected', gameData);

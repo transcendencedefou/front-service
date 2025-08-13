@@ -1,4 +1,5 @@
 import { ref } from 'vue';
+import { useAuthStore } from '@/stores/auth';
 
 interface GameData {
   gameType: string;
@@ -11,6 +12,14 @@ const isGameModalVisible = ref(false);
 
 export function useGameModal() {
   function openGameModal() {
+    const authStore = useAuthStore();
+    
+    // Vérifier si l'utilisateur est connecté avant d'ouvrir la modal
+    if (!authStore.isAuthenticated) {
+      console.warn('Utilisateur non connecté - impossible d\'ouvrir la modal de jeu');
+      return;
+    }
+    
     isGameModalVisible.value = true;
   }
 

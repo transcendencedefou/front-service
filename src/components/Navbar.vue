@@ -18,6 +18,7 @@
           <button @click="openGameModal" class="nav-text">{{ t('nav.games') }}</button>
           <router-link to="/dashboard" class="nav-text">{{ t('nav.user') }}</router-link>
           <router-link to="/tournaments" class="nav-text">Tournois</router-link>
+          <router-link to="/cgu" class="nav-text">CGU</router-link>
 
           <!-- Login / Logout -->
           <router-link
@@ -30,7 +31,7 @@
           <button
             v-else
             @click="logout"
-            class="nav-cta text-red-400 hover:text-red-300 focus-visible:ring-red-400"
+            class="nav-cta"
           >
             {{ t('nav.logout') }}
           </button>
@@ -52,6 +53,7 @@
           >
             <option value="fr-FR">FR</option>
             <option value="en-US">EN</option>
+            <option value="es-ES">ES</option>
           </select>
         </div>
 
@@ -106,6 +108,7 @@
       <button @click="openGameModal; menuOpen = false" class="nav-text">{{ t('nav.games') }}</button>
       <router-link to="/dashboard" class="nav-text" @click="menuOpen = false">{{ t('nav.user') }}</router-link>
       <router-link to="/tournaments" class="nav-text" @click="menuOpen = false">Tournois</router-link>
+  <router-link to="/cgu" class="nav-text" @click="menuOpen = false">CGU</router-link>
 
       <router-link
         v-if="!auth.isAuthenticated"
@@ -118,7 +121,7 @@
       <button
         v-else
         @click="logout"
-        class="nav-cta text-red-400 hover:text-red-300"
+        class="nav-cta"
       >
         {{ t('nav.logout') }}
       </button>
@@ -138,6 +141,7 @@
       >
         <option value="fr-FR">FR</option>
         <option value="en-US">EN</option>
+        <option value="es-ES">ES</option>
       </select>
     </div>
   </transition>
